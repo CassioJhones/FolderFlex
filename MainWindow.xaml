@@ -1,0 +1,36 @@
+﻿<Window x:Class="Movedor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Movedor"
+        mc:Ignorable="d" ResizeMode="CanMinimize" Topmost="True"
+        Title="Movedor de Arquivos" Height="350" Width="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="280"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Name="SelectFolderButton" Content="Selecionar Pasta" Width="200" Height="30" Click="SelectFolderButton_Click"/>
+
+            <ListView MouseDoubleClick="Click_AbrirArquivo" Name="MovidosListBox" Height="150" Width="370" Margin="0,10,0,0" SelectionMode="Single" Foreground="DimGray">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Caminho" Width="0" DisplayMemberBinding="{Binding Rota}" />
+                        <GridViewColumn Header="Nome" Width="200" DisplayMemberBinding="{Binding Nome}" />
+                        <GridViewColumn Header="Extensão" Width="80" DisplayMemberBinding="{Binding Extensao}" />
+                        <GridViewColumn Header="Tamanho" Width="80" DisplayMemberBinding="{Binding Tamanho}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <ProgressBar Name="Progresso" Width="300" Height="20" Margin="0,10,0,0" Minimum="0" Maximum="100"/>
+            <TextBlock Name="MensagemStatus" Text="Selecione uma pasta para começar..." Margin="0,5,0,0" TextAlignment="Center"/>
+            <TextBlock Name="TempoDecorrido" Text="" Margin="0,0,0,0" TextAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0 -10">
+            <Image Source="/git.ico"  Width="38" ToolTip="Código do Projeto" Cursor="Hand"
+                   MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
+        </StackPanel>
+    </Grid>
+</Window>
