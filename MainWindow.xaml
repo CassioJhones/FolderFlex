@@ -14,7 +14,8 @@
         <StackPanel Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Stretch" >
             <StackPanel Orientation="Horizontal">
                 <Image Source="/git.ico"  Width="38" ToolTip="Código do Projeto" Cursor="Hand" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
-                <Button Name="SelectFolderButton" Content="Selecionar Pasta" Width="150" Height="30" Click="SelectFolderButton_Click"/>
+                <Button Name="SelectFolderButton" Content="Selecionar Pasta" Width="150" Height="30" Click="Click_SelectFolderButton" IsDefault="True"/>
+                <Button Name="CancelButton" Content="Cancelar" Width="70" Margin="118,0" Height="30" Click="Click_Cancel" BorderThickness="0.5" Foreground="White" Background="#b73228"/>
             </StackPanel>
 
             <ListView MouseDoubleClick="Click_AbrirArquivo" Name="MovidosListBox" Height="150" Width="370" Margin="0,5,0,0" SelectionMode="Single" Foreground="DimGray">
@@ -22,8 +23,8 @@
                     <GridView>
                         <GridViewColumn Header="Caminho" Width="0" DisplayMemberBinding="{Binding Rota}" />
                         <GridViewColumn Header="Nome" Width="200" DisplayMemberBinding="{Binding Nome}" />
-                        <GridViewColumn Header="Extensão" Width="80" DisplayMemberBinding="{Binding Extensao}" />
-                        <GridViewColumn Header="Tamanho" Width="80" DisplayMemberBinding="{Binding Tamanho}" />
+                        <GridViewColumn Header="Extensão" Width="60" DisplayMemberBinding="{Binding Extensao}" />
+                        <GridViewColumn Header="Tamanho" Width="70" DisplayMemberBinding="{Binding Tamanho}" />
                     </GridView>
                 </ListView.View>
             </ListView>
@@ -31,7 +32,7 @@
             <TextBlock Name="TempoDecorrido" Text="" Margin="0,0,0,0" TextAlignment="Center"/>
             <TextBlock Name="MensagemStatus" Text="Selecione uma pasta para começar..." Margin="0,-16,0,0" TextAlignment="Center" />
         </StackPanel>
-        <ScrollViewer Grid.Row="1">
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <TextBlock Name="MensagemErro" Text="" Margin="10,-20,0,0" TextWrapping="Wrap"/>
             </ScrollViewer>
         

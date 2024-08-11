@@ -1,17 +1,24 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Input;
 using Brushes = System.Windows.Media.Brushes;
 namespace Movedor;
 
 public partial class MainWindow : Window
 {
-    public MainWindow() => InitializeComponent();
+    public MainWindow()
+    {
+        InitializeComponent();
+        Cancelador = new CancellationTokenSource();
+    }
+
+    private CancellationTokenSource Cancelador;
     private int contador = 0;
     private string UltimaPastaSelecionada = "";
     public string Nome { get; set; }
     public string Tamanho { get; set; }
-    private async void SelectFolderButton_Click(object sender, RoutedEventArgs e)
+    private async void Click_SelectFolderButton(object sender, RoutedEventArgs e)
     {
         Zerado();
         using FolderBrowserDialog janela = new();
@@ -23,18 +30,23 @@ public partial class MainWindow : Window
         if (janela.ShowDialog() == System.Windows.Forms.DialogResult.OK)
         {
             string caminhoSelecionado = janela.SelectedPath;
-
+            Cancelador = new CancellationTokenSource();
             try
             {
                 UltimaPastaSelecionada = caminhoSelecionado;
                 Stopwatch cronometro = new();
                 cronometro.Start();
-                await MoverParaRaiz(caminhoSelecionado);
+                await MoverParaRaiz(caminhoSelecionado, Cancelador.Token);
                 cronometro.Stop();
 
                 ExibirMensagemStatus();
                 ExibirTempo(cronometro);
 
+            }
+            catch (OperationCanceledException)
+            {
+                MensagemErro.Text = $"\nOperação cancelada pelo usuário após mover {contador}.";
+                MensagemErro.Foreground = Brushes.Red;
             }
             catch (Exception ex)
             {
@@ -68,7 +80,7 @@ public partial class MainWindow : Window
         else if (contador > 1) MensagemStatus.Text = $"{contador} arquivos movidos com sucesso!";
 
     }
-    private async Task MoverParaRaiz(string pastaRaiz)
+    private async Task MoverParaRaiz(string pastaRaiz, CancellationToken cancelador)
     {
         string[] listaSubPastas = Directory.GetDirectories(pastaRaiz, "*", SearchOption.AllDirectories);
 
@@ -76,6 +88,7 @@ public partial class MainWindow : Window
         int arquivosProcessados = 0;
         foreach (string pasta in listaSubPastas)
         {
+            cancelador.ThrowIfCancellationRequested();
             string[] arquivos = Directory.GetFiles(pasta);
             foreach (string file in arquivos)
             {
@@ -90,7 +103,7 @@ public partial class MainWindow : Window
                     contador++;
                     arquivosProcessados++;
                     Progresso.Value = (double)arquivosProcessados / totalArquivos * 100;
-                    await Task.Delay(10);
+                    await Task.Delay(10, cancelador);
                 }
             }
         }
@@ -110,7 +123,7 @@ public partial class MainWindow : Window
             }
             catch (Exception ex)
             {
-                MensagemErro.Text += $"\nErro ao deletar a pasta {subPasta}: {ex.Message}";
+                MensagemErro.Text += $"\nErro ao deletar a pasta {subPasta}:\n{ex.Message}";
             }
         }
     }
@@ -118,9 +131,9 @@ public partial class MainWindow : Window
     {
         FileInfo info = new(caminhoArquivo);
 
-        string tamanhoConvertido = $"{(info.Length / 1024.0):F3} kb";
+        string tamanhoConvertido = $"{(info.Length / 1024.0):F2} Kb";
         if (info.Length / 1024.0 > 1024)
-            tamanhoConvertido = $"{(info.Length / 1024.0 / 1024.0):F3} mb";
+            tamanhoConvertido = $"{(info.Length / 1024.0 / 1024.0):F2} Mb";
 
         MovidosListBox.Items.Add(new ArquivoInfo
         {
@@ -141,7 +154,7 @@ public partial class MainWindow : Window
         TempoDecorrido.Text = "";
     }
 
-    private void Image_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         AbrirSite("https://github.com/CassioJhones");
         AbrirSite("https://github.com/CassioJhones/Movedor");
@@ -173,7 +186,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void Click_AbrirArquivo(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    private void Click_AbrirArquivo(object sender, MouseButtonEventArgs e)
     {
         try
         {
@@ -193,11 +206,9 @@ public partial class MainWindow : Window
 
         }
     }
+
+    private void Click_Cancel(object sender, RoutedEventArgs e)
+        => Cancelador.Cancel();
+
 }
-public class ArquivoInfo
-{
-    public string? Rota { get; set; }
-    public string? Nome { get; set; }
-    public string? Tamanho { get; set; }
-    public string? Extensao { get; set; }
-}
+
