@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Windows;
 using Brushes = System.Windows.Media.Brushes;
 namespace Movedor;
 
@@ -6,7 +8,7 @@ public partial class MainWindow : Window
 {
     public MainWindow() => InitializeComponent();
     private int contador = 0;
-    private string ultimaPastaSelecionada = "";
+    private string UltimaPastaSelecionada = "";
     public string Nome { get; set; }
     public string Tamanho { get; set; }
     private async void SelectFolderButton_Click(object sender, RoutedEventArgs e)
@@ -16,7 +18,7 @@ public partial class MainWindow : Window
         janela.Description = "Selecione a pasta raiz";
         janela.UseDescriptionForTitle = true;
         janela.ShowNewFolderButton = true;
-        janela.SelectedPath = ultimaPastaSelecionada;
+        janela.SelectedPath = UltimaPastaSelecionada;
 
         if (janela.ShowDialog() == System.Windows.Forms.DialogResult.OK)
         {
@@ -24,50 +26,66 @@ public partial class MainWindow : Window
 
             try
             {
-                ultimaPastaSelecionada = caminhoSelecionado;
-                System.Diagnostics.Stopwatch tempo = new();
-                tempo.Start();
+                UltimaPastaSelecionada = caminhoSelecionado;
+                Stopwatch cronometro = new();
+                cronometro.Start();
                 await MoverParaRaiz(caminhoSelecionado);
-                tempo.Stop();
+                cronometro.Stop();
 
-                TimeSpan tempoDecorrido = tempo.Elapsed;
-                string tempoFormatado = string.Format("{0:D2}:{1:D2}:{2:D2}",
-                                                      tempoDecorrido.Hours,
-                                                      tempoDecorrido.Minutes,
-                                                      tempoDecorrido.Seconds);
-                MensagemStatus.Text = $"{contador} arquivos movidos com sucesso!";
+                ExibirMensagemStatus();
+                ExibirTempo(cronometro);
 
-                TempoDecorrido.Text = tempoFormatado.Equals("00:00:00")
-                ? $"Executado em {tempo.Elapsed.Milliseconds}ms\n" : $"Executou em: {tempoFormatado}\n";
-
-                MensagemStatus.Foreground = Brushes.Green;
             }
             catch (Exception ex)
             {
-                MensagemStatus.Text = $"Erro: {ex.Message}";
-                MensagemStatus.Foreground = Brushes.Red;
+                MensagemErro.Text = $"\nErro: {ex.Message}";
+                MensagemErro.Foreground = Brushes.Red;
             }
         }
     }
 
+    private void ExibirTempo(Stopwatch tempo)
+    {
+        TimeSpan tempoDecorrido = tempo.Elapsed;
+        string tempoFormatado = string.Format("{0:D2}:{1:D2}:{2:D2}",
+                                              tempoDecorrido.Hours,
+                                              tempoDecorrido.Minutes,
+                                              tempoDecorrido.Seconds);
+
+        TempoDecorrido.Text = tempoFormatado.Equals("00:00:00")
+                ? $"Executou em {tempo.Elapsed.Milliseconds}ms\n" : $"Executou em: {tempoFormatado}\n";
+    }
+
+    private void ExibirMensagemStatus()
+    {
+        MensagemStatus.Foreground = Brushes.Green;
+        if (contador == 1) MensagemStatus.Text = $"Arquivo movido com sucesso!";
+        else if (contador == 0)
+        {
+            MensagemStatus.Foreground = Brushes.Red;
+            MensagemStatus.Text = $"Nenhum Arquivo foi movido!";
+        }
+        else if (contador > 1) MensagemStatus.Text = $"{contador} arquivos movidos com sucesso!";
+
+    }
     private async Task MoverParaRaiz(string pastaRaiz)
     {
-        string[] listaSubPastas = System.IO.Directory.GetDirectories(pastaRaiz, "*", System.IO.SearchOption.AllDirectories);
+        string[] listaSubPastas = Directory.GetDirectories(pastaRaiz, "*", SearchOption.AllDirectories);
 
-        int totalArquivos = listaSubPastas.Sum(subPasta => System.IO.Directory.GetFiles(subPasta).Length);
+        int totalArquivos = listaSubPastas.Sum(pasta => Directory.GetFiles(pasta).Length);
         int arquivosProcessados = 0;
-        foreach (string subPasta in listaSubPastas)
+        foreach (string pasta in listaSubPastas)
         {
-            string[] arquivos = System.IO.Directory.GetFiles(subPasta);
+            string[] arquivos = Directory.GetFiles(pasta);
             foreach (string file in arquivos)
             {
-                string pastaDestino = System.IO.Path.Combine(pastaRaiz, System.IO.Path.GetFileName(file));
+                string pastaDestino = Path.Combine(pastaRaiz, Path.GetFileName(file));
 
-                if (System.IO.File.Exists(pastaDestino))
-                    MensagemStatus.Text += $"O arquivo {System.IO.Path.GetFileName(file)} já existe na pasta raiz. Pulando arquivo.";
+                if (File.Exists(pastaDestino))
+                    MensagemErro.Text += $"\nO arquivo {Path.GetFileName(file)} já existe na pasta.";
                 else
                 {
-                    System.IO.File.Move(file, pastaDestino);
+                    File.Move(file, pastaDestino);
                     AdicionarArquivoNaLista(pastaDestino);
                     contador++;
                     arquivosProcessados++;
@@ -77,15 +95,28 @@ public partial class MainWindow : Window
             }
         }
 
-        foreach (string subPasta in listaSubPastas)
+        DeletarPastas(listaSubPastas);
+    }
+
+    private void DeletarPastas(string[] subpastas)
+    {
+        string[] subpastasOrdenadas = subpastas.OrderByDescending(pasta => pasta.Count(c => c == '\\')).ToArray();
+        foreach (string subPasta in subpastasOrdenadas)
         {
-            if (System.IO.Directory.GetFiles(subPasta).Length == 0 && System.IO.Directory.GetDirectories(subPasta).Length == 0) ;
-            System.IO.Directory.Delete(subPasta);
+            try
+            {
+                if (Directory.GetFiles(subPasta).Length == 0 && Directory.GetDirectories(subPasta).Length == 0)
+                    Directory.Delete(subPasta);
+            }
+            catch (Exception ex)
+            {
+                MensagemErro.Text += $"\nErro ao deletar a pasta {subPasta}: {ex.Message}";
+            }
         }
     }
     private void AdicionarArquivoNaLista(string caminhoArquivo)
     {
-        System.IO.FileInfo info = new(caminhoArquivo);
+        FileInfo info = new(caminhoArquivo);
 
         string tamanhoConvertido = $"{(info.Length / 1024.0):F3} kb";
         if (info.Length / 1024.0 > 1024)
@@ -94,7 +125,7 @@ public partial class MainWindow : Window
         MovidosListBox.Items.Add(new ArquivoInfo
         {
             Rota = caminhoArquivo,
-            Nome = System.IO.Path.GetFileNameWithoutExtension(caminhoArquivo),
+            Nome = Path.GetFileNameWithoutExtension(caminhoArquivo),
             Tamanho = tamanhoConvertido,
             Extensao = info.Extension.Substring(1, info.Extension.Length - 1)
         });
@@ -105,6 +136,7 @@ public partial class MainWindow : Window
         Progresso.Value = 0;
         MovidosListBox.Items.Clear();
         MensagemStatus.Text = "Selecione uma pasta para começar...";
+        MensagemErro.Text = "";
         MensagemStatus.Foreground = Brushes.Black;
         TempoDecorrido.Text = "";
     }
@@ -119,17 +151,17 @@ public partial class MainWindow : Window
     {
         try
         {
-            System.Diagnostics.ProcessStartInfo AbrirComNavegadorPadrao = new()
+            ProcessStartInfo AbrirComNavegadorPadrao = new()
             {
                 FileName = link,
                 UseShellExecute = true
             };
 
-            System.Diagnostics.Process.Start(AbrirComNavegadorPadrao);
+            Process.Start(AbrirComNavegadorPadrao);
         }
         catch (Exception)
         {
-            System.Diagnostics.ProcessStartInfo AbrirNavegador = new()
+            ProcessStartInfo AbrirNavegador = new()
             {
                 FileName = "cmd",
                 Arguments = $"/c start {link}",
@@ -137,20 +169,28 @@ public partial class MainWindow : Window
                 CreateNoWindow = true
             };
 
-            System.Diagnostics.Process.Start(AbrirNavegador);
+            Process.Start(AbrirNavegador);
         }
     }
 
     private void Click_AbrirArquivo(object sender, System.Windows.Input.MouseButtonEventArgs e)
     {
-        if (MovidosListBox.SelectedItem is ArquivoInfo arquivoSelecionado)
+        try
         {
-            string caminhoCompleto = arquivoSelecionado.Rota;
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            if (MovidosListBox.SelectedItem is ArquivoInfo arquivoSelecionado)
             {
-                FileName = caminhoCompleto,
-                UseShellExecute = true
-            });
+                string caminhoCompleto = arquivoSelecionado.Rota;
+                Process.Start(new ProcessStartInfo
+                {
+                    FileName = caminhoCompleto,
+                    UseShellExecute = true
+                });
+            }
+        }
+        catch (Exception)
+        {
+            return;
+
         }
     }
 }
