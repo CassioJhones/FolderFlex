@@ -1,5 +1,5 @@
 # Movedor de Arquivos
-> Recomendado para quem trabalha com grandes quantidades de arquivos e deseja mover vários arquivos de várias subpastas para uma pasta raiz.
+> Recomendado para quem trabalha com grandes quantidades de arquivos e deseja mover arquivos de várias subpastas para uma pasta raiz de modo rápido.
 
 O **Movedor de Arquivos** é uma ferramenta simples, mas eficiente, desenvolvida em WPF que permite mover arquivos de múltiplas subpastas para uma única pasta raiz. Com uma interface amigável e fácil de usar, é ideal para quem precisa organizar grandes volumes de arquivos de forma rápida e prática.
 
@@ -12,9 +12,9 @@ O **Movedor de Arquivos** é uma ferramenta simples, mas eficiente, desenvolvida
 - **Registro de Tempo**: Mostra o tempo total gasto para mover os arquivos.
 - **Acesso Rápido**: Clique em arquivos listados para abrir diretamente em seu local de origem.
 
-## Instalação
+## Download Gratuito
 
-1. Baixe a última versão do aplicativo na seção de [releases](https://github.com/CassioJhones/Movedor/releases).
+1. Baixe a última versão do aplicativo na seção de [releases](https://github.com/CassioJhones/Movedor/releases) ou no [4Shared](https://www.4shared.com/file/Fr8awKdYjq/Movedor.html)
 2. Extraia o conteúdo do arquivo `.zip` em uma pasta de sua escolha.
 3. Execute o arquivo `Movedor.exe`.
 
@@ -26,9 +26,11 @@ O **Movedor de Arquivos** é uma ferramenta simples, mas eficiente, desenvolvida
 4. Acompanhe o progresso através da barra de progresso e da lista de arquivos movidos.
 5. Clique em qualquer arquivo na lista para abri-lo diretamente em seu local.
 
-### Interface do Usuário
+## Interface do Usuário
 
-
+| ![PastasCheias](https://github.com/user-attachments/assets/8df3d8d1-4761-416b-b9a1-82e7cbec45bc) | ![workingGif](https://github.com/user-attachments/assets/9704df56-1735-4646-8496-959620ca8e28) |
+|:---:|:---:|
+| **Pastas Cheias** | **Movendo Arquivos** |
 
 
 ## Contribuição
@@ -47,5 +49,6 @@ Contribuições são bem-vindas! Se você tiver sugestões, problemas ou correç
 ## Autor
 
 - **Cássio Jhones** - [GitHub](https://github.com/CassioJhones)
+⭐ Deixe uma estrela no repositório 
 
 
