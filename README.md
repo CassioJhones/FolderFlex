@@ -1,12 +1,11 @@
 # Movedor de Arquivos
 > Recomendado para quem trabalha com grandes quantidades de arquivos e deseja mover arquivos de várias subpastas para uma pasta raiz de modo rápido.
 
-O **Movedor de Arquivos** é uma ferramenta simples, mas eficiente, desenvolvida em WPF que permite mover arquivos de múltiplas subpastas para uma única pasta raiz. Com uma interface amigável e fácil de usar, é ideal para quem precisa organizar grandes volumes de arquivos de forma rápida e prática.
+O **Movedor de Arquivos** é uma ferramenta simples, mas eficiente, desenvolvida em WPF que permite mover arquivos de múltiplas subpastas para uma única pasta raiz. Ideal para quem precisa organizar grandes volumes de arquivos de forma rápida e prática.
 
 ## Recursos
 
-- **Movimentação de Arquivos**: Mova arquivos de subpastas para uma pasta raiz.
-- **Interface Simples**: Escolha a pasta de origem através de uma interface amigável.
+- **Movimentação de Arquivos**: Mova arquivos de subpastas para uma pasta raiz
 - **Feedback Visual**: Acompanhe o progresso e veja o número de arquivos movidos em tempo real.
 - **Evita Sobrescritas**: Verifica se o arquivo já existe na pasta raiz antes de movê-lo.
 - **Registro de Tempo**: Mostra o tempo total gasto para mover os arquivos.
@@ -17,6 +16,7 @@ O **Movedor de Arquivos** é uma ferramenta simples, mas eficiente, desenvolvida
 1. Baixe a última versão do aplicativo na seção de [releases](https://github.com/CassioJhones/Movedor/releases) ou no [4Shared](https://www.4shared.com/file/Fr8awKdYjq/Movedor.html)
 2. Extraia o conteúdo do arquivo `.zip` em uma pasta de sua escolha.
 3. Execute o arquivo `Movedor.exe`.
+4. Pode ser necessário ter instalado o .NET 8
 
 ## Como Usar
 
@@ -49,6 +49,6 @@ Contribuições são bem-vindas! Se você tiver sugestões, problemas ou correç
 ## Autor
 
 - **Cássio Jhones** - [GitHub](https://github.com/CassioJhones)
-⭐ Deixe uma estrela no repositório 
+- ⭐ Deixe uma estrela no repositório 
 
 

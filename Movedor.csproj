@@ -1,40 +1,53 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <UseWPF>true</UseWPF>
-    <UseWindowsForms>True</UseWindowsForms>
-    <NeutralLanguage>pt-BR</NeutralLanguage>
-    <PackageIcon>fold.png</PackageIcon>
-    <ApplicationIcon>pasta.ico</ApplicationIcon>
-    <StartupObject>Movedor.App</StartupObject>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+		<UseWindowsForms>True</UseWindowsForms>
+		<NeutralLanguage>pt-BR</NeutralLanguage>
+		<PackageIcon>fold.png</PackageIcon>
+		<ApplicationIcon>pasta.ico</ApplicationIcon>
+		<StartupObject>Movedor.App</StartupObject>
+	</PropertyGroup>
+
 
 	<PropertyGroup>
-		<PublishReadyToRun>false</PublishReadyToRun>
+		<PublishReadyToRun>true</PublishReadyToRun>
+		<Company>CassioJhones</Company>
+		<Authors>CassioJhones</Authors>
+		<RepositoryUrl>https://github.com/CassioJhones/Movedor</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<Product>Movedor</Product>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
+		<DebugType>full</DebugType>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<DebugType>embedded</DebugType>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Content Include="pasta.ico" />
-  </ItemGroup>
+	<ItemGroup>
+		<Content Include="pasta.ico" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="pasta.ico" />
-  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="pasta.ico" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="git.ico" />
-  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="git.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Include="App.xaml" />
+	</ItemGroup>
+
+	
+
 
 </Project>
