@@ -1,7 +1,5 @@
-﻿using Movedor.Util;
-using Movedor.ViewModel;
+﻿using Movedor.ViewModel;
 using System.Diagnostics;
-using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using Brushes = System.Windows.Media.Brushes;
@@ -16,7 +14,6 @@ public partial class MainWindow : Window
         _viewModel = new MainWindowsViewModel();
         DataContext = _viewModel;
     }
-
     private async void Click_SelecionarPasta(object sender, RoutedEventArgs e)
     {
         LimparTela();
@@ -26,7 +23,6 @@ public partial class MainWindow : Window
         ExibirMensagemStatus();
         ExibirTempo(_viewModel.Cronometro);
     }
-
     private void ExibirTempo(Stopwatch tempo)
     {
         TimeSpan tempoDecorrido = tempo.Elapsed;
@@ -36,7 +32,6 @@ public partial class MainWindow : Window
             ? $"Executou em {tempo.Elapsed.Milliseconds}ms\n"
             : $"Executou em: {tempoFormatado}\n";
     }
-
     private void ExibirMensagemStatus()
     {
         MensagemStatus.Foreground = _viewModel.Contador > 0 ? Brushes.Green : Brushes.Red;
@@ -45,7 +40,6 @@ public partial class MainWindow : Window
         else if (_viewModel.Contador == 0) _viewModel.MensagemStatus = "Nenhum Arquivo foi movido!";
         else if (_viewModel.Contador > 1) _viewModel.MensagemStatus = $"{_viewModel.Contador} arquivos movidos com sucesso!";
     }
-
     private void LimparTela()
     {
         _viewModel.Contador = 0;
@@ -57,10 +51,8 @@ public partial class MainWindow : Window
     }
     private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         => _viewModel.LinkIcone();
-
     private void Click_AbrirArquivo(object sender, MouseButtonEventArgs e)
         => _viewModel.AbrirArquivo(ArquivosListBox);
-
     private void Click_Cancelar(object sender, RoutedEventArgs e)
         => _viewModel.Cancelar();
 }

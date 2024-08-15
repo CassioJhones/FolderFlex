@@ -6,14 +6,14 @@
         xmlns:local="clr-namespace:Movedor.View"
         xmlns:vm="clr-namespace:Movedor.ViewModel"
         mc:Ignorable="d" ResizeMode="CanMinimize" Topmost="True"
-        Title="Movedor de Arquivos" Height="350" Width="400">
+        Title="Movedor de Arquivos" Height="380" Width="500">
     <Window.DataContext>
         <vm:MainWindowsViewModel/>
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="255"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Stretch" >
             <StackPanel Orientation="Horizontal">
@@ -22,23 +22,22 @@
                 <Button Name="CancelButton" Content="Cancelar" Width="70" Margin="118,0" Height="30" Click="Click_Cancelar" BorderThickness="0.5" Foreground="White" Background="#b73228"/>
             </StackPanel>
 
-            <ListView ItemsSource="{Binding ArquivosMovidos}" SelectedItem="{Binding ArquivoSelecionado}"  MouseDoubleClick="Click_AbrirArquivo" Name="ArquivosListBox" Height="150" Width="370" Margin="0,5,0,0" SelectionMode="Single" Foreground="DimGray">
+            <ListView ItemsSource="{Binding ArquivosMovidos}" SelectedItem="{Binding ArquivoSelecionado}"  MouseDoubleClick="Click_AbrirArquivo" Name="ArquivosListBox" Height="150" Width="460" Margin="0,5,0,0" SelectionMode="Single" Foreground="DimGray">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Caminho" Width="0" DisplayMemberBinding="{Binding Rota}" />
-                        <GridViewColumn Header="Nome" Width="150" DisplayMemberBinding="{Binding Nome}" />
+                        <GridViewColumn Header="Nome" Width="280" DisplayMemberBinding="{Binding Nome}" />
                         <GridViewColumn Header="Extensão" Width="60" DisplayMemberBinding="{Binding Extensao}" />
                         <GridViewColumn Header="Tamanho" Width="70" DisplayMemberBinding="{Binding Tamanho}" />
                     </GridView>
                 </ListView.View>
             </ListView>
-            <ProgressBar Name="Progresso" Value="{Binding Progresso}" Width="300" Height="20" Margin="0,3,0,0" Minimum="0" Maximum="100"/>
+            <ProgressBar Name="Progresso" Value="{Binding Progresso}" Width="460" Height="20" Margin="0,3,0,0" Minimum="0" Maximum="100" />
             <TextBlock Name="TempoDecorrido" Text="" Margin="0,0,0,0" TextAlignment="Center"/>
             <TextBlock Name="MensagemStatus" Text="{Binding MensagemStatus}" Margin="0,-16,0,0" TextAlignment="Center" FontWeight="Bold"/>
         </StackPanel>
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <TextBlock Name="MensagemErro" Text="{Binding MensagemErro}" Margin="10,-20,0,0" TextWrapping="Wrap"/>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="0" Padding="0">
+            <TextBlock Name="MensagemErro" Text="{Binding MensagemErro}" Margin="10,0"  TextWrapping="Wrap"/>
         </ScrollViewer>
-
     </Grid>
 </Window>

@@ -8,7 +8,7 @@ namespace Movedor.ViewModel;
 public class MainWindowsViewModel : INotifyPropertyChanged
 {
     #region PROPRIEDADES
-    
+
     public event PropertyChangedEventHandler? PropertyChanged;
     private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     private CancellationTokenSource _cancelador;
@@ -41,7 +41,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(Progresso));
         }
     }
-    private string _mensagemStatus= "Selecione uma pasta para começar...";
+    private string _mensagemStatus = "Selecione uma pasta para começar...";
     public string MensagemStatus
     {
         get => _mensagemStatus;
@@ -137,7 +137,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
                 }
                 else
                 {
-                    MensagemErro += $"\nO arquivo {Path.GetFileName(file)} já existe na pasta.";
+                    MensagemErro += $"O arquivo {Path.GetFileName(file)} já existe na pasta.\n";
                 }
             }
         }
@@ -220,7 +220,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
                 });
             }
         }
-        catch (Win32Exception erro)
+        catch (Win32Exception)
         {
             MensagemErro = $"\nArquivo não encontrado";
         }
@@ -232,4 +232,3 @@ public class MainWindowsViewModel : INotifyPropertyChanged
     public void Cancelar()
     => Cancelador.Cancel();
 }
-
