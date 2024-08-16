@@ -93,12 +93,20 @@ public class MainWindowsViewModel : INotifyPropertyChanged
         if (janela.ShowDialog() == System.Windows.Forms.DialogResult.OK)
         {
             string caminhoSelecionado = janela.SelectedPath;
+            string caminhoDestino = caminhoSelecionado;
             Cancelador = new CancellationTokenSource();
+
+            var destinoEscolhido = await SelecionarDestino();
+            if (!string.IsNullOrEmpty(destinoEscolhido))
+            {
+                caminhoDestino = destinoEscolhido;
+            }
+
             try
             {
                 UltimaPastaSelecionada = caminhoSelecionado;
                 Cronometro.Start();
-                await MoverParaRaiz(caminhoSelecionado, Cancelador.Token);
+                await MoverParaRaiz(caminhoSelecionado, caminhoDestino, Cancelador.Token);
                 Cronometro.Stop();
             }
             catch (OperationCanceledException)
@@ -111,9 +119,32 @@ public class MainWindowsViewModel : INotifyPropertyChanged
             }
         }
     }
-    private async Task MoverParaRaiz(string pastaRaiz, CancellationToken cancelador)
+
+    public async Task<string> SelecionarDestino()
     {
+        using FolderBrowserDialog janela = new();
+        janela.Description = "Selecione o destino dos arquivos";
+        janela.UseDescriptionForTitle = true;
+        janela.ShowNewFolderButton = true;
+        janela.SelectedPath = UltimaPastaSelecionada;
+
+        if (janela.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+        {
+            return janela.SelectedPath;
+        }
+
+        return string.Empty;
+    }
+    private async Task MoverParaRaiz(string pastaRaiz, string destino, CancellationToken cancelador)
+    {
+        var infoPasta = new DirectoryInfo(pastaRaiz);
         string[] listaSubPastas = Directory.GetDirectories(pastaRaiz, "*", SearchOption.AllDirectories);
+
+        if (listaSubPastas.Length <= 0)
+        {
+            MensagemErro += $"Nenhuma subpasta encontrada em: {infoPasta.Name} \n";
+            return;
+        }
 
         int totalArquivos = listaSubPastas.Sum(pasta => Directory.GetFiles(pasta).Length);
         int arquivosProcessados = 0;
@@ -123,11 +154,11 @@ public class MainWindowsViewModel : INotifyPropertyChanged
             string[] arquivos = Directory.GetFiles(pasta);
             foreach (string file in arquivos)
             {
-                string pastaDestino = Path.Combine(pastaRaiz, Path.GetFileName(file));
+                string pastaDestino = Path.Combine(destino, Path.GetFileName(file));
 
                 if (!File.Exists(pastaDestino))
                 {
-                    File.Move(file, pastaDestino);
+                    File.Copy(file, pastaDestino);
                     AdicionarArquivoNaLista(pastaDestino);
                     Contador++;
                     arquivosProcessados++;
