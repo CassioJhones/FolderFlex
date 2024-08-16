@@ -18,8 +18,9 @@
         <StackPanel Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Stretch" >
             <StackPanel Orientation="Horizontal">
                 <Image Source="/git.ico"  Width="38" ToolTip="Código do Projeto" Cursor="Hand" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
-                <Button Name="SelectFolderButton" Content="Selecionar Pasta" Width="150" Height="30" Click="Click_SelecionarPasta" IsDefault="True"/>
-                <Button Name="CancelButton" Content="Cancelar" Width="70" Margin="118,0" Height="30" Click="Click_Cancelar" BorderThickness="0.5" Foreground="White" Background="#b73228"/>
+                <Button Name="SelectFolderButton" Content="Selecionar Pasta" Width="110" Height="30" Click="Click_SelecionarPasta" IsDefault="True"/>
+                <Button x:Name="SelectDestinationFolder" Content="Selecionar Destino" Width="110" Height="30" Click="Click_SelecionarDestino" Margin="10,0"/>
+                <Button Name="CancelButton" Content="Cancelar" Width="70" Margin="110,0,0,0" Height="30" Click="Click_Cancelar" BorderThickness="0.5" Foreground="White" Background="#b73228" FontWeight="Medium"/>
             </StackPanel>
 
             <ListView ItemsSource="{Binding ArquivosMovidos}" SelectedItem="{Binding ArquivoSelecionado}"  MouseDoubleClick="Click_AbrirArquivo" Name="ArquivosListBox" Height="150" Width="460" Margin="0,5,0,0" SelectionMode="Single" Foreground="DimGray">
