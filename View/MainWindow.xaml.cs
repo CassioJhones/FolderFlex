@@ -58,7 +58,6 @@ public partial class MainWindow : Window
         => _viewModel.AbrirArquivo(ArquivosListBox);
     private void Click_Cancelar(object sender, RoutedEventArgs e)
         => _viewModel.Cancelar();
-
     private async void Click_SelecionarDestino(object sender, RoutedEventArgs e)
     {
         await _viewModel.SelecionarDestino();

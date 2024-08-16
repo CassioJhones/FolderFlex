@@ -19,8 +19,9 @@
             <StackPanel Orientation="Horizontal">
                 <Image Source="/git.ico" Width="38" ToolTip="Código do Projeto" Cursor="Hand" MouseLeftButtonDown="Image_MouseLeftButtonDown"/>
                 <Button Name="SelectFolderButton" Content="Selecionar Pasta" Width="110" Height="30" Click="Click_SelecionarPasta" IsDefault="True" ToolTip="A pasta selecionada terá todas as subpastas extraídas para sua raiz"/>
-                <Button x:Name="SelectDestinationFolder"  Content="Selecionar Destino" Width="110" Height="30" Click="Click_SelecionarDestino" Margin="10,0"/>
-                <Button Name="CancelButton" Content="Cancelar" Width="70" Margin="110,0,0,0" Height="30" Click="Click_Cancelar" BorderThickness="0.5" Foreground="White" Background="#b73228" FontWeight="Medium"/>
+                <Button x:Name="SelectDestinationFolder"  Content="Selecionar Destino" Width="110" Height="30" Click="Click_SelecionarDestino" Margin="5,0"/>
+                <CheckBox Content="Renomear" VerticalAlignment="Center" IsChecked="{Binding Renomear}" ToolTip="Marque para renomear os arquivos iguais que já existem na pasta"/>
+                <Button Name="CancelButton" Content="Cancelar" Width="70" Margin="40,0,0,0" Height="30" Click="Click_Cancelar" BorderThickness="0.5" Foreground="White" Background="#b73228" FontWeight="Medium"/>
             </StackPanel>
 
             <ListView ItemsSource="{Binding ArquivosMovidos}" SelectedItem="{Binding ArquivoSelecionado}"  MouseDoubleClick="Click_AbrirArquivo" Name="ArquivosListBox" Height="150" Width="460" Margin="0,5,0,0" SelectionMode="Single" Foreground="DimGray">
@@ -33,6 +34,7 @@
                     </GridView>
                 </ListView.View>
             </ListView>
+
             <ProgressBar Name="Progresso" Value="{Binding Progresso}" Width="460" Height="20" Margin="0,3,0,0" Minimum="0" Maximum="100" />
             <TextBlock Name="TempoDecorrido" Text="" Margin="0,0,0,0" TextAlignment="Center"/>
             <TextBlock Name="MensagemStatus" Text="{Binding MensagemStatus}" Margin="0,-16,0,0" TextAlignment="Center" FontWeight="Bold"/>
