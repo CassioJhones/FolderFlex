@@ -44,10 +44,13 @@ public partial class MainWindow : Window
     {
         _viewModel.Contador = 0;
         _viewModel.Progresso = 0;
+        _viewModel.ArquivosMovidos.Clear();
+        _viewModel.Cronometro.Reset();
         _viewModel.MensagemStatus = "Selecione uma pasta para começar...";
         _viewModel.MensagemErro = "";
         MensagemStatus.Foreground = Brushes.Black;
         TempoDecorrido.Text = "";
+
     }
     private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         => _viewModel.LinkIcone();
@@ -59,6 +62,17 @@ public partial class MainWindow : Window
     private async void Click_SelecionarDestino(object sender, RoutedEventArgs e)
     {
         await _viewModel.SelecionarDestino();
+        if (!string.IsNullOrEmpty(_viewModel.PastaDestino))
+        {
+            MensagemStatus.Foreground = Brushes.OrangeRed;
+            SelectDestinationFolder.Content = "Destino ✅";
+            SelectDestinationFolder.Foreground = Brushes.ForestGreen;
+        }
+        else
+        {
+            SelectDestinationFolder.Content = "Selecionar Destino";
+            SelectDestinationFolder.Foreground = Brushes.Black;
+        }
     }
 }
 

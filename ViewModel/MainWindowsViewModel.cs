@@ -71,6 +71,16 @@ public class MainWindowsViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(UltimaPastaSelecionada));
         }
     }
+    private string _pastaDestino;
+    public string PastaDestino
+    {
+        get => _pastaDestino;
+        set
+        {
+            _pastaDestino = value;
+            OnPropertyChanged(nameof(_pastaDestino));
+        }
+    }
     public string Nome { get; set; }
     public string Tamanho { get; set; }
     public ObservableCollection<ArquivoInfo> ArquivosMovidos { get; private set; }
@@ -92,15 +102,11 @@ public class MainWindowsViewModel : INotifyPropertyChanged
 
         if (janela.ShowDialog() == System.Windows.Forms.DialogResult.OK)
         {
+            string caminhoDestino = "";
             string caminhoSelecionado = janela.SelectedPath;
-            string caminhoDestino = caminhoSelecionado;
-            Cancelador = new CancellationTokenSource();
 
-            var destinoEscolhido = await SelecionarDestino();
-            if (!string.IsNullOrEmpty(destinoEscolhido))
-            {
-                caminhoDestino = destinoEscolhido;
-            }
+            caminhoDestino = string.IsNullOrEmpty(PastaDestino) ? caminhoSelecionado : PastaDestino;
+            Cancelador = new CancellationTokenSource();
 
             try
             {
@@ -130,14 +136,21 @@ public class MainWindowsViewModel : INotifyPropertyChanged
 
         if (janela.ShowDialog() == System.Windows.Forms.DialogResult.OK)
         {
+            _pastaDestino = janela.SelectedPath;
+            DirectoryInfo infoPasta = new(_pastaDestino);
+            MensagemStatus = $"Tudo será movido para: {infoPasta.Name}";
             return janela.SelectedPath;
         }
-
-        return string.Empty;
+        else
+        {
+            _pastaDestino = "";
+            MensagemStatus = $"Tudo será movido para a Raiz da pasta";
+            return janela.SelectedPath;
+        }
     }
     private async Task MoverParaRaiz(string pastaRaiz, string destino, CancellationToken cancelador)
     {
-        var infoPasta = new DirectoryInfo(pastaRaiz);
+        DirectoryInfo infoPasta = new(pastaRaiz);
         string[] listaSubPastas = Directory.GetDirectories(pastaRaiz, "*", SearchOption.AllDirectories);
 
         if (listaSubPastas.Length <= 0)
@@ -150,6 +163,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
         int arquivosProcessados = 0;
         foreach (string pasta in listaSubPastas)
         {
+            DirectoryInfo subPastaInfo = new(pastaRaiz);
             cancelador.ThrowIfCancellationRequested();
             string[] arquivos = Directory.GetFiles(pasta);
             foreach (string file in arquivos)
@@ -163,12 +177,14 @@ public class MainWindowsViewModel : INotifyPropertyChanged
                     Contador++;
                     arquivosProcessados++;
                     Progresso = (double)arquivosProcessados / totalArquivos * 100;
-
                     await Task.Delay(10, cancelador);
                 }
                 else
                 {
-                    MensagemErro += $"O arquivo {Path.GetFileName(file)} já existe na pasta.\n";
+                    MensagemErro += $"O arquivo {Path.GetFileName(file)} já existe na pasta {subPastaInfo.Name}.\n";
+                    arquivosProcessados++;
+                    Progresso = (double)arquivosProcessados / totalArquivos * 100;
+                    await Task.Delay(10, cancelador);
                 }
             }
         }
@@ -208,10 +224,8 @@ public class MainWindowsViewModel : INotifyPropertyChanged
         }
     }
     public void LinkIcone()
-    {
-        AbrirSite("https://github.com/CassioJhones");
-        AbrirSite("https://github.com/CassioJhones/Movedor");
-    }
+        => AbrirSite("https://github.com/CassioJhones/Movedor");
+
     private void AbrirSite(string link)
     {
         try
