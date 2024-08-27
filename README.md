@@ -1,4 +1,9 @@
-# Movedor de Arquivos
+<div align="right">
+  <img src="https://img.shields.io/badge/WPF-017ad7?style=for-the-badge&logo=Windows&logoColor=white" />
+  <img src="https://img.shields.io/badge/.NET_8-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" />
+</div>
+
+# Movedor de Arquivos  
 > Recomendado para quem trabalha com grandes quantidades de arquivos e deseja mover arquivos de várias subpastas para uma pasta raiz de modo rápido.
 
 ## Recursos
