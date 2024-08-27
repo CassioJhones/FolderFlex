@@ -28,7 +28,7 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Caminho" Width="0" DisplayMemberBinding="{Binding Rota}" />
-                        <GridViewColumn Header="Nome" Width="280" DisplayMemberBinding="{Binding Nome}" />
+                        <GridViewColumn Header="Nome" Width="320" DisplayMemberBinding="{Binding Nome}" />
                         <GridViewColumn Header="Extensão" Width="60" DisplayMemberBinding="{Binding Extensao}" />
                         <GridViewColumn Header="Tamanho" Width="70" DisplayMemberBinding="{Binding Tamanho}" />
                     </GridView>
