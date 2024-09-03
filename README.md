@@ -1,14 +1,8 @@
-<img src="https://github.com/user-attachments/assets/4e77a61a-1566-4a99-9cb1-2960dc1ea08b" alt="Banner FolderFlex" width="100%" />
+<img src="https://github.com/user-attachments/assets/0b7e98fe-aeb5-406f-9cb8-6095ebdbf095" alt="Banner FolderFlex" width="100%" />
 
-<div align="right">
-  <img src="https://img.shields.io/badge/WPF-017ad7?style=for-the-badge&logo=Windows&logoColor=white" />
-  <img src="https://img.shields.io/badge/.NET_8-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" />
-</div>
 
-# FolderFlex  - ⭐ Deixe uma estrela no repositório 
+<h1>⭐ Deixe uma estrela no repositório  <img src="https://img.shields.io/badge/WPF-017ad7?style=for-the-badge&logo=Windows&logoColor=white" /> <img src="https://img.shields.io/badge/.NET_8-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" /></h1>
 > Recomendado para quem trabalha com grandes quantidades de arquivos e deseja mover arquivos de várias subpastas para uma pasta raiz de modo rápido.
-
-## Recursos
 
 - **Feedback Visual**: Acompanhe o progresso e veja o número de arquivos movidos em tempo real.
 - **Evita Sobrescritas**: Verifica se o arquivo já existe na pasta raiz antes de movê-lo.
