@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+		<UseWindowsForms>true</UseWindowsForms>
+		<ApplicationIcon>Recursos\pasta.ico</ApplicationIcon>
+		<StartupObject>Movedor.App</StartupObject>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Recursos\git.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Recursos\pasta.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Recursos\git.ico" />
+	</ItemGroup>
+
+</Project>
