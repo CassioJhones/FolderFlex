@@ -1,3 +1,5 @@
+<img src="https://github.com/user-attachments/assets/4e77a61a-1566-4a99-9cb1-2960dc1ea08b" alt="Banner FolderFlex" width="100%" />
+
 <div align="right">
   <img src="https://img.shields.io/badge/WPF-017ad7?style=for-the-badge&logo=Windows&logoColor=white" />
   <img src="https://img.shields.io/badge/.NET_8-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" />
