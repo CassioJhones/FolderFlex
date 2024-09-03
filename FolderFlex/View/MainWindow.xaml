@@ -1,15 +1,16 @@
-﻿<Window x:Class="Movedor.View.MainWindow"
+﻿<Window x:Class="FolderFlex.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Movedor.View"
-        xmlns:vm="clr-namespace:Movedor.ViewModel" ShowInTaskbar="True"
-        mc:Ignorable="d" ResizeMode="CanMinimize" Topmost="True" Icon="/Recursos/git.ico"
+        xmlns:local="clr-namespace:FolderFlex.View"
+        xmlns:vm="clr-namespace:FolderFlex.ViewModel" ShowInTaskbar="True"
+        mc:Ignorable="d" ResizeMode="CanMinimize" Topmost="True" Icon="/Recursos/pasta.ico" 
         Title="FolderFlex " Height="400" Width="500">
     <Window.DataContext>
         <vm:MainWindowsViewModel/>
     </Window.DataContext>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="255"/>

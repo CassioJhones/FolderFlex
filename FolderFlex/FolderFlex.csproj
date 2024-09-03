@@ -8,7 +8,7 @@
 		<UseWPF>true</UseWPF>
 		<UseWindowsForms>true</UseWindowsForms>
 		<ApplicationIcon>Recursos\pasta.ico</ApplicationIcon>
-		<StartupObject>Movedor.App</StartupObject>
+		<StartupObject></StartupObject>
 	</PropertyGroup>
 
 	<ItemGroup>

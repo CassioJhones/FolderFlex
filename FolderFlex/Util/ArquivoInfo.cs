@@ -1,4 +1,4 @@
-﻿namespace Movedor.Util;
+﻿namespace FolderFlex.Util;
 public class ArquivoInfo
 {
     public string? Rota { get; set; }

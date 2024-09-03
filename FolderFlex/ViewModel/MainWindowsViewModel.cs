@@ -1,10 +1,10 @@
-﻿using Movedor.Util;
+﻿using FolderFlex.Util;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 
-namespace Movedor.ViewModel;
+namespace FolderFlex.ViewModel;
 public class MainWindowsViewModel : INotifyPropertyChanged
 {
     #region PROPRIEDADES

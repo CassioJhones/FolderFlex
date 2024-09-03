@@ -1,9 +1,9 @@
-﻿using Movedor.ViewModel;
+﻿using FolderFlex.ViewModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using Brushes = System.Windows.Media.Brushes;
-namespace Movedor.View;
+namespace FolderFlex.View;
 
 public partial class MainWindow : Window
 {

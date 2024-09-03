@@ -1,6 +1,6 @@
 ﻿using Application = System.Windows.Application;
 
-namespace Movedor;
+namespace FolderFlex;
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>
