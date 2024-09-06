@@ -327,6 +327,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
     => Cancelador.Cancel();
     public void AtualizarProgresso(int totalArquivos)
     {
+        if (totalArquivos is 0) throw new DivideByZeroException();
         ArquivosProcessados += 1;
         Progresso = (double)ArquivosProcessados / totalArquivos * 100;
     }
