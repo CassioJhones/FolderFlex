@@ -14,11 +14,11 @@ public partial class MainWindow : Window
         _viewModel = new MainWindowsViewModel();
         DataContext = _viewModel;
     }
-    private async void Click_SelecionarPasta(object sender, RoutedEventArgs e)
+    private async void Click_SelecionarOrigem(object sender, RoutedEventArgs e)
     {
         LimparTela();
 
-        await _viewModel.SelecionarPasta();
+        await _viewModel.SelecionarOrigem();
 
         ExibirMensagemStatus();
         ExibirTempo(_viewModel.Cronometro);
@@ -59,18 +59,8 @@ public partial class MainWindow : Window
     private void Click_Cancelar(object sender, RoutedEventArgs e)
         => _viewModel.Cancelar();
     private async void Click_SelecionarDestino(object sender, RoutedEventArgs e)
-    {
-        await _viewModel.SelecionarDestino();
-        if (!string.IsNullOrEmpty(_viewModel.PastaDestino))
-        {
-            MensagemStatus.Foreground = Brushes.OrangeRed;
-            SelectDestinationFolder.Content = "Destino ✅";
-            SelectDestinationFolder.Foreground = Brushes.ForestGreen;
-        }
-        else
-        {
-            SelectDestinationFolder.Content = "Selecionar Destino";
-            SelectDestinationFolder.Foreground = Brushes.Black;
-        }
-    }
+        => await _viewModel.SelecionarDestino();
+    private async void Click_Iniciar(object sender, RoutedEventArgs e)
+        => await _viewModel.IniciarMovimento();
+
 }

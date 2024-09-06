@@ -81,14 +81,24 @@ public class MainWindowsViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(UltimaPastaSelecionada));
         }
     }
-    private string _pastaDestino;
+    private string _pastaDestino = "Destino...";
     public string PastaDestino
     {
         get => _pastaDestino;
         set
         {
             _pastaDestino = value;
-            OnPropertyChanged(nameof(_pastaDestino));
+            OnPropertyChanged(nameof(PastaDestino));
+        }
+    }
+    private string _pastaOrigem = "Origem...";
+    public string PastaOrigem
+    {
+        get => _pastaOrigem;
+        set
+        {
+            _pastaOrigem = value;
+            OnPropertyChanged(nameof(PastaOrigem));
         }
     }
     public string Nome { get; set; }
@@ -103,7 +113,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
         ArquivosMovidos = new ObservableCollection<ArquivoInfo>();
         Cronometro = new Stopwatch();
     }
-    public async Task SelecionarPasta()
+    public async Task SelecionarOrigem()
     {
         using FolderBrowserDialog janela = new();
         janela.Description = "SELECIONE A PASTA RAIZ";
@@ -112,30 +122,36 @@ public class MainWindowsViewModel : INotifyPropertyChanged
         janela.SelectedPath = UltimaPastaSelecionada;
 
         if (janela.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            PastaOrigem = janela.SelectedPath;
+    }
+
+    public async Task IniciarMovimento()
+    {
+        string caminhoDestino = "";
+        caminhoDestino = string.IsNullOrEmpty(PastaDestino) ? PastaOrigem : PastaDestino;
+        Cancelador = new CancellationTokenSource();
+
+        try
         {
-            string caminhoDestino = "";
-            string caminhoSelecionado = janela.SelectedPath;
-
-            caminhoDestino = string.IsNullOrEmpty(PastaDestino) ? caminhoSelecionado : PastaDestino;
-            Cancelador = new CancellationTokenSource();
-
-            try
-            {
-                UltimaPastaSelecionada = caminhoSelecionado;
-                Cronometro.Start();
-                await MoverParaRaiz(caminhoSelecionado, caminhoDestino, Cancelador.Token);
-                Cronometro.Stop();
-            }
-            catch (OperationCanceledException)
-            {
-                MensagemErro += $"\nOperação cancelada pelo usuário após mover {Contador}.";
-            }
-            catch (Exception ex)
-            {
-                MensagemErro += $"\nErro: {ex.Message}";
-            }
+            UltimaPastaSelecionada = PastaOrigem;
+            Cronometro.Start();
+            await MoverParaRaiz(PastaOrigem, caminhoDestino, Cancelador.Token);
+            Cronometro.Stop();
+        }
+        catch (OperationCanceledException)
+        {
+            MensagemErro += $"\nOperação cancelada pelo usuário após mover {Contador}.";
+        }
+        catch (DirectoryNotFoundException ex)
+        {
+            MensagemErro += $"\nPasta raiz inexistente ou não selecionada";
+        }
+        catch (Exception ex)
+        {
+            MensagemErro += $"\nErro: {ex.Message}";
         }
     }
+
     public async Task<string> SelecionarDestino()
     {
         using FolderBrowserDialog janela = new();
@@ -146,7 +162,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
 
         if (janela.ShowDialog() == System.Windows.Forms.DialogResult.OK)
         {
-            _pastaDestino = janela.SelectedPath;
+            PastaDestino = janela.SelectedPath;
             DirectoryInfo infoPasta = new(_pastaDestino);
             MensagemStatus = $"Tudo será movido para: {infoPasta.Name}";
             return janela.SelectedPath;
@@ -158,7 +174,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
             return janela.SelectedPath;
         }
     }
-    private async Task MoverParaRaiz(string pastaRaiz, string destino, CancellationToken cancelador)
+    public async Task MoverParaRaiz(string pastaRaiz, string destino, CancellationToken cancelador)
     {
         DirectoryInfo infoPasta = new(pastaRaiz);
         string[] listaSubPastas = Directory.GetDirectories(pastaRaiz, "*", SearchOption.AllDirectories);
@@ -225,7 +241,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
 
         DeletarPastas(listaSubPastas);
     }
-    private void AdicionarArquivoNaLista(string pastaDestino)
+    public void AdicionarArquivoNaLista(string pastaDestino)
     {
         FileInfo info = new(pastaDestino);
 
@@ -241,7 +257,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
             Extensao = Path.GetExtension(pastaDestino)?.TrimStart('.')
         });
     }
-    private void DeletarPastas(string[] subpastas)
+    public void DeletarPastas(string[] subpastas)
     {
         string[] subpastasOrdenadas = subpastas.OrderByDescending(pasta => pasta.Count(c => c == '\\')).ToArray();
         foreach (string subPasta in subpastasOrdenadas)
@@ -259,7 +275,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
     }
     public void LinkIcone()
         => AbrirSite("https://github.com/CassioJhones/Movedor");
-    private void AbrirSite(string link)
+    public void AbrirSite(string link)
     {
         try
         {
