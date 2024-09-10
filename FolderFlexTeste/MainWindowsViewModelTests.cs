@@ -1,4 +1,5 @@
 using FolderFlex.ViewModel;
+using System.Text;
 namespace FolderFlexTeste;
 
 public class MainWindowsViewModelTests
@@ -14,6 +15,7 @@ public class MainWindowsViewModelTests
         Assert.Equal(0, contadorInicial);
     }
 
+    #region CHECKBOX PARA RENOMEAR
     [Fact(DisplayName = "Opcão de renomear os arquivos deve iniciar como false")]
     public void Renomear_DeveSerFalsoPorPadrao()
     {
@@ -30,6 +32,9 @@ public class MainWindowsViewModelTests
         Assert.NotEqual(valorInicial, viewModel.Renomear);
     }
 
+    #endregion CHECKBOX PARA RENOMEAR
+
+    #region BARRA DE PROGRESSO
     [Fact(DisplayName = "AtualizarProgresso deve atualizar corretamente após processar um arquivo")]
     public void AtualizarProgresso_DeveAtualizarCorretamente_AposProcessarUmArquivo()
     {
@@ -75,4 +80,38 @@ public class MainWindowsViewModelTests
 
         Assert.Equal(progressoEsperado, viewModel.Progresso);
     }
+    #endregion BARRA DE PROGRESSO
+
+    #region TAREFA PARA MOVER
+
+    [Fact(DisplayName = "IniciarMovimento deve mover arquivos corretamente")]
+    public async Task IniciarMovimento_DeveMoverArquivosCorretamente()
+    {
+        // Arrange
+        viewModel.PastaOrigem = "C:\\TesteOrigem";
+        viewModel.PastaDestino = "C:\\TesteDestino";
+        Directory.CreateDirectory(viewModel.PastaOrigem);
+        Directory.CreateDirectory(viewModel.PastaDestino);
+
+        using (FileStream fs = File.Create($"{viewModel.PastaOrigem}/teste.txt"))
+        {
+            byte[] info = new UTF8Encoding(true).GetBytes("Texto de teste");
+            fs.Write(info, 0, info.Length);
+        }
+
+        // Act
+        await viewModel.IniciarMovimento();
+
+        // Assert
+        
+        Assert.Equal(viewModel.PastaOrigem, viewModel.UltimaPastaSelecionada);
+        Assert.Equal(0, viewModel.MensagemErro.Length);
+
+        Assert.True(File.Exists($"{viewModel.PastaDestino}/teste.txt")); 
+        Assert.False(File.Exists($"{viewModel.PastaOrigem}/teste.txt")); 
+
+        Directory.Delete(viewModel.PastaOrigem, true);
+        Directory.Delete(viewModel.PastaDestino, true);
+    }
+    #endregion
 }
