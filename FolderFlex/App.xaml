@@ -94,7 +94,7 @@
         <Style x:Key="TextBoxRoundedStyle" TargetType="TextBox">
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="BorderBrush" Value="#CCC" />
-            <Setter Property="Padding" Value="5" />
+            <Setter Property="Padding" Value="5 2" />
             <Setter Property="Background" Value="White" />
             <Setter Property="Template">
                 <Setter.Value>

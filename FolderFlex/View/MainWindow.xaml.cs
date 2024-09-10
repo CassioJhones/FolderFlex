@@ -17,11 +17,13 @@ public partial class MainWindow : Window
     private async void Click_SelecionarOrigem(object sender, RoutedEventArgs e)
     {
         LimparTela();
-
         await _viewModel.SelecionarOrigem();
+    }
 
-        ExibirMensagemStatus();
-        ExibirTempo(_viewModel.Cronometro);
+    private async void Click_SelecionarDestino(object sender, RoutedEventArgs e)
+    {
+        LimparTela();
+        await _viewModel.SelecionarDestino();
     }
     private void ExibirTempo(Stopwatch tempo)
     {
@@ -42,6 +44,7 @@ public partial class MainWindow : Window
     }
     private void LimparTela()
     {
+        if (_viewModel.Contador == 0) return;
         _viewModel.Contador = 0;
         _viewModel.Progresso = 0;
         _viewModel.ArquivosMovidos.Clear();
@@ -58,9 +61,13 @@ public partial class MainWindow : Window
         => _viewModel.AbrirArquivo(ArquivosListBox);
     private void Click_Cancelar(object sender, RoutedEventArgs e)
         => _viewModel.Cancelar();
-    private async void Click_SelecionarDestino(object sender, RoutedEventArgs e)
-        => await _viewModel.SelecionarDestino();
+
     private async void Click_Iniciar(object sender, RoutedEventArgs e)
-        => await _viewModel.IniciarMovimento();
+    {
+        await _viewModel.IniciarMovimento();
+
+        ExibirMensagemStatus();
+        ExibirTempo(_viewModel.Cronometro);
+    }
 
 }
