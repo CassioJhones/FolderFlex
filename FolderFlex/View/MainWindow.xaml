@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FolderFlex.View"
-        xmlns:vm="clr-namespace:FolderFlex.ViewModel" ShowInTaskbar="True"
+        xmlns:vm="clr-namespace:FolderFlex.ViewModel" ShowInTaskbar="True" FontFamily="Segoe UI"
         mc:Ignorable="d" ResizeMode="CanMinimize" Topmost="True" Icon="/Recursos/pasta.ico" 
         Title="FolderFlex " Height="400" Width="500">
     <Window.DataContext>
@@ -29,16 +29,16 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="5,5,0,0" Grid.Row="0">
-                    <TextBlock Width="250"  Height="25" IsEnabled="False" Background="WhiteSmoke" Text="{Binding PastaOrigem}" Margin="5,0,0,0" VerticalAlignment="Top"/>
-                    <Button Content="...." Width="25" Height="25" Click="Click_SelecionarOrigem" Margin="2,0,10,0"  VerticalAlignment="Top"/>
-                    <Button Content="Mover" Width="100" Height="25" Click="Click_Iniciar" BorderThickness="0.5" Foreground="White" Background="ForestGreen" FontWeight="Medium" VerticalAlignment="Top"/>
+                    <TextBox Style="{StaticResource TextBoxRoundedStyle}" Width="250"  Height="25" IsEnabled="True" IsReadOnly="True" Background="WhiteSmoke" Text="{Binding PastaOrigem}" Margin="5,0,0,0" VerticalAlignment="Top"/>
+                    <Button Style="{StaticResource FlatButtonStyle_Blue}" Content="...." Width="25" Height="25" Click="Click_SelecionarOrigem" Margin="2,0,10,0"  VerticalAlignment="Top"/>
+                    <Button Style="{StaticResource FlatButtonStyle_Green}" Content="Mover" Width="100" Height="25" Click="Click_Iniciar" BorderThickness="0.5" FontWeight="Medium" VerticalAlignment="Top"/>
                     <Image  Source="/Recursos/git.ico" Width="38" ToolTip="Código do Projeto" Cursor="Hand" MouseLeftButtonDown="Image_MouseLeftButtonDown" Margin="20,-8,0,0" VerticalAlignment="Bottom"/>
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Margin="5,0,0,0" Grid.Row="1">
-                    <TextBlock Width="250"   Height="25" Background="WhiteSmoke" Text="{Binding PastaDestino}" Margin="5,0,0,0" IsEnabled="False" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                    <Button  Content="...." Width="25" Height="25" Click="Click_SelecionarDestino"  Margin="2,0,10,0" ToolTip="Selecionar a pasta de destino"/>
-                    <Button  Content="Cancelar" Width="100" Height="25" Click="Click_Cancelar" BorderThickness="0.5" Foreground="White" Background="#b73228" FontWeight="Medium"/>
+                    <TextBox Style="{StaticResource TextBoxRoundedStyle}" Width="250"   Height="25" IsEnabled="True" IsReadOnly="True" Background="WhiteSmoke" Text="{Binding PastaDestino}" Margin="5,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                    <Button Style="{StaticResource FlatButtonStyle_Blue}" Content="...." Width="25" Height="25" Click="Click_SelecionarDestino"  Margin="2,0,10,0" ToolTip="Selecionar a pasta de destino"/>
+                    <Button Style="{StaticResource FlatButtonStyle_Red}" Content="Cancelar" Width="100" Height="25" Click="Click_Cancelar" BorderThickness="0.5" FontWeight="Medium"/>
                     <CheckBox Content="Renomear" VerticalAlignment="Center" IsChecked="{Binding Renomear}" ToolTip="Marque para renomear os arquivos iguais que já existem na pasta" Margin="4,0,10,0"/>
                 </StackPanel>
 
@@ -48,9 +48,9 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Caminho" Width="0" DisplayMemberBinding="{Binding Rota}" />
-                        <GridViewColumn Header="Nome" Width="320" DisplayMemberBinding="{Binding Nome}" />
+                        <GridViewColumn Header="Nome" Width="290" DisplayMemberBinding="{Binding Nome}" />
                         <GridViewColumn Header="Extensão" Width="60" DisplayMemberBinding="{Binding Extensao}" />
-                        <GridViewColumn Header="Tamanho" Width="70" DisplayMemberBinding="{Binding Tamanho}" />
+                        <GridViewColumn Header="Tamanho" Width="100" DisplayMemberBinding="{Binding Tamanho}" />
                     </GridView>
                 </ListView.View>
             </ListView>

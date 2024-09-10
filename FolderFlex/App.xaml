@@ -4,6 +4,114 @@
              xmlns:local="clr-namespace:FolderFlex.View"
              StartupUri="View/MainWindow.xaml">
     <Application.Resources>
+        <!-- Estilo para Botões Flat AZUL-->
+            <Style x:Key="FlatButtonStyle_Blue" TargetType="Button">
+            <Setter Property="Background" Value="#939797" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="FontWeight" Value="Bold" />
+                <Setter Property="Padding" Value="10,5" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}" 
+                            CornerRadius="4" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#4c5253" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+        <!-- Estilo para Botões Flat VERDE-->
+        <Style x:Key="FlatButtonStyle_Green" TargetType="Button">
+            <Setter Property="Background" Value="LimeGreen" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                     CornerRadius="4" 
+                     BorderBrush="{TemplateBinding BorderBrush}" 
+                     BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="MediumSeaGreen" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
+        <!-- Estilo para Botões Flat VERMELHO-->
+        <Style x:Key="FlatButtonStyle_Red" TargetType="Button">
+            <Setter Property="Background" Value="IndianRed" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+              CornerRadius="4" 
+              BorderBrush="{TemplateBinding BorderBrush}" 
+              BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="DarkRed" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
+        <!-- Estilo para TextBox com Bordas Arredondadas -->
+        <Style x:Key="TextBoxRoundedStyle" TargetType="TextBox">
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="#CCC" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="Background" Value="White" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border CornerRadius="5" BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsFocused" Value="True">
+                    <Setter Property="BorderBrush" Value="#007ACC" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
     </Application.Resources>
 </Application>
