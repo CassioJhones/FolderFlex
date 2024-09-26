@@ -55,6 +55,13 @@
                         <GridViewColumn Header="Tamanho" Width="100" DisplayMemberBinding="{Binding Tamanho}" />
                     </GridView>
                 </ListView.View>
+
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem  Header="Abrir pasta deste arquivo" Click="AbrirPastaDoArquivo_Click"/>
+                    </ContextMenu>
+                </ListView.ContextMenu>
+
             </ListView>
             <ProgressBar Name="Progresso" Value="{Binding Progresso}" Width="460" Height="20" Margin="0,0,0,0" Minimum="0" Maximum="100" />
             <TextBlock Name="TempoDecorrido" Text="" Margin="0,0,0,0" TextAlignment="Center"/>

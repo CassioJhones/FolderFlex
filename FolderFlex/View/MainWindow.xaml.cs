@@ -61,7 +61,8 @@ public partial class MainWindow : Window
         => _viewModel.AbrirArquivo(ArquivosListBox);
     private void Click_Cancelar(object sender, RoutedEventArgs e)
         => _viewModel.Cancelar();
-
+    private void AbrirPastaDoArquivo_Click(object sender, RoutedEventArgs e)
+        => _viewModel.OpcaoAbertura(ArquivosListBox);
     private async void Click_Iniciar(object sender, RoutedEventArgs e)
     {
         await _viewModel.IniciarMovimento();
@@ -69,5 +70,4 @@ public partial class MainWindow : Window
         ExibirMensagemStatus();
         ExibirTempo(_viewModel.Cronometro);
     }
-
 }

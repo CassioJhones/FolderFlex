@@ -11,8 +11,8 @@ public class MainWindowsViewModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
     private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    private CancellationTokenSource _cancelador;
-    public CancellationTokenSource Cancelador
+    private CancellationTokenSource? _cancelador;
+    public CancellationTokenSource? Cancelador
     {
         get => _cancelador;
         set
@@ -71,8 +71,8 @@ public class MainWindowsViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(MensagemErro));
         }
     }
-    private string _ultimaPastaSelecionada;
-    public string UltimaPastaSelecionada
+    private string? _ultimaPastaSelecionada;
+    public string? UltimaPastaSelecionada
     {
         get => _ultimaPastaSelecionada;
         set
@@ -81,8 +81,8 @@ public class MainWindowsViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(UltimaPastaSelecionada));
         }
     }
-    private string _pastaDestino = "Destino...";
-    public string PastaDestino
+    private string? _pastaDestino = "Destino...";
+    public string? PastaDestino
     {
         get => _pastaDestino;
         set
@@ -91,8 +91,8 @@ public class MainWindowsViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(PastaDestino));
         }
     }
-    private string _pastaOrigem = "Origem...";
-    public string PastaOrigem
+    private string? _pastaOrigem = "Origem...";
+    public string? PastaOrigem
     {
         get => _pastaOrigem;
         set
@@ -101,8 +101,8 @@ public class MainWindowsViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(PastaOrigem));
         }
     }
-    public string Nome { get; set; }
-    public string Tamanho { get; set; }
+    public string? Nome { get; set; }
+    public string? Tamanho { get; set; }
     public ObservableCollection<ArquivoInfo> ArquivosMovidos { get; private set; }
     public Stopwatch Cronometro { get; private set; }
     public int ArquivosProcessados = 0;
@@ -119,8 +119,8 @@ public class MainWindowsViewModel : INotifyPropertyChanged
         janela.Description = "SELECIONE A PASTA RAIZ";
         janela.UseDescriptionForTitle = true;
         janela.ShowNewFolderButton = true;
-        janela.SelectedPath = UltimaPastaSelecionada;
-
+        janela.SelectedPath = UltimaPastaSelecionada ?? "";
+        PastaDestino = "";
         PastaOrigem = janela.ShowDialog() == System.Windows.Forms.DialogResult.OK ? janela.SelectedPath : "";
     }
 
@@ -130,7 +130,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
         janela.Description = "SELECIONE O DESTINO DOS ARQUIVOS";
         janela.UseDescriptionForTitle = true;
         janela.ShowNewFolderButton = true;
-        janela.SelectedPath = UltimaPastaSelecionada;
+        janela.SelectedPath = UltimaPastaSelecionada ?? "";
 
         if (janela.ShowDialog() == System.Windows.Forms.DialogResult.OK)
         {
@@ -149,7 +149,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
 
     public async Task IniciarMovimento()
     {
-        string caminhoDestino = "";
+        string? caminhoDestino = "";
         caminhoDestino = string.IsNullOrEmpty(PastaDestino) ? PastaOrigem : PastaDestino;
         Cancelador = new CancellationTokenSource();
 
@@ -164,11 +164,11 @@ public class MainWindowsViewModel : INotifyPropertyChanged
         {
             MensagemErro += $"\nOperação cancelada pelo usuário após mover {Contador}.";
         }
-        catch (DirectoryNotFoundException ex)
+        catch (DirectoryNotFoundException)
         {
             MensagemErro += $"\nPasta raiz inexistente ou não selecionada";
         }
-        catch (IOException ex)
+        catch (IOException)
         {
             MensagemErro += $"\nSendo usado por outro processo";
         }
@@ -177,7 +177,6 @@ public class MainWindowsViewModel : INotifyPropertyChanged
             MensagemErro += $"\nErro: {ex.Message}";
         }
     }
-
 
     public async Task MoverParaRaiz(string pastaRaiz, string destino, CancellationToken cancelador)
     {
@@ -215,9 +214,9 @@ public class MainWindowsViewModel : INotifyPropertyChanged
                     }
                     else if (File.Exists(pastaDestino) && Renomear)
                     {
-                        string diretorio = Path.GetDirectoryName(pastaDestino);
-                        string nomeArquivo = Path.GetFileNameWithoutExtension(pastaDestino);
-                        string extensao = Path.GetExtension(pastaDestino);
+                        string? diretorio = Path.GetDirectoryName(pastaDestino) ?? "";
+                        string? nomeArquivo = Path.GetFileNameWithoutExtension(pastaDestino) ?? "";
+                        string? extensao = Path.GetExtension(pastaDestino) ?? "";
 
                         int contador = 1;
                         string novoCaminho;
@@ -266,9 +265,9 @@ public class MainWindowsViewModel : INotifyPropertyChanged
                 }
                 else if (File.Exists(destinoArquivo) && Renomear)
                 {
-                    string diretorio = Path.GetDirectoryName(destinoArquivo);
-                    string nomeArquivo = Path.GetFileNameWithoutExtension(destinoArquivo);
-                    string extensao = Path.GetExtension(destinoArquivo);
+                    string? diretorio = Path.GetDirectoryName(destinoArquivo) ?? "";
+                    string? nomeArquivo = Path.GetFileNameWithoutExtension(destinoArquivo) ?? "";
+                    string? extensao = Path.GetExtension(destinoArquivo) ?? "";
 
                     int contador = 1;
                     string novoCaminho;
@@ -336,7 +335,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
         }
     }
     public void LinkIcone()
-        => AbrirSite("https://github.com/CassioJhones/Movedor");
+        => AbrirSite("https://github.com/CassioJhones/FolderFlex");
     public void AbrirSite(string link)
     {
         try
@@ -368,7 +367,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
         {
             if (listBox.SelectedItem is ArquivoInfo arquivoSelecionado)
             {
-                string caminhoCompleto = arquivoSelecionado.Rota;
+                string? caminhoCompleto = arquivoSelecionado.Rota ?? "";
                 Process.Start(new ProcessStartInfo
                 {
                     FileName = caminhoCompleto,
@@ -378,19 +377,63 @@ public class MainWindowsViewModel : INotifyPropertyChanged
         }
         catch (Win32Exception)
         {
-            MensagemErro = $"\nArquivo não encontrado";
+            MensagemErro += $"\nArquivo não encontrado";
         }
         catch (Exception erro)
         {
-            MensagemErro = $"\n{erro.Message}";
+            MensagemErro += $"\n{erro.Message}";
         }
     }
     public void Cancelar()
-    => Cancelador.Cancel();
+    => Cancelador?.Cancel();
     public void AtualizarProgresso(int totalArquivos)
     {
         if (totalArquivos is 0) throw new DivideByZeroException();
         ArquivosProcessados += 1;
         Progresso = (double)ArquivosProcessados / totalArquivos * 100;
+    }
+
+    public void OpcaoAbertura(System.Windows.Controls.ListBox ArquivosListBox)
+    {
+        if (ArquivosListBox.SelectedItem is ArquivoInfo arquivoSelecionado)
+        {
+            string? diretorio = Path.GetDirectoryName(arquivoSelecionado.Rota) ?? "";
+
+            try
+            {
+                if (string.IsNullOrEmpty(diretorio))
+                {
+                    MensagemErro += $"O caminho do diretório está vazio ou inválido: {arquivoSelecionado.Rota} \n";
+                    return;
+                }
+
+                if (Directory.Exists(diretorio))
+                    Process.Start("explorer.exe", diretorio);
+                else
+                    MensagemErro += $"Pasta não encontrada: {diretorio} \n";
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                MensagemErro += $"Acesso negado ao abrir a pasta: {diretorio}. Detalhes: {ex.Message}\n";
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+                MensagemErro += $"Diretório não encontrado: {diretorio}. Detalhes: {ex.Message}\n";
+            }
+            catch (ArgumentException ex)
+            {
+                MensagemErro += $"O caminho fornecido é inválido: {diretorio}. Detalhes: {ex.Message}\n";
+            }
+            catch (InvalidOperationException ex)
+            {
+                MensagemErro += $"Erro ao iniciar o processo para abrir a pasta: {diretorio}. Detalhes: {ex.Message}\n";
+            }
+            catch (Exception ex)
+            {
+                MensagemErro += $"Erro inesperado ao tentar abrir a pasta: {diretorio}. Detalhes: {ex.Message}\n";
+            }
+        }
+        else MensagemErro += $"Nenhum arquivo foi selecionado.\n";
+
     }
 }

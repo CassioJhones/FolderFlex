@@ -7,8 +7,8 @@ public class MainWindowsViewModelTests
     private readonly MainWindowsViewModel viewModel;
     public MainWindowsViewModelTests()
         => viewModel = new MainWindowsViewModel();
-    
-    [Fact(DisplayName ="Contador de arquivos deve iniciar com zero")]
+
+    [Fact(DisplayName = "Contador de arquivos deve iniciar com zero")]
     public void Contador_DeveIniciarEmZero()
     {
         int contadorInicial = viewModel.Contador;
@@ -45,14 +45,14 @@ public class MainWindowsViewModelTests
         viewModel.AtualizarProgresso(totalArquivos);
 
         Assert.Equal(1, viewModel.ArquivosProcessados);
-        Assert.Equal(10, viewModel.Progresso); 
+        Assert.Equal(10, viewModel.Progresso);
     }
 
     [Fact(DisplayName = "AtualizarProgresso deve atualizar corretamente após processar todos os arquivos")]
     public void AtualizarProgresso_DeveSer100_AposProcessarTodosArquivos()
     {
         int totalArquivos = 5;
-        viewModel.ArquivosProcessados = 4; 
+        viewModel.ArquivosProcessados = 4;
         viewModel.Progresso = 80;
 
         viewModel.AtualizarProgresso(totalArquivos);
@@ -69,8 +69,8 @@ public class MainWindowsViewModelTests
     }
 
     [Theory(DisplayName = "AtualizarProgresso deve calcular corretamente o progresso")]
-    [InlineData(0, 5, 20)]  
-    [InlineData(1, 5, 40)]  
+    [InlineData(0, 5, 20)]
+    [InlineData(1, 5, 40)]
     [InlineData(2, 5, 60)]
     public void AtualizarProgresso_DeveCalcularCorretamente(int arquivosJaProcessados, int totalArquivos, double progressoEsperado)
     {
@@ -103,15 +103,17 @@ public class MainWindowsViewModelTests
         await viewModel.IniciarMovimento();
 
         // Assert
-        
+
         Assert.Equal(viewModel.PastaOrigem, viewModel.UltimaPastaSelecionada);
         Assert.Equal(0, viewModel.MensagemErro.Length);
 
-        Assert.True(File.Exists($"{viewModel.PastaDestino}/teste.txt")); 
-        Assert.False(File.Exists($"{viewModel.PastaOrigem}/teste.txt")); 
+        Assert.True(File.Exists($"{viewModel.PastaDestino}/teste.txt"));
+        Assert.False(File.Exists($"{viewModel.PastaOrigem}/teste.txt"));
 
         Directory.Delete(viewModel.PastaOrigem, true);
         Directory.Delete(viewModel.PastaDestino, true);
     }
-    #endregion
+
+    #endregion TAREFA PARA MOVER
+
 }
