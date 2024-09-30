@@ -40,7 +40,10 @@
                     <TextBox Style="{StaticResource TextBoxRoundedStyle}" Width="250"   Height="25" IsEnabled="True" IsReadOnly="True" Background="WhiteSmoke" Text="{Binding PastaDestino}" Margin="5,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
                     <Button Style="{StaticResource FlatButtonStyle_Blue}" Content="...." Width="25" Height="25" Click="Click_SelecionarDestino"  Margin="2,0,10,0" ToolTip="Selecionar a pasta de destino"/>
                     <Button Style="{StaticResource FlatButtonStyle_Red}" Content="Cancelar" Width="100" Height="25" Click="Click_Cancelar" BorderThickness="0.5" FontWeight="Medium"/>
-                    <CheckBox Content="Renomear" VerticalAlignment="Center" IsChecked="{Binding Renomear}" ToolTip="Marque para renomear os arquivos iguais que já existem na pasta" Margin="4,0,10,0"/>
+                    <StackPanel>
+                        <CheckBox Content="Renomear" VerticalAlignment="Center" IsChecked="{Binding Renomear}" ToolTip="Marque para renomear os arquivos iguais que já existem na pasta" Margin="4,0,10,0"/>
+                        <CheckBox Content="Copiar" VerticalAlignment="Center" IsChecked="{Binding SomenteCopiar}" ToolTip="Marque para copiar os arquivos ao invés de mover" Margin="4,0,10,0"/>
+                    </StackPanel>
                 </StackPanel>
 
             </Grid>

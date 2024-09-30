@@ -14,16 +14,15 @@ public partial class MainWindow : Window
         _viewModel = new MainWindowsViewModel();
         DataContext = _viewModel;
     }
-    private async void Click_SelecionarOrigem(object sender, RoutedEventArgs e)
+    private void Click_SelecionarOrigem(object sender, RoutedEventArgs e)
     {
         LimparTela();
-        await _viewModel.SelecionarOrigem();
+        _viewModel.SelecionarOrigem();
     }
-
-    private async void Click_SelecionarDestino(object sender, RoutedEventArgs e)
+    private void Click_SelecionarDestino(object sender, RoutedEventArgs e)
     {
         LimparTela();
-        await _viewModel.SelecionarDestino();
+        _viewModel.SelecionarDestino();
     }
     private void ExibirTempo(Stopwatch tempo)
     {
@@ -37,10 +36,10 @@ public partial class MainWindow : Window
     private void ExibirMensagemStatus()
     {
         MensagemStatus.Foreground = _viewModel.Contador > 0 ? Brushes.Green : Brushes.Red;
-
-        if (_viewModel.Contador == 1) _viewModel.MensagemStatus = "Arquivo movido com sucesso!";
-        else if (_viewModel.Contador == 0) _viewModel.MensagemStatus = "Nenhum Arquivo foi movido!";
-        else if (_viewModel.Contador > 1) _viewModel.MensagemStatus = $"{_viewModel.Contador} arquivos movidos com sucesso!";
+        string acao = _viewModel.SomenteCopiar ? "copiado" : "movido";
+        if (_viewModel.Contador == 1) _viewModel.MensagemStatus = $"Arquivo {acao} com sucesso!";
+        else if (_viewModel.Contador == 0) _viewModel.MensagemStatus = $"Nenhum Arquivo foi {acao}!";
+        else if (_viewModel.Contador > 1) _viewModel.MensagemStatus = $"{_viewModel.Contador} arquivos {acao}s com sucesso!";
     }
     private void LimparTela()
     {
