@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FolderFlex.View"
         xmlns:vm="clr-namespace:FolderFlex.ViewModel"
         xmlns:local1="clr-namespace:FolderFlex.Util" ShowInTaskbar="True" FontFamily="Segoe UI"
-        mc:Ignorable="d" ResizeMode="CanMinimize" Topmost="True" Icon="/Recursos/pasta.ico" 
+        mc:Ignorable="d" ResizeMode="CanMinimize" Topmost="True" Icon="/Recursos/pasta.ico" Loaded="VerificarVersao"
         Title="FolderFlex " Height="400" Width="500">
     <Window.DataContext>
         <vm:MainWindowsViewModel/>
