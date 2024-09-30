@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FolderFlex.View"
-        xmlns:vm="clr-namespace:FolderFlex.ViewModel" ShowInTaskbar="True" FontFamily="Segoe UI"
+        xmlns:vm="clr-namespace:FolderFlex.ViewModel"
+        xmlns:local1="clr-namespace:FolderFlex.Util" ShowInTaskbar="True" FontFamily="Segoe UI"
         mc:Ignorable="d" ResizeMode="CanMinimize" Topmost="True" Icon="/Recursos/pasta.ico" 
         Title="FolderFlex " Height="400" Width="500">
     <Window.DataContext>
@@ -32,7 +33,15 @@
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="5,5,0,0" Grid.Row="0">
                     <TextBox Style="{StaticResource TextBoxRoundedStyle}" Width="250"  Height="25" IsEnabled="True" IsReadOnly="True" Background="WhiteSmoke" Text="{Binding PastaOrigem}" Margin="5,0,0,0" VerticalAlignment="Top"/>
                     <Button Style="{StaticResource FlatButtonStyle_Blue}" Content="...." Width="25" Height="25" Click="Click_SelecionarOrigem" Margin="2,0,10,0"  VerticalAlignment="Top"/>
-                    <Button Style="{StaticResource FlatButtonStyle_Green}" Content="Mover" Width="100" Height="25" Click="Click_Iniciar" BorderThickness="0.5" FontWeight="Medium" VerticalAlignment="Top"/>
+                    <Button Style="{StaticResource FlatButtonStyle_Green}" Width="100" Height="25" Click="Click_Iniciar" BorderThickness="0.5" FontWeight="Medium" VerticalAlignment="Top">
+                        <Button.Content>
+                            <Binding Path="SomenteCopiar" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.Converter>
+                                    <local1:BooleanToStringConverter TrueValue="Copiar" FalseValue="Mover"/>
+                                </Binding.Converter>
+                            </Binding>
+                        </Button.Content>
+                    </Button>
                     <Image  Source="/Recursos/git.ico" Width="38" ToolTip="Código do Projeto" Cursor="Hand" MouseLeftButtonDown="Image_MouseLeftButtonDown" Margin="20,-8,0,0" VerticalAlignment="Bottom"/>
                 </StackPanel>
 
@@ -40,7 +49,10 @@
                     <TextBox Style="{StaticResource TextBoxRoundedStyle}" Width="250"   Height="25" IsEnabled="True" IsReadOnly="True" Background="WhiteSmoke" Text="{Binding PastaDestino}" Margin="5,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
                     <Button Style="{StaticResource FlatButtonStyle_Blue}" Content="...." Width="25" Height="25" Click="Click_SelecionarDestino"  Margin="2,0,10,0" ToolTip="Selecionar a pasta de destino"/>
                     <Button Style="{StaticResource FlatButtonStyle_Red}" Content="Cancelar" Width="100" Height="25" Click="Click_Cancelar" BorderThickness="0.5" FontWeight="Medium"/>
-                    <CheckBox Content="Renomear" VerticalAlignment="Center" IsChecked="{Binding Renomear}" ToolTip="Marque para renomear os arquivos iguais que já existem na pasta" Margin="4,0,10,0"/>
+                    <StackPanel>
+                        <CheckBox Content="Renomear" VerticalAlignment="Center" IsChecked="{Binding Renomear}" ToolTip="Marque para renomear os arquivos iguais que já existem na pasta" Margin="4,0,10,0"/>
+                        <CheckBox Content="Copiar" VerticalAlignment="Center" IsChecked="{Binding SomenteCopiar}" ToolTip="Marque para copiar os arquivos ao invés de mover" Margin="4,0,10,0"/>
+                    </StackPanel>
                 </StackPanel>
 
             </Grid>

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.Versioning;
 
 namespace FolderFlex.ViewModel;
 public class MainWindowsViewModel : INotifyPropertyChanged
@@ -39,6 +40,16 @@ public class MainWindowsViewModel : INotifyPropertyChanged
         {
             _renomear = value;
             OnPropertyChanged(nameof(Renomear));
+        }
+    }
+    private bool _somenteCopiar = false;
+    public bool SomenteCopiar
+    {
+        get => _somenteCopiar;
+        set
+        {
+            _somenteCopiar = value;
+            OnPropertyChanged(nameof(SomenteCopiar));
         }
     }
     private double _progresso;
@@ -113,39 +124,8 @@ public class MainWindowsViewModel : INotifyPropertyChanged
         ArquivosMovidos = new ObservableCollection<ArquivoInfo>();
         Cronometro = new Stopwatch();
     }
-    public async Task SelecionarOrigem()
-    {
-        using FolderBrowserDialog janela = new();
-        janela.Description = "SELECIONE A PASTA RAIZ";
-        janela.UseDescriptionForTitle = true;
-        janela.ShowNewFolderButton = true;
-        janela.SelectedPath = UltimaPastaSelecionada ?? "";
-        PastaDestino = "";
-        PastaOrigem = janela.ShowDialog() == System.Windows.Forms.DialogResult.OK ? janela.SelectedPath : "";
-    }
-
-    public async Task<string> SelecionarDestino()
-    {
-        using FolderBrowserDialog janela = new();
-        janela.Description = "SELECIONE O DESTINO DOS ARQUIVOS";
-        janela.UseDescriptionForTitle = true;
-        janela.ShowNewFolderButton = true;
-        janela.SelectedPath = UltimaPastaSelecionada ?? "";
-
-        if (janela.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-        {
-            PastaDestino = janela.SelectedPath;
-            DirectoryInfo infoPasta = new(_pastaDestino);
-            MensagemStatus = $"Tudo será movido para: {infoPasta.Name}";
-            return janela.SelectedPath;
-        }
-        else
-        {
-            PastaDestino = "";
-            MensagemStatus = $"Sem o destino, Tudo será movido para a Raiz da pasta origem";
-            return janela.SelectedPath;
-        }
-    }
+    #region Tarefas
+    
 
     public async Task IniciarMovimento()
     {
@@ -162,7 +142,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
         }
         catch (OperationCanceledException)
         {
-            MensagemErro += $"\nOperação cancelada pelo usuário após mover {Contador}.";
+            MensagemErro += $"\nOperação cancelada pelo usuário após {(SomenteCopiar ? "copiar" : "mover")} {Contador}.";
         }
         catch (DirectoryNotFoundException)
         {
@@ -190,123 +170,131 @@ public class MainWindowsViewModel : INotifyPropertyChanged
             return;
         }
 
-        int totalArquivosNasSubpastas = listaSubPastas.Sum(pasta => Directory.GetFiles(pasta).Length);
-
+        int totalArquivos = listaSubPastas.Sum(pasta => Directory.GetFiles(pasta).Length) + listaArquivosSoltos.Length;
         ArquivosProcessados = 0;
-        if (listaSubPastas.Length > 0)
+
+        Task pastas = ProcessarPastas(listaSubPastas, destino, cancelador, totalArquivos);
+        Task arquivos = ProcessarArquivosSoltos(listaArquivosSoltos, destino, cancelador, totalArquivos);
+
+        await Task.WhenAll(pastas, arquivos);
+
+        if (!SomenteCopiar)
+            DeletarPastas(listaSubPastas);
+    }
+
+    private async Task ProcessarPastas(string[] listaSubPastas, string destino, CancellationToken cancelador, int totalArquivos)
+    {
+        foreach (string pasta in listaSubPastas)
         {
-            foreach (string pasta in listaSubPastas)
-            {
-                DirectoryInfo subPastaInfo = new(pastaRaiz);
-                cancelador.ThrowIfCancellationRequested();
-                string[] arquivos = Directory.GetFiles(pasta);
-                foreach (string file in arquivos)
-                {
-                    string pastaDestino = Path.Combine(destino, Path.GetFileName(file));
-
-                    if (!File.Exists(pastaDestino))
-                    {
-                        File.Move(file, pastaDestino);
-                        AdicionarArquivoNaLista(pastaDestino);
-                        Contador++;
-                        AtualizarProgresso(totalArquivosNasSubpastas);
-                        await Task.Delay(10, cancelador);
-                    }
-                    else if (File.Exists(pastaDestino) && Renomear)
-                    {
-                        string? diretorio = Path.GetDirectoryName(pastaDestino) ?? "";
-                        string? nomeArquivo = Path.GetFileNameWithoutExtension(pastaDestino) ?? "";
-                        string? extensao = Path.GetExtension(pastaDestino) ?? "";
-
-                        int contador = 1;
-                        string novoCaminho;
-
-                        do
-                        {
-                            string novoNomeArquivo = $"{nomeArquivo} ({contador}){extensao}";
-                            novoCaminho = Path.Combine(diretorio, novoNomeArquivo);
-                            contador++;
-                        }
-                        while (File.Exists(novoCaminho));
-
-                        File.Move(file, novoCaminho);
-                        AdicionarArquivoNaLista(novoCaminho);
-                        Contador++;
-                        AtualizarProgresso(totalArquivosNasSubpastas);
-                    }
-                    else
-                    {
-                        if (string.IsNullOrEmpty(PastaDestino))
-                            MensagemErro += $"O arquivo {Path.GetFileName(file)} já existe na pasta {destino}.\n";
-                        else
-                            MensagemErro += $"O arquivo {Path.GetFileName(file)} já existe na pasta {_pastaDestino}.\n";
-
-                        AtualizarProgresso(totalArquivosNasSubpastas);
-                        await Task.Delay(10, cancelador);
-                    }
-                }
-            }
-        }
-
-        if (listaArquivosSoltos.Length > 0)
-        {
-            foreach (string arquivo in listaArquivosSoltos)
+            string[] arquivos = Directory.GetFiles(pasta);
+            foreach (string file in arquivos)
             {
                 cancelador.ThrowIfCancellationRequested();
-                string destinoArquivo = Path.Combine(destino, Path.GetFileName(arquivo));
-
-                if (!File.Exists(destinoArquivo))
-                {
-                    File.Move(arquivo, destinoArquivo);
-                    AdicionarArquivoNaLista(destinoArquivo);
-                    Contador++;
-                    AtualizarProgresso(listaArquivosSoltos.Length);
-                    await Task.Delay(10, cancelador);
-                }
-                else if (File.Exists(destinoArquivo) && Renomear)
-                {
-                    string? diretorio = Path.GetDirectoryName(destinoArquivo) ?? "";
-                    string? nomeArquivo = Path.GetFileNameWithoutExtension(destinoArquivo) ?? "";
-                    string? extensao = Path.GetExtension(destinoArquivo) ?? "";
-
-                    int contador = 1;
-                    string novoCaminho;
-
-                    do
-                    {
-                        string novoNomeArquivo = $"{nomeArquivo} ({contador}){extensao}";
-                        novoCaminho = Path.Combine(diretorio, novoNomeArquivo);
-                        contador++;
-                    }
-                    while (File.Exists(novoCaminho));
-
-                    File.Move(arquivo, novoCaminho);
-                    AdicionarArquivoNaLista(novoCaminho);
-                    Contador++;
-                    AtualizarProgresso(listaArquivosSoltos.Length);
-                }
-                else
-                {
-                    if (string.IsNullOrEmpty(PastaDestino))
-                        MensagemErro += $"O arquivo {Path.GetFileName(arquivo)} já existe na pasta {destino}.\n";
-                    else
-                        MensagemErro += $"O arquivo {Path.GetFileName(arquivo)} já existe na pasta {_pastaDestino}.\n";
-
-                    AtualizarProgresso(listaArquivosSoltos.Length);
-                    await Task.Delay(10, cancelador);
-                }
+                string pastaDestino = Path.Combine(destino, Path.GetFileName(file));
+                await MoverCopiar(file, pastaDestino, totalArquivos, cancelador);
             }
         }
+    }
 
-        DeletarPastas(listaSubPastas);
+    private async Task MoverCopiar(string arquivo, string destinoArquivo, int totalArquivos, CancellationToken cancelador)
+    {
+        if (!File.Exists(destinoArquivo))
+        {
+            if (SomenteCopiar) File.Copy(arquivo, destinoArquivo);
+            else File.Move(arquivo, destinoArquivo);
+
+            AdicionarArquivoNaLista(destinoArquivo);
+            Contador++;
+            AtualizarProgresso(totalArquivos);
+            await Task.Delay(10, cancelador);
+        }
+        else if (Renomear)
+        {
+            string novoCaminho = RenomearArquivo(destinoArquivo);
+            File.Move(arquivo, novoCaminho);
+            AdicionarArquivoNaLista(novoCaminho);
+            Contador++;
+            AtualizarProgresso(totalArquivos);
+        }
+        else
+        {
+            MensagemErro += $"O arquivo {Path.GetFileName(arquivo)} já existe na pasta {Path.GetDirectoryName(destinoArquivo)}.\n";
+
+            AtualizarProgresso(totalArquivos);
+            await Task.Delay(10, cancelador);
+        }
+    }
+    private async Task ProcessarArquivosSoltos(string[] listaArquivosSoltos, string destino, CancellationToken cancelador, int totalArquivos)
+    {
+        foreach (string arquivo in listaArquivosSoltos)
+        {
+            cancelador.ThrowIfCancellationRequested();
+            string destinoArquivo = Path.Combine(destino, Path.GetFileName(arquivo));
+
+            await MoverCopiar(arquivo, destinoArquivo, totalArquivos, cancelador);
+        }
+    }
+    #endregion Tarefas
+    [SupportedOSPlatform("windows")]
+    public void SelecionarOrigem()
+    {
+        using FolderBrowserDialog janela = new();
+        janela.Description = "SELECIONE A PASTA RAIZ";
+        janela.UseDescriptionForTitle = true;
+        janela.ShowNewFolderButton = true;
+        janela.SelectedPath = UltimaPastaSelecionada ?? "";
+        PastaDestino = "";
+        PastaOrigem = janela.ShowDialog() == System.Windows.Forms.DialogResult.OK ? janela.SelectedPath : "";
+    }
+    [SupportedOSPlatform("windows")]
+    public string SelecionarDestino()
+    {
+        using FolderBrowserDialog janela = new();
+        janela.Description = "SELECIONE O DESTINO DOS ARQUIVOS";
+        janela.UseDescriptionForTitle = true;
+        janela.ShowNewFolderButton = true;
+        janela.SelectedPath = UltimaPastaSelecionada ?? "";
+
+        if (janela.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+        {
+            PastaDestino = janela.SelectedPath;
+            DirectoryInfo infoPasta = new(PastaDestino);
+            MensagemStatus = $"Tudo será {(SomenteCopiar ? "copiado" : "movido")} para: {infoPasta.Name}";
+            return janela.SelectedPath;
+        }
+        else
+        {
+            PastaDestino = "";
+            MensagemStatus = $"Sem o destino, Tudo será {(SomenteCopiar ? "copiado" : "movido")} para a Raiz da pasta origem";
+            return janela.SelectedPath;
+        }
+    }
+    public string RenomearArquivo(string caminhoOriginal)
+    {
+        string? diretorio = Path.GetDirectoryName(caminhoOriginal) ?? "";
+        string? nomeArquivo = Path.GetFileNameWithoutExtension(caminhoOriginal) ?? "";
+        string? extensao = Path.GetExtension(caminhoOriginal) ?? "";
+
+        int contador = 1;
+        string novoCaminho;
+
+        do
+        {
+            string novoNomeArquivo = $"{nomeArquivo} ({contador}){extensao}";
+            novoCaminho = Path.Combine(diretorio, novoNomeArquivo);
+            contador++;
+        }
+        while (File.Exists(novoCaminho));
+        return novoCaminho;
     }
     public void AdicionarArquivoNaLista(string pastaDestino)
     {
         FileInfo info = new(pastaDestino);
+        double tamanhoKB = info.Length / 1024.0;
 
-        string tamanhoConvertido = $"{(info.Length / 1024.0):F2} Kb";
-        if (info.Length / 1024.0 > 1024)
-            tamanhoConvertido = $"{(info.Length / 1024.0 / 1024.0):F2} Mb";
+        string tamanhoConvertido = tamanhoKB > 1024 * 1024
+            ? $"{(tamanhoKB / 1024.0 / 1024.0):F2} GB"
+            : tamanhoKB > 1024 ? $"{(tamanhoKB / 1024.0):F2} MB" : $"{tamanhoKB:F2} KB";
 
         ArquivosMovidos.Add(new ArquivoInfo
         {
@@ -324,9 +312,8 @@ public class MainWindowsViewModel : INotifyPropertyChanged
             try
             {
                 if (Directory.GetFiles(subPasta).Length == 0 && Directory.GetDirectories(subPasta).Length == 0)
-                {
                     Directory.Delete(subPasta);
-                }
+
             }
             catch (Exception ex)
             {
@@ -392,7 +379,6 @@ public class MainWindowsViewModel : INotifyPropertyChanged
         ArquivosProcessados += 1;
         Progresso = (double)ArquivosProcessados / totalArquivos * 100;
     }
-
     public void OpcaoAbertura(System.Windows.Controls.ListBox ArquivosListBox)
     {
         if (ArquivosListBox.SelectedItem is ArquivoInfo arquivoSelecionado)
