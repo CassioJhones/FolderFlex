@@ -190,9 +190,10 @@ public class MainWindowsViewModel : INotifyPropertyChanged
             return;
         }
 
-        int totalArquivosNasSubpastas = listaSubPastas.Sum(pasta => Directory.GetFiles(pasta).Length);
-
+        int totalArquivos = listaSubPastas.Sum(pasta => Directory.GetFiles(pasta).Length) + listaArquivosSoltos.Length;
         ArquivosProcessados = 0;
+
+
         if (listaSubPastas.Length > 0)
         {
             foreach (string pasta in listaSubPastas)
@@ -209,7 +210,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
                         File.Move(file, pastaDestino);
                         AdicionarArquivoNaLista(pastaDestino);
                         Contador++;
-                        AtualizarProgresso(totalArquivosNasSubpastas);
+                        AtualizarProgresso(totalArquivos);
                         await Task.Delay(10, cancelador);
                     }
                     else if (File.Exists(pastaDestino) && Renomear)
@@ -232,7 +233,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
                         File.Move(file, novoCaminho);
                         AdicionarArquivoNaLista(novoCaminho);
                         Contador++;
-                        AtualizarProgresso(totalArquivosNasSubpastas);
+                        AtualizarProgresso(totalArquivos);
                     }
                     else
                     {
@@ -241,7 +242,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
                         else
                             MensagemErro += $"O arquivo {Path.GetFileName(file)} já existe na pasta {_pastaDestino}.\n";
 
-                        AtualizarProgresso(totalArquivosNasSubpastas);
+                        AtualizarProgresso(totalArquivos);
                         await Task.Delay(10, cancelador);
                     }
                 }
@@ -303,10 +304,11 @@ public class MainWindowsViewModel : INotifyPropertyChanged
     public void AdicionarArquivoNaLista(string pastaDestino)
     {
         FileInfo info = new(pastaDestino);
+        double tamanhoKB = info.Length / 1024.0;
 
-        string tamanhoConvertido = $"{(info.Length / 1024.0):F2} Kb";
-        if (info.Length / 1024.0 > 1024)
-            tamanhoConvertido = $"{(info.Length / 1024.0 / 1024.0):F2} Mb";
+        string tamanhoConvertido = tamanhoKB > 1024 * 1024
+            ? $"{(tamanhoKB / 1024.0 / 1024.0):F2} GB"
+            : tamanhoKB > 1024 ? $"{(tamanhoKB / 1024.0):F2} MB" : $"{tamanhoKB:F2} KB";
 
         ArquivosMovidos.Add(new ArquivoInfo
         {
@@ -316,6 +318,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
             Extensao = Path.GetExtension(pastaDestino)?.TrimStart('.')
         });
     }
+
     public void DeletarPastas(string[] subpastas)
     {
         string[] subpastasOrdenadas = subpastas.OrderByDescending(pasta => pasta.Count(c => c == '\\')).ToArray();
