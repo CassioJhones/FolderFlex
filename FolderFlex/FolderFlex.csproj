@@ -10,7 +10,11 @@
 		<ApplicationIcon>Recursos\pasta.ico</ApplicationIcon>
 		<StartupObject></StartupObject>
 	</PropertyGroup>
-
+	
+	<PropertyGroup>
+		<AssemblyVersion>4.0.1.0</AssemblyVersion>
+		<FileVersion>4.0.1.0</FileVersion>
+	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="Recursos\git.ico" />
 	</ItemGroup>

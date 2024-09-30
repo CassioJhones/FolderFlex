@@ -69,4 +69,9 @@ public partial class MainWindow : Window
         ExibirMensagemStatus();
         ExibirTempo(_viewModel.Cronometro);
     }
+
+    private async void VerificarVersao(object sender, RoutedEventArgs e)
+    {
+        await AtualizacaoChecker.VerificarAtualizacaoAsync();
+    }
 }
