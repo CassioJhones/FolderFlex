@@ -18,6 +18,9 @@
 	<ItemGroup>
 	  <None Remove="Recursos\git.ico" />
 	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="MahApps.Metro.IconPacks" Version="5.0.0" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<Resource Include="Recursos\pasta.ico" />

@@ -36,9 +36,7 @@
                     <Button Style="{StaticResource FlatButtonStyle_Green}" Width="100" Height="25" Click="Click_Iniciar" BorderThickness="0.5" FontWeight="Medium" VerticalAlignment="Top">
                         <Button.Content>
                             <Binding Path="SomenteCopiar" UpdateSourceTrigger="PropertyChanged">
-                                <Binding.Converter>
-                                    <local1:BooleanToStringConverter TrueValue="Copiar" FalseValue="Mover"/>
-                                </Binding.Converter>
+                              
                             </Binding>
                         </Button.Content>
                     </Button>
