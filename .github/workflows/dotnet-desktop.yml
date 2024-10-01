@@ -1,0 +1,43 @@
+name: Compilação e Teste FolderFlex
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restaurando as dependencies
+      run: dotnet FolderFlex.sln 
+
+    - name: Compilando Tudo
+      run: dotnet build FolderFlex.sln --configuration ${{ matrix.configuration }} --no-restore
+      
+    - name: Rodando Testes de unidade
+      run: dotnet test FolderFlexTeste/FolderFlexTeste.csproj --configuration ${{ matrix.configuration }} --no-build --verbosity normal
+
+    - name: Publicando a aplicação
+      run: dotnet publish FolderFlex/FolderFlex.csproj --configuration ${{ matrix.configuration }} --output ./output 
+
+    - name: Upload dos Artefatos
+      uses: actions/upload-artifact@v3
+      with:
+        name: Build Outputs
+        path: ./output 
