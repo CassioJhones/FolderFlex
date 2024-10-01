@@ -130,8 +130,6 @@ namespace FolderFlex.ViewModel
 
         private readonly FolderFlexMain _mainWindow;
 
-        private Dictionary<string, string> FilesDictionary = new Dictionary<string, string>();
-
         private List<string> namesRegistered = new List<string>();
         #endregion PROPRIEDADES
 
@@ -357,9 +355,6 @@ namespace FolderFlex.ViewModel
             {
                 if (cancelIcon.Visibility == Visibility.Visible)
                 {
-                    // Executa a ação de cancelamento
-                    //cancelAction?.Invoke();
-                    // Alterar ícones: esconder Cancel, mostrar FileSearch
 
                     cancelatorItem.Cancel();
 
@@ -368,14 +363,11 @@ namespace FolderFlex.ViewModel
                     cancelIcon.Visibility = Visibility.Collapsed;
 
                     return;
-                    //fileSearchIcon.Visibility = Visibility.Visible;
                 }
                 var caminhoDestino = string.IsNullOrEmpty(PastaDestino) ? PastaOrigem : PastaDestino;
 
                 if (Directory.Exists(caminhoDestino))
                     Process.Start("explorer.exe", caminhoDestino);
-                // Executa a ação de abrir o arquivo
-                //openAction?.Invoke();
             };
 
             grid.Children.Add(actionButton);
@@ -433,50 +425,57 @@ namespace FolderFlex.ViewModel
 
             if (!File.Exists(destinoArquivo))
             {
-                try
+                
+                using (FileStream sourceStream = new FileStream(arquivo, FileMode.Open, FileAccess.Read))
+                using (FileStream destinationStream = new FileStream(destinoArquivo, FileMode.CreateNew, FileAccess.Write))
                 {
-                    using (FileStream sourceStream = new FileStream(arquivo, FileMode.Open, FileAccess.Read))
-                    using (FileStream destinationStream = new FileStream(destinoArquivo, FileMode.CreateNew, FileAccess.Write))
+                    byte[] buffer = new byte[81920];
+                    int bytesRead;
+                    while ((bytesRead = await sourceStream.ReadAsync(buffer, 0, buffer.Length, cancelador)) > 0)
                     {
-                        byte[] buffer = new byte[81920];
-                        int bytesRead;
-                        while ((bytesRead = await sourceStream.ReadAsync(buffer, 0, buffer.Length, cancelador)) > 0)
-                        {
-                            await destinationStream.WriteAsync(buffer, 0, bytesRead, canceladorItem);
-                            totalBytesCopied += bytesRead;
+                        await destinationStream.WriteAsync(buffer, 0, bytesRead, canceladorItem);
+                        totalBytesCopied += bytesRead;
 
-                            double progressPercentage = (double)totalBytesCopied / fileSize * 100;  
+                        double progressPercentage = (double)totalBytesCopied / fileSize * 100;  
 
-                            progressBar?.Dispatcher.Invoke(() =>
-                            {
-                                progressBar.Value = progressPercentage;
-                            }, DispatcherPriority.Render);
-
-                            await Task.Delay(50, canceladorItem);
-
-                            if (canceladorItem.IsCancellationRequested)
-                            {
-                                progressBar?.Dispatcher.Invoke(() =>
-                                {
-                                    progressBar.Visibility = Visibility.Hidden;
-                                }, DispatcherPriority.Render);
-                               
-                            }
-                        }
-
-                      
                         progressBar?.Dispatcher.Invoke(() =>
                         {
-                            progressBar.Value = 100;
+                            progressBar.Value = progressPercentage;
                         }, DispatcherPriority.Render);
+
+                        await Task.Delay(10, canceladorItem);
+
+                        if (canceladorItem.IsCancellationRequested)
+                        {
+                            progressBar?.Dispatcher.Invoke(() =>
+                            {
+                                progressBar.Visibility = Visibility.Hidden;
+                            }, DispatcherPriority.Render);
+                               
+                        }
                     }
                 }
-                finally
+
+                progressBar?.Dispatcher.Invoke(() =>
                 {
-                    AdicionarArquivoNaLista(destinoArquivo);
-                    Contador++;
-                    AtualizarProgresso(totalArquivos);
-                }
+                   progressBar.Value = 100;
+                }, DispatcherPriority.Render);
+
+                _mainWindow.Dispatcher.Invoke(() =>
+                {
+                    var index = arquivosProcessados.ToList().IndexOf(arquivo);
+
+                    var searchIcon = _mainWindow.FindName($"SearchIcon{index}") as System.Windows.Controls.Control;
+
+                    var cancelIcon = _mainWindow.FindName($"CancelIcon{index}") as System.Windows.Controls.Control;
+
+                    searchIcon.Visibility = Visibility.Visible;
+
+                    cancelIcon.Visibility = Visibility.Collapsed;
+                });
+                AdicionarArquivoNaLista(destinoArquivo);
+                Contador++;
+                AtualizarProgresso(totalArquivos);
 
                 return;
             }
