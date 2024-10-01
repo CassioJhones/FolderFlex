@@ -1,39 +1,55 @@
 <img src="https://github.com/user-attachments/assets/2c2f396a-67a9-4212-a967-9f8a95e5eb74" alt="Banner FolderFlex" width="100%" />
 
+<h1>⭐ Deixe uma estrela no repositório </h1>
 
-<h1>⭐ Deixe uma estrela no repositório  <img src="https://img.shields.io/badge/WPF-017ad7?style=for-the-badge&logo=Windows&logoColor=white" /> <img src="https://img.shields.io/badge/.NET_8-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" /></h1>
-> Recomendado para quem trabalha com grandes quantidades de arquivos e deseja mover arquivos de várias subpastas para uma pasta raiz de modo rápido.
+![GitHub Release](https://img.shields.io/github/v/release/Cassiojhones/folderflex?sort=date&display_name=tag&style=plastic&label=Vers%C3%A3o&link=https%3A%2F%2Fgithub.com%2FCassioJhones%2FFolderFlex%2Freleases%2Fdownload%2F4.0.1.0%2FFolderFlex.exe&link=https%3A%2F%2Fgithub.com%2FCassioJhones%2FFolderFlex%2Freleases%2Fdownload%2F4.0.1.0%2FFolderFlex.exe)
+![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/cassiojhones/folderflex/total?style=plastic&label=Downloads)
+![GitHub Repo stars](https://img.shields.io/github/stars/Cassiojhones/folderflex?style=plastic&label=Stars)
+![Front](https://img.shields.io/badge/WPF-017ad7?style=plastic&logo=Windows&logoColor=white)
+![Back](https://img.shields.io/badge/.NET_8-512BD4?style=plastic&logo=dotnet&logoColor=white)
 
+## Vantagens:
+- **Mover ou Copiar Arquivos**: Move ou copia arquivos de várias subpastas para uma pasta de destino ou a própria pasta raiz.
 - **Feedback Visual**: Acompanhe o progresso e veja o número de arquivos movidos em tempo real.
-- **Evita Sobrescritas**: Verifica se o arquivo já existe na pasta raiz antes de movê-lo.
-- **Registro de Tempo**: Mostra o tempo total gasto para mover os arquivos.
+- **Registro de Tempo**: Mostra o tempo total gasto no processo.
 - **Acesso Rápido**: Clique nos arquivos listados para abrir diretamente seu local de origem.
+- **Suporte a múltiplos formatos**: Compatível com diferentes tipos de arquivos.
+- **Atualizações Automáticas**: Verificação de novas versões via `GitHub Releases`.
+- **Economia de Tempo**: O que poderia custar minutos e até horas, agora pode ser feito em segundos.
+- **Organização Simplificada**: Centralize todos os seus arquivos sem o esforço manual de abrir cada uma das pastas.
+- **Sem Preocupações**: Elimina o risco de esquecer arquivos em subpastas ou perder algo importante.
 
 ## Download Gratuito
 
-1. Baixe a última versão do aplicativo na seção de [releases](https://github.com/CassioJhones/FolderFlex/releases) ou no [4Shared](https://www.4shared.com/file/Fr8awKdYjq/Movedor.html)
-2. Extraia o conteúdo do arquivo `.zip` em uma pasta de sua escolha.
-3. Execute o arquivo `FolderFlex.exe`.
-4. Pode ser necessário instalar o .NET 8
+1. Baixe a última versão do aplicativo na seção de [releases](https://github.com/CassioJhones/FolderFlex/releases)
+2. Caso já tiver instalado .NET 8, basta executar
+
+---
 
 ## Como Usar
 
-1. Abra o aplicativo.
-2. Clique no botão "Selecionar Pasta" e escolha a pasta raiz onde estão os arquivos e subpastas.
-3. O aplicativo moverá todos os arquivos das subpastas para a pasta raiz.
-4. Clique em qualquer arquivo na lista para abri-lo diretamente em seu local.
+1. **Selecione a pasta de origem**: Escolha a pasta contendo subpastas com arquivos que você deseja mover ou copiar.
+2. **Escolha a pasta de destino**: Especifique a pasta para onde os arquivos serão `movidos/copiados`.
+3. Caso nao tiver um destino especificado os arquivos de todas as subpastas serao `movidos/copiados` para a raiz
+4. **Escolha o modo de operação**: 
+   - Mover: Transfere os arquivos para a pasta de destino ou raize deleta todas as pastas vazias.
+   - Copiar: Apenas copia os arquivos para a nova pasta ou aiz.
+5. **Iniciar**: Clique no botão `Mover` ou `Copiar` para executar a operação.
+
+### Exemplo de uso
+
+1. **Mover arquivos**:
+   - Clique em "Mover" para transferir arquivos de várias subpastas para um único diretório ou para a própria raiz.
+2. **Copiar arquivos**:
+   - Marque a opção "Copiar" para duplicar os arquivos em outro local ou na própria raiz.
+---
 
 ## Interface 
-<img src="https://github.com/user-attachments/assets/9704df56-1735-4646-8496-959620ca8e28" alt="Movendo Arquivos" width="600px"/>
-
-**Movendo Arquivos**
 
 ## Contribuição
-
-Contribuições são bem-vindas! Se você tiver sugestões, problemas ou correções de bugs, por favor, abra uma [issue](https://github.com/CassioJhones/Movedor/issues) ou envie um pull request.
+Contribuições são bem-vindas! Se você tiver sugestões, problemas ou correções de bugs, abra uma [issue](https://github.com/CassioJhones/Movedor/issues) ou envie um pull request.
 
 ### Como Contribuir
-
 1. Fork este repositório.
 2. Crie uma branch para a sua feature (`git checkout -b feature/nova-feature`).
 3. Commit suas alterações (`git commit -m 'Adiciona nova feature'`).
@@ -42,4 +58,6 @@ Contribuições são bem-vindas! Se você tiver sugestões, problemas ou correç
 
 ## Autor
 
-- **Cássio Jhones** - [GitHub](https://github.com/CassioJhones)
+[Cássio Jhones](https://github.com/CassioJhones)
+
+<!-- ou no [4Shared](https://www.4shared.com/file/Fr8awKdYjq/Movedor.html)- -- !---!>
