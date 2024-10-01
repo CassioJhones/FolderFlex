@@ -16,16 +16,16 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout Code
+    - name: Sincronizando Repositório
       uses: actions/checkout@v4
 
-    - name: Setup .NET
+    - name: Configurando Ambiente .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.x'
 
     - name: Restaurando as dependencies
-      run: dotnet FolderFlex.sln 
+      run: dotnet restore FolderFlex.sln 
 
     - name: Compilando Tudo
       run: dotnet build FolderFlex.sln --configuration ${{ matrix.configuration }} --no-restore
