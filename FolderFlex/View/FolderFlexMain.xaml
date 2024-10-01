@@ -202,7 +202,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="200"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 <Grid  Grid.Row="0" Background="Transparent" Height="50" VerticalAlignment="Top" Panel.ZIndex="1">
                     <StackPanel Orientation="Horizontal">
@@ -284,8 +284,8 @@
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>
-                <StackPanel Grid.Row="3" Orientation="Horizontal">
-                    <iconPacks:PackIconFontisto Kind="Github" Margin="10,0,0,5" Foreground="#272727"/>
+                <StackPanel Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center">
+                    <iconPacks:PackIconFontisto Kind="Github" Margin="10,4,0,5" Foreground="#272727"/>
                 </StackPanel>
             </Grid>
 

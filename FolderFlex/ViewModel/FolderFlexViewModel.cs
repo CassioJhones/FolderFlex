@@ -230,7 +230,7 @@ namespace FolderFlex.ViewModel
                 BorderBrush = (System.Windows.Media.Brush)new BrushConverter().ConvertFromString("#EBECF4")!,
                 BorderThickness = new Thickness(1),
                 CornerRadius = new CornerRadius(10),
-                Height = 60,
+                Height = 56,
                 Margin = new Thickness(0, 5, 14, 0)
             };
 
