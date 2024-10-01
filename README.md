@@ -7,7 +7,7 @@
 ![GitHub Repo stars](https://img.shields.io/github/stars/Cassiojhones/folderflex?style=plastic&label=Stars)
 ![Front](https://img.shields.io/badge/WPF-017ad7?style=plastic&logo=Windows&logoColor=white)
 ![Back](https://img.shields.io/badge/.NET_8-512BD4?style=plastic&logo=dotnet&logoColor=white)
-
+[![CI/CD](https://github.com/CassioJhones/FolderFlex/actions/workflows/dotnet-desktop.yml/badge.svg?style=plastic)](https://github.com/CassioJhones/FolderFlex/actions/workflows/dotnet-desktop.yml)
 ## Vantagens:
 - **Mover ou Copiar Arquivos**: Move ou copia arquivos de várias subpastas para uma pasta de destino ou a própria pasta raiz.
 - **Feedback Visual**: Acompanhe o progresso e veja o número de arquivos movidos em tempo real.
