@@ -52,7 +52,6 @@ public partial class MainWindow : Window
         _viewModel.MensagemErro = "";
         MensagemStatus.Foreground = Brushes.Black;
         TempoDecorrido.Text = "";
-
     }
     private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         => _viewModel.LinkIcone();
