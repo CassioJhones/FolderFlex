@@ -1,7 +1,7 @@
 ﻿using FolderFlex.ViewModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
-
 
 namespace FolderFlex.View
 {
@@ -48,14 +48,8 @@ namespace FolderFlex.View
             //MensagemStatus.Foreground = Brushes.Black;
             //TempoDecorrido.Text = "";
         }
-        private void Image_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-         => _viewModel.LinkIcone();
-        //private void Click_AbrirArquivo(object sender, MouseButtonEventArgs e)
-        //    => _viewModel.AbrirArquivo(ArquivosListBox);
-        private void Click_Cancelar(object sender, RoutedEventArgs e)
-            => _viewModel.Cancelar();
-        //private void AbrirPastaDoArquivo_Click(object sender, RoutedEventArgs e)
-        //    => _viewModel.OpcaoAbertura(ArquivosListBox);
+
+        private void Click_Cancelar(object sender, RoutedEventArgs e) => _viewModel.Cancelar();
 
         private async void StartMove_Click(object sender, RoutedEventArgs e)
         {
@@ -66,9 +60,9 @@ namespace FolderFlex.View
 
         }
 
-        private void Cancelation_Click(object sender, RoutedEventArgs e)
-        {
-            _viewModel.Cancelar();
-        }
+        private void Cancelation_Click(object sender, RoutedEventArgs e) => _viewModel.Cancelar();
+
+        private void ButtonGithub_Click(object sender, RoutedEventArgs e) => _viewModel.LinkIcone();
+
     }
 }

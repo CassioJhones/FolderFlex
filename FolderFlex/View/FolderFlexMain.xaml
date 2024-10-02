@@ -217,12 +217,12 @@
                         <TextBlock x:Name="MensagemStatus" Text="{Binding MensagemStatus}" FontSize="16" Foreground="#A0A3BD" TextAlignment="Center"  Margin="0,0,0,10"/>
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center"  Margin="20,10,0,0">
-                                <TextBox x:Name="OriginLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270"  Foreground="#A0A3BD" Text="{Binding PastaOrigem}"  Height="25" IsEnabled="True" IsReadOnly="True" Background="WhiteSmoke" Margin="5,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                                <Button Margin="10,0,0,0" Content="Origem" Height="24" Width="100" Style="{StaticResource RoundedButtonStyle}" Background="#526cca" Foreground="White" VerticalAlignment="Center" Click="Click_SelecionarOrigem"/>
+                                <TextBox x:Name="OriginLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270"  Foreground="#A0A3BD" Text="{Binding PastaOrigem}"  Height="25" IsEnabled="True"  Background="WhiteSmoke" Margin="5,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                <Button Margin="10,0,0,0" Content="Origem" Height="24" Width="100" Style="{StaticResource RoundedButtonStyle}"  Background="#526cca" Foreground="White" VerticalAlignment="Center" Click="Click_SelecionarOrigem"/>
 
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="20,10,0,0">
-                                <TextBox x:Name="DestinationLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270"  Foreground="#A0A3BD" Text="{Binding PastaDestino}"  Height="25" IsEnabled="True" IsReadOnly="True" Background="WhiteSmoke" Margin="5,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                <TextBox x:Name="DestinationLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270"  Foreground="#A0A3BD" Text="{Binding PastaDestino}"  Height="25" IsEnabled="True" Background="WhiteSmoke" Margin="5,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
                                 <Button Margin="10,0,0,0" Content="Destino" Height="24" Width="100" Style="{StaticResource RoundedButtonStyle}" Background="#526cca" Foreground="White" VerticalAlignment="Center" Click="Click_SelecionarDestino"/>
                         </StackPanel>
                         </StackPanel>
@@ -237,21 +237,8 @@
                             <CheckBox x:Name="cbCopy"  IsChecked="{Binding SomenteCopiar}" Content="Copiar" VerticalAlignment="Center" Foreground="#A0A3BD" ToolTip="Marque para copiar os arquivos ao invés de mover" Margin="4,0,10,0"/>
                         </StackPanel>
 
-
                     </StackPanel>
-                    <!--<StackPanel HorizontalAlignment="Center">
-                        -->
-                    <!--<iconPacks:PackIconMaterialLight Kind="Folder" HorizontalAlignment="Center" Margin="0,10,0,0" Height="32" Width="32" Foreground="#A0A3BD"/>-->
-                    <!--
-                        <Button Content="Origem" Style="{StaticResource RoundedButtonStyle}" Margin="0,10,0,0" Background="#123156" Foreground="White"/>
-                        <Label x:Name="OriginLabel" Content="C:\Users\Ryuu\Pictures\MEmu Photo" Foreground="#A0A3BD" Visibility="Visible"/>
-                        <Button Content="Destino" Style="{StaticResource RoundedButtonStyle}" Margin="0,10,0,0" Background="#123156" Foreground="White"/>
-                        <Label x:Name="DestinationLabel" Content="C:\Users\Ryuu\Pictures\MEmu Photo" Foreground="#A0A3BD" Visibility="Visible"/>
-                        -->
-                    <!--<TextBlock x:Name="SelectFolderLabel" Text="Selecione as pastas para começar" FontSize="16" Foreground="#A0A3BD" TextAlignment="Center"  Margin="0,0,0,0"/>-->
-                    <!--
-                        <Button Content="Mover" Style="{StaticResource RoundedButtonStyle}" Margin="0,10,0,0" Background="#123156" Foreground="White"/>
-                    </StackPanel>-->
+
                 </Border>
                 <Grid Grid.Row="2">
 
@@ -281,7 +268,9 @@
                     </ScrollViewer>
                 </Grid>
                 <StackPanel Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center">
-                    <iconPacks:PackIconFontisto Kind="Github" Margin="10,4,0,5" Foreground="#272727"/>
+                    <Button Style="{StaticResource TransparentButton}" Click="ButtonGithub_Click">
+                        <iconPacks:PackIconFontisto Kind="Github" Margin="10,4,0,5" Foreground="#272727"/>
+                    </Button>
                 </StackPanel>
             </Grid>
 

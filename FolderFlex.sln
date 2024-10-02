@@ -5,7 +5,9 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FolderFlex", "FolderFlex\FolderFlex.csproj", "{3305593C-5A76-4A86-A35C-EE2A2F1DE809}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FolderFlexTeste", "FolderFlexTeste\FolderFlexTeste.csproj", "{C94B3768-E3FA-4F79-B2D9-CA6C02963BD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FolderFlexTeste", "FolderFlexTeste\FolderFlexTeste.csproj", "{C94B3768-E3FA-4F79-B2D9-CA6C02963BD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Updater", "Updater\Updater.csproj", "{6CEB0CB4-B925-4DED-8516-08BAE981BB35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{C94B3768-E3FA-4F79-B2D9-CA6C02963BD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C94B3768-E3FA-4F79-B2D9-CA6C02963BD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C94B3768-E3FA-4F79-B2D9-CA6C02963BD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CEB0CB4-B925-4DED-8516-08BAE981BB35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CEB0CB4-B925-4DED-8516-08BAE981BB35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CEB0CB4-B925-4DED-8516-08BAE981BB35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CEB0CB4-B925-4DED-8516-08BAE981BB35}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

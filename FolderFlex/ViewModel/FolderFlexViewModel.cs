@@ -6,7 +6,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -106,6 +105,17 @@ namespace FolderFlex.ViewModel
             get => _pastaDestino;
             set
             {
+                if (!Directory.Exists(value))
+                {
+                    System.Windows.Forms.MessageBox.Show($"O caminho informado é invalido ou não existe.");
+
+                    _pastaDestino = string.Empty;
+                    OnPropertyChanged(nameof(PastaDestino));
+
+                    _mainWindow.OriginLabel.Focus();
+
+                    return;
+                };
                 _pastaDestino = value;
                 OnPropertyChanged(nameof(PastaDestino));
             }
@@ -116,6 +126,17 @@ namespace FolderFlex.ViewModel
             get => _pastaOrigem;
             set
             {
+                if (!Directory.Exists(value))
+                {
+                    System.Windows.Forms.MessageBox.Show($"O caminho informado é invalido ou não existe.");
+
+                    _pastaOrigem = string.Empty;
+                    OnPropertyChanged(nameof(PastaOrigem));
+
+                    _mainWindow.DestinationLabel.Focus();
+
+                    return;
+                };
                 _pastaOrigem = value;
                 OnPropertyChanged(nameof(PastaOrigem));
             }
@@ -469,10 +490,11 @@ namespace FolderFlex.ViewModel
 
                     var cancelIcon = _mainWindow.FindName($"CancelIcon{index}") as System.Windows.Controls.Control;
 
-                    searchIcon.Visibility = Visibility.Visible;
+                    searchIcon!.Visibility = Visibility.Visible;
 
-                    cancelIcon.Visibility = Visibility.Collapsed;
+                    cancelIcon!.Visibility = Visibility.Collapsed;
                 });
+
                 AdicionarArquivoNaLista(destinoArquivo);
                 Contador++;
                 AtualizarProgresso(totalArquivos);
@@ -502,6 +524,7 @@ namespace FolderFlex.ViewModel
             foreach (string arquivo in listaArquivosSoltos)
             {
                 cancelador.ThrowIfCancellationRequested();
+
                 string destinoArquivo = Path.Combine(destino, Path.GetFileName(arquivo));
 
                 var (canceladorItem, progressBar) = AddFileComponent(arquivo, destino);
