@@ -18,6 +18,10 @@
 	<ItemGroup>
 	  <None Remove="Recursos\git.ico" />
 	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="MahApps.Metro.IconPacks" Version="5.0.0" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<Resource Include="Recursos\pasta.ico" />
@@ -25,6 +29,9 @@
 
 	<ItemGroup>
 	  <Resource Include="Recursos\git.ico" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\FolderFlexCommon\FolderFlexCommon.csproj" />
 	</ItemGroup>
 
 </Project>

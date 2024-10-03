@@ -1,4 +1,5 @@
 ﻿using FolderFlex.Util;
+using FolderFlex.View;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -117,6 +118,7 @@ public class MainWindowsViewModel : INotifyPropertyChanged
     public ObservableCollection<ArquivoInfo> ArquivosMovidos { get; private set; }
     public Stopwatch Cronometro { get; private set; }
     public int ArquivosProcessados = 0;
+
     #endregion PROPRIEDADES
     public MainWindowsViewModel()
     {
