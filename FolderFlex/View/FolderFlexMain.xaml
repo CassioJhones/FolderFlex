@@ -278,11 +278,13 @@
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>
-                <StackPanel Grid.Row="3" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Style="{StaticResource TransparentButton}" Click="ButtonGithub_Click">
+                <DockPanel Grid.Row="3" VerticalAlignment="Center">
+                    <Button Style="{StaticResource TransparentButton}" Click="ButtonGithub_Click" HorizontalAlignment="Left">
                         <iconPacks:PackIconFontisto Kind="Github" Margin="10,4,0,5" Foreground="#272727"/>
                     </Button>
-                </StackPanel>
+                    <ComboBox Style="{StaticResource ComboBoxRoundedStyle}" Foreground="#A0A3BD" Background="WhiteSmoke" x:Name="LanguageCombo" SelectionChanged="ComboBox_SelectionChanged" ItemsSource="{Binding LanguageOptions, Source={StaticResource FolderFlexMessageProviderViewModel}}" HorizontalAlignment="Right" Width="80" Height="20" Margin="0,0,10,0">
+                    </ComboBox>
+                </DockPanel>
             </Grid>
 
         </Border>

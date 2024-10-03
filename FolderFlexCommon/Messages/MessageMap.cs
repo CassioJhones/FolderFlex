@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using FolderFlexCommon.Settings.ApplicationSettings;
+using FolderFlexCommon.Settings;
 
 namespace FolderFlexCommon.Messages
 {
@@ -10,12 +12,14 @@ namespace FolderFlexCommon.Messages
     {
         private static Dictionary<string, Dictionary<string, string>> _messages;
 
-        // TODO: deve carregar das configuracoes .ini ou xml
-        private static string _defaultLanguage = "pt";
+        private static string _defaultLanguage;
 
         static MessageMap()
         {
             _messages = new Dictionary<string, Dictionary<string, string>>();
+
+            _defaultLanguage = ApplicationSettings.New(new IniFileParameterStore("config.flx")).Language ?? "pt";
+            
             LoadMessagesFromJson();
         }
 
@@ -40,14 +44,14 @@ namespace FolderFlexCommon.Messages
             {
                 return _messages[language][key];
             }
-            else if (_messages.ContainsKey(_defaultLanguage) && _messages[_defaultLanguage].ContainsKey(key))
+
+            if (_messages.ContainsKey(_defaultLanguage) && _messages[_defaultLanguage].ContainsKey(key))
             {
                 return _messages[_defaultLanguage][key];
             }
-            else
-            {
-                return $"Message key '{key}' not found.";
-            }
+           
+             return null;
+          
         }
 
         public static void SetDefaultLanguage(string language)
@@ -60,6 +64,21 @@ namespace FolderFlexCommon.Messages
             {
                 throw new ArgumentException($"Language '{language}' not supported.");
             }
+        }
+
+        public static Dictionary<string, string> ListLanguages()
+        {
+            var languageList = new Dictionary<string, string>();
+
+            foreach (var language in _messages.Keys)
+            {
+                if (_messages[language].ContainsKey("language_description"))
+                {
+                    languageList.Add(language, _messages[language]["language_description"]);
+                }
+            }
+
+            return languageList;
         }
     }
 }

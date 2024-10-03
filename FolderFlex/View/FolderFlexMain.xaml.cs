@@ -1,5 +1,6 @@
 ﻿using FolderFlex.ViewModel;
 using FolderFlexCommon.Messages;
+using FolderFlexCommon.Settings.ApplicationSettings;
 using System.Windows;
 using System.Windows.Input;
 
@@ -8,12 +9,20 @@ namespace FolderFlex.View
     public partial class FolderFlexMain : Window
     {
         private readonly FolderFlexViewModel _viewModel;
+        private readonly FolderFlexMessageProviderViewModel _languageController;
         public FolderFlexMain()
         {
             InitializeComponent();
             _viewModel = new FolderFlexViewModel(this);
-
+            
             DataContext = _viewModel;
+            
+            _languageController = (FolderFlexMessageProviderViewModel)this.FindResource("FolderFlexMessageProviderViewModel");
+
+            var selectedLanguage = MessageMap.ListLanguages().FirstOrDefault(x => x.Key == _languageController.Language).Value;
+
+            LanguageCombo.SelectedItem = selectedLanguage;
+
         }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -44,8 +53,6 @@ namespace FolderFlex.View
             _viewModel.Progresso = 0;
             _viewModel.Cronometro.Reset();
             _viewModel.StatusMessage = MessageMap.GetMessage("select_to_start");
-            //MensagemStatus.Foreground = Brushes.Black;
-            //TempoDecorrido.Text = "";
         }
 
         private void Click_Cancelar(object sender, RoutedEventArgs e) => _viewModel.Cancelar();
@@ -54,13 +61,19 @@ namespace FolderFlex.View
         {
             StackContainer.Children.Clear();
             await _viewModel.IniciarMovimento();
-            //ExibirMensagemStatus();
-            //ExibirTempo(_viewModel.Cronometro);
         }
 
         private void Cancelation_Click(object sender, RoutedEventArgs e) => _viewModel.Cancelar();
 
         private void ButtonGithub_Click(object sender, RoutedEventArgs e) => _viewModel.LinkIcone();
 
+        private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            var selectedLanguageKey = MessageMap.ListLanguages().FirstOrDefault(x => x.Value == LanguageCombo.SelectedItem.ToString()).Key;
+
+            _languageController.Language = selectedLanguageKey; 
+
+            MessageMap.SetDefaultLanguage(selectedLanguageKey);
+        }
     }
 }

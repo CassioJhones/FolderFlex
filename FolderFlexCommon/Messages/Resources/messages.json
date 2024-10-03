@@ -1,5 +1,6 @@
 {
   "pt": {
+    "language_description": "Português",
     "select_to_start": "Selecione as pastas para começar.",
     "select_root_folder": "SELECIONE A PASTA RAIZ",
     "select_destination_folder": "SELECIONE O DESTINO DOS ARQUIVOS",
@@ -20,6 +21,7 @@
     "copy_label": "Copiar"
   },
   "en": {
+    "language_description": "English",
     "select_to_start": "Select the folders to start.",
     "select_root_folder": "SELECT THE ROOT FOLDER",
     "select_destination_folder": "SELECT THE DESTINATION OF FILES",
@@ -40,6 +42,7 @@
     "copy_label": "Copy"
   },
   "es": {
+    "language_description": "Español",
     "select_to_start": "Seleccione las carpetas para comenzar.",
     "select_root_folder": "SELECCIONE LA CARPETA RAÍZ",
     "select_destination_folder": "SELECCIONE EL DESTINO DE LOS ARCHIVOS",
@@ -60,6 +63,7 @@
     "copy_label": "Copiar"
   },
   "jp": {
+    "language_description": "日本語",
     "select_to_start": "フォルダを選択して開始します。",
     "select_root_folder": "ルートフォルダを選択",
     "select_destination_folder": "ファイルの保存先を選択",

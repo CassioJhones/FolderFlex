@@ -1,5 +1,7 @@
 ﻿using FolderFlex.Util;
 using FolderFlexCommon.Messages;
+using FolderFlexCommon.Settings;
+using FolderFlexCommon.Settings.ApplicationSettings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,17 +12,16 @@ using System.Windows.Input;
 
 namespace FolderFlex.ViewModel
 {
-    public class FolderFlexMessageProviderViewModel: INotifyPropertyChanged
+    public class FolderFlexMessageProviderViewModel : INotifyPropertyChanged
     {
-        // deve carregar das configuracoes .ini ou xml
-        private string _language = "pt";
 
+        private ApplicationSettings _settings = ApplicationSettings.New(new IniFileParameterStore("config.flx"));
         public string Language
         {
-            get => _language;
+            get => _settings.Language;
             set
             {
-                _language = value;
+                _settings.Language = value;
                 OnPropertyChanged("StatusMessage");
                 OnPropertyChanged("OriginLabel");
                 OnPropertyChanged("DestinationLabel");
@@ -30,6 +31,8 @@ namespace FolderFlex.ViewModel
                 OnPropertyChanged("CancelLabel");
             }
         }
+
+        public List<string> LanguageOptions => ListLanguages();
         public string StatusMessage => MessageMap.GetMessage("select_to_start", Language);
 
         public string OriginLabel => MessageMap.GetMessage("origin_label", Language);
@@ -58,6 +61,11 @@ namespace FolderFlex.ViewModel
         private void ChangeLanguage(string newLanguage)
         {
             Language = newLanguage;
+        }
+
+        private static List<string> ListLanguages()
+        {
+            return MessageMap.ListLanguages().Values.ToList();
         }
 
 
