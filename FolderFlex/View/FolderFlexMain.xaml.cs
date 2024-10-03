@@ -13,7 +13,6 @@ namespace FolderFlex.View
             InitializeComponent();
             _viewModel = new FolderFlexViewModel(this);
             DataContext = _viewModel;
-
         }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -44,7 +43,7 @@ namespace FolderFlex.View
             _viewModel.ArquivosMovidos.Clear();
             _viewModel.Cronometro.Reset();
             _viewModel.MensagemStatus = "Selecione as pastas para começar";
-            _viewModel.MensagemErro = "";
+            _viewModel.MensagemErro = string.Empty;
             //MensagemStatus.Foreground = Brushes.Black;
             //TempoDecorrido.Text = "";
         }
@@ -57,7 +56,6 @@ namespace FolderFlex.View
             await _viewModel.IniciarMovimento();
             //ExibirMensagemStatus();
             //ExibirTempo(_viewModel.Cronometro);
-
         }
 
         private void Cancelation_Click(object sender, RoutedEventArgs e) => _viewModel.Cancelar();

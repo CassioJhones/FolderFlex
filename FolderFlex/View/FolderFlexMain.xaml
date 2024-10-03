@@ -11,7 +11,7 @@
         BorderBrush="Transparent"
         Background="Transparent"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-        Title="FolderFlex" Height="550" Width="480">
+        Title="FolderFlex" Height="340" Width="480">
     <Window.Resources>
         <Style TargetType="ProgressBar" x:Key="RoundedProgressBar">
             <Setter Property="Template">
@@ -196,11 +196,11 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="200"/>
+                    <RowDefinition Height="240"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
-                <Grid  Grid.Row="0" Background="Transparent" Height="50" VerticalAlignment="Top" Panel.ZIndex="1">
+                <Grid  Grid.Row="0" Background="Transparent" Height="40" VerticalAlignment="Top" Panel.ZIndex="1">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Recursos/pasta.ico" Height="24" Margin="15,0,10,0"/>
                         <TextBlock Text="Folder Flex" FontSize="16" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="#AAB8C2" FontWeight="SemiBold" />
@@ -215,18 +215,26 @@
 
                     <StackPanel Orientation="Vertical">
                         <TextBlock x:Name="MensagemStatus" Text="{Binding MensagemStatus}" FontSize="16" Foreground="#A0A3BD" TextAlignment="Center"  Margin="0,0,0,10"/>
-                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center"  Margin="20,10,0,0">
-                                <TextBox x:Name="OriginLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270"  Foreground="#A0A3BD" Text="{Binding PastaOrigem}"  Height="25" IsEnabled="True"  Background="WhiteSmoke" Margin="5,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock  Text="Origem" Foreground="#A0A3BD" FontWeight="SemiBold" FontSize="10" Margin="7,0"/>
+                                    <TextBox x:Name="OriginLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270"  Foreground="#A0A3BD" Text="{Binding PastaOrigem}"  Height="25" IsEnabled="True"  Background="WhiteSmoke" Margin="5,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                    <TextBlock  Text="{Binding PastaOrigemError}" Foreground="#ea516a" FontWeight="SemiBold" FontSize="10" Margin="7,0"/>
+                                </StackPanel>
                                 <Button Margin="10,0,0,0" Content="Origem" Height="24" Width="100" Style="{StaticResource RoundedButtonStyle}"  Background="#526cca" Foreground="White" VerticalAlignment="Center" Click="Click_SelecionarOrigem"/>
 
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="20,10,0,0">
-                                <TextBox x:Name="DestinationLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270"  Foreground="#A0A3BD" Text="{Binding PastaDestino}"  Height="25" IsEnabled="True" Background="WhiteSmoke" Margin="5,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock  Text="Destino" Foreground="#A0A3BD" FontWeight="SemiBold" FontSize="10" Margin="7,0"/>
+                                    <TextBox x:Name="DestinationLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270"  Foreground="#A0A3BD" Text="{Binding PastaDestino}"  Height="25" IsEnabled="True" Background="WhiteSmoke" Margin="5,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                    <TextBlock  Text="{Binding PastaDestinoError}" Foreground="#ea516a" FontWeight="SemiBold" FontSize="10" Margin="7,0"/>
+                                </StackPanel>
                                 <Button Margin="10,0,0,0" Content="Destino" Height="24" Width="100" Style="{StaticResource RoundedButtonStyle}" Background="#526cca" Foreground="White" VerticalAlignment="Center" Click="Click_SelecionarDestino"/>
                         </StackPanel>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,25,0,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,18,0,0">
 
                             <Button Click="StartMove_Click" Content="Mover" Style="{StaticResource RoundedButtonStyle}" Margin="0,0,5,0" Background="#526cca" Foreground="White" FontWeight="SemiBold"/>
                             <Button Click="Cancelation_Click" Content="Cancelar" Style="{StaticResource RoundedButtonStyle}" Margin="5,0,0,0" Background="#399fa1" Foreground="White" FontWeight="SemiBold"/>

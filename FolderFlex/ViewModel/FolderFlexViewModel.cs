@@ -99,59 +99,20 @@ namespace FolderFlex.ViewModel
                 OnPropertyChanged(nameof(UltimaPastaSelecionada));
             }
         }
-        private string? _pastaDestino = "Destino...";
-        public string? PastaDestino
-        {
-            get => _pastaDestino;
-            set
-            {
-                if (!Directory.Exists(value))
-                {
-                    System.Windows.Forms.MessageBox.Show($"O caminho informado é invalido ou não existe.");
-
-                    _pastaDestino = string.Empty;
-                    OnPropertyChanged(nameof(PastaDestino));
-
-                    _mainWindow.OriginLabel.Focus();
-
-                    return;
-                };
-                _pastaDestino = value;
-                OnPropertyChanged(nameof(PastaDestino));
-            }
-        }
-        private string? _pastaOrigem = "Origem...";
-        public string? PastaOrigem
-        {
-            get => _pastaOrigem;
-            set
-            {
-                if (!Directory.Exists(value))
-                {
-                    System.Windows.Forms.MessageBox.Show($"O caminho informado é invalido ou não existe.");
-
-                    _pastaOrigem = string.Empty;
-                    OnPropertyChanged(nameof(PastaOrigem));
-
-                    _mainWindow.DestinationLabel.Focus();
-
-                    return;
-                };
-                _pastaOrigem = value;
-                OnPropertyChanged(nameof(PastaOrigem));
-            }
-        }
+        public string? PastaDestino { get; set; }
+        public string? PastaOrigem { get; set; }
         public string? Nome { get; set; }
         public string? Tamanho { get; set; }
         public ObservableCollection<ArquivoInfo> ArquivosMovidos { get; private set; }
         public Stopwatch Cronometro { get; private set; }
         public int ArquivosProcessados = 0;
 
-        private HashSet<string> arquivosProcessados = new HashSet<string>();
+        private readonly HashSet<string> arquivosProcessados = [];
 
         private readonly FolderFlexMain _mainWindow;
 
-        private List<string> namesRegistered = new List<string>();
+        private readonly List<string> namesRegistered = [];
+
         #endregion PROPRIEDADES
 
         public FolderFlexViewModel(FolderFlexMain mainWindow) {
@@ -201,52 +162,77 @@ namespace FolderFlex.ViewModel
         public async Task MoverParaRaiz(string pastaRaiz, string destino, CancellationToken cancelador)
         {
             DirectoryInfo infoPasta = new(pastaRaiz);
+
             string[] listaSubPastas = Directory.GetDirectories(pastaRaiz, "*", SearchOption.AllDirectories);
             string[] listaArquivosSoltos = Directory.GetFiles(pastaRaiz, "*", SearchOption.TopDirectoryOnly);
 
             if (listaSubPastas.Length <= 0 && listaArquivosSoltos.Length <= 0)
             {
-                MensagemErro += $"Nenhuma subpasta encontrada em: {infoPasta.Name} \n";
+                MensagemErro += $"Nenhuma subpasta ou arquivo encontrado em: {infoPasta.Name} \n";
                 return;
             }
 
             int totalArquivos = listaSubPastas.Sum(pasta => Directory.GetFiles(pasta).Length) + listaArquivosSoltos.Length;
             ArquivosProcessados = 0;
 
-            Task pastas = ProcessarPastas(listaSubPastas, destino, cancelador, totalArquivos);
-            Task arquivos = ProcessarArquivosSoltos(listaArquivosSoltos, destino, cancelador, totalArquivos);
+            var listaCompleta = listaArquivosSoltos.Concat(listaSubPastas).ToArray();
 
-            await Task.WhenAll(pastas, arquivos);
+            await ProcessarArquivosOuPastas(listaCompleta, destino, cancelador, totalArquivos);
 
             if (!SomenteCopiar)
                 DeletarPastas(listaSubPastas);
         }
-
-        private async Task ProcessarPastas(string[] listaSubPastas, string destino, CancellationToken cancelador, int totalArquivos)
+        private async Task ProcessarArquivosOuPastas(string[] lista, string destino, CancellationToken cancelador, int totalArquivos)
         {
-            foreach (string pasta in listaSubPastas)
-            {
-                string[] arquivos = Directory.GetFiles(pasta);
-                foreach (string file in arquivos)
-                {
-                    cancelador.ThrowIfCancellationRequested();
-                    string pastaDestino = Path.Combine(destino, Path.GetFileName(file));
+            var semaphore = new SemaphoreSlim(10);
+            var tasks = new List<Task>();
 
-                    var (canceladorItem, progressBar) = AddFileComponent(file, destino);
+            foreach (string item in lista)
+            {
+                cancelador.ThrowIfCancellationRequested();
+
+                if (Directory.Exists(item)) 
+                {
+                    string[] arquivos = Directory.GetFiles(item);
+                    string[] subPastas = Directory.GetDirectories(item);
+
+                    await ProcessarArquivosOuPastas(arquivos, destino, cancelador, totalArquivos);
+
+                    await ProcessarArquivosOuPastas(subPastas, destino, cancelador, totalArquivos);
+
+                    continue;
+                }
+               
+                string destinoArquivo = Path.Combine(destino, Path.GetFileName(item));
+
+                if (File.Exists(destinoArquivo)) continue;
+
+                var (canceladorItem, progressBar) = AddFileComponent(item, destino);
+
+                await semaphore.WaitAsync(cancelador);
+
+                tasks.Add(Task.Run(async () =>
+                {
                     try
                     {
-                        await MoverCopiar(file, pastaDestino, totalArquivos, progressBar, cancelador, canceladorItem);
+                        await MoverCopiar(item, destinoArquivo, totalArquivos, progressBar, cancelador, canceladorItem);
                     }
                     catch (Exception)
                     {
-                        if (canceladorItem.IsCancellationRequested) continue;
+                        if (canceladorItem.IsCancellationRequested) return;
                         if (cancelador.IsCancellationRequested) throw new OperationCanceledException();
                     }
-                    
-                }
+                    finally
+                    {
+                        semaphore.Release();
+                    }
+                }, cancelador));
+                
             }
-        }
 
+            await Task.WhenAll(tasks);
+        }
+ 
         private (CancellationToken itemCancelator, System.Windows.Controls.ProgressBar?) AddFileComponent(string arquivo, string destino)
         {
 
@@ -277,7 +263,8 @@ namespace FolderFlex.ViewModel
             {
                 Orientation = System.Windows.Controls.Orientation.Horizontal,
                 VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(10, 0, 0, 0)
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                //Margin = new Thickness(10, 0, 0, 0)
             };
 
             var fileIcon = new PackIconPhosphorIcons
@@ -291,17 +278,28 @@ namespace FolderFlex.ViewModel
 
             TextBlock fileNameTextBlock = new()
             {
-                Text = Path.GetFileName(arquivo).Length > 30 ? $"{Path.GetFileName(arquivo).Substring(0, 30)}..." : Path.GetFileName(arquivo),
+                Text = Path.GetFileName(arquivo).Length > 35 ? $"{Path.GetFileName(arquivo).Substring(0, 35)}..." : Path.GetFileName(arquivo),
                 VerticalAlignment = VerticalAlignment.Center,
                 FontSize = 14,
                 FontWeight = FontWeights.SemiBold,
-                Margin = new Thickness(0, 0, 0, 2),
+                Margin = new Thickness(0, 0, 0, 4),
                 Foreground = (System.Windows.Media.Brush)new BrushConverter().ConvertFromString("#1f1446")!
             };
 
             stackPanel.Children.Add(fileNameTextBlock);
 
-            grid.Children.Add(stackPanel);
+            System.Windows.Controls.Button fileButton = new()
+            {
+                Style = (Style)_mainWindow.FindResource("TransparentButton"),
+                Margin = new Thickness(10, 0, 0, 2),
+                Cursor = System.Windows.Input.Cursors.Hand,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
+                ToolTip = "Abrir Arquivo"
+            };
+
+            fileButton.Content = stackPanel;
+
+            grid.Children.Add(fileButton);
 
             System.Windows.Controls.ProgressBar progressBar = new System.Windows.Controls.ProgressBar
             {
@@ -312,6 +310,20 @@ namespace FolderFlex.ViewModel
                 VerticalAlignment = VerticalAlignment.Center,
                 Margin = new Thickness(10, 40, 0, 0),
                 HorizontalAlignment = System.Windows.HorizontalAlignment.Left
+            };
+
+            fileButton.Click += (s, e) =>
+            {
+                if (File.Exists(arquivo) && progressBar?.Value == 100)
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = arquivo,
+                        UseShellExecute = true
+                    });
+                }
+
+
             };
 
             grid.Children.Add(progressBar);
@@ -329,7 +341,7 @@ namespace FolderFlex.ViewModel
 
             grid.Children.Add(fileSizeTextBlock);
 
-            System.Windows.Controls.Button actionButton = new System.Windows.Controls.Button
+            System.Windows.Controls.Button actionButton = new()
             {
                 Style = (Style)_mainWindow.FindResource("TransparentButton"),
                 Margin = new Thickness(10,0, 10, 0),
@@ -388,7 +400,7 @@ namespace FolderFlex.ViewModel
                 var caminhoDestino = string.IsNullOrEmpty(PastaDestino) ? PastaOrigem : PastaDestino;
 
                 if (Directory.Exists(caminhoDestino))
-                    Process.Start("explorer.exe", caminhoDestino);
+                    Process.Start("explorer", caminhoDestino);
             };
 
             grid.Children.Add(actionButton);
@@ -519,27 +531,6 @@ namespace FolderFlex.ViewModel
             await Task.Delay(10, cancelador);
             
         }
-        private async Task ProcessarArquivosSoltos(string[] listaArquivosSoltos, string destino, CancellationToken cancelador, int totalArquivos)
-        {
-            foreach (string arquivo in listaArquivosSoltos)
-            {
-                cancelador.ThrowIfCancellationRequested();
-
-                string destinoArquivo = Path.Combine(destino, Path.GetFileName(arquivo));
-
-                var (canceladorItem, progressBar) = AddFileComponent(arquivo, destino);
-
-                try
-                {
-                    await MoverCopiar(arquivo, destinoArquivo, totalArquivos, progressBar, cancelador, canceladorItem);
-                }
-                catch (Exception)
-                {
-                    if (canceladorItem.IsCancellationRequested) continue;
-                    if (cancelador.IsCancellationRequested) throw new OperationCanceledException();
-                }
-            }
-        }
         public async Task IniciarMovimento()
         {
             var caminhoDestino = string.IsNullOrEmpty(PastaDestino) ? PastaOrigem : PastaDestino;
@@ -553,6 +544,7 @@ namespace FolderFlex.ViewModel
 
             try
             {
+                _mainWindow.Height = 580;
                 UltimaPastaSelecionada = PastaOrigem;
                 Cronometro.Start();
                 await MoverParaRaiz(PastaOrigem, caminhoDestino, Cancelador.Token);
