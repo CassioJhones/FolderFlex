@@ -7,7 +7,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 public class Updater
 {
-    private const string GitHubApiUrl = "https://api.github.com/repos/ryuuzera/Trimui-Smart-Hub/releases/latest";
+    private const string GitHubApiUrl = "https://api.github.com/repos/CassioJhones/FolderFlex/releases/latest";
 
     private readonly static string AppName = "FolderFlex.exe";
     private static JsonNode? GithubRepoResponse { get; set; }
@@ -25,32 +25,23 @@ public class Updater
 
             AppPath = Path.Combine(appDirectory, AppName);
 
-            FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(AppPath);
-
-            Version.TryParse(versionInfo.FileVersion, out Version versaoAntiga);
-
             client.DefaultRequestHeaders.UserAgent.TryParseAdd("request");
+
             var response = await client.GetAsync(GitHubApiUrl).Result.Content.ReadAsStringAsync();
 
             GithubRepoResponse = JsonNode.Parse(response);
 
-            string? versaoGit = GithubRepoResponse?["tag_name"].ToString();
+            await Download();
 
+            UnzipFiles();
 
-            if (Version.TryParse(versaoGit, out Version novaVersao) && novaVersao > versaoAntiga)
-            {
-                Console.WriteLine($"Nova versão disponível: {novaVersao}. Atualizando...");
-
-                await Download();
-
-                UnzipFiles();
-
-                ReplaceFiles();
-            }
+            ReplaceFiles();
 
         }
         catch (Exception ex)
         {
+            StartApplication();
+
             Environment.Exit(0);
         }
         finally
@@ -103,27 +94,28 @@ public class Updater
 
     private static void ReplaceFiles()
     {
-        if (Directory.Exists(Path.Combine(ExtractionPath, AppName.Split('.').First())))
-        {
-            Directory.Delete(ExtractionPath, true);
-        }
-        ZipFile.ExtractToDirectory(TempPath, ExtractionPath);
-    }
-
-    private static void UnzipFiles()
-    {
         string[] arquivos = Directory.GetFiles(ExtractionPath, "*.*", SearchOption.AllDirectories);
 
         foreach (string arquivo in arquivos)
         {
             string destino = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Path.GetFileName(arquivo));
-            File.Copy(arquivo, destino, true); 
+            File.Copy(arquivo, destino, true);
         }
+    }
 
+    private static void UnzipFiles()
+    {
+        ZipFile.ExtractToDirectory(TempPath, ExtractionPath, true);
     }
 
     private static void StartApplication()
     {
-        Process.Start(AppPath);
+        ProcessStartInfo startInfo = new ProcessStartInfo
+        {
+            FileName = Path.GetFileName(AppPath),
+            WindowStyle = ProcessWindowStyle.Normal
+        };
+
+        Process.Start(Path.GetFileName(AppPath));
     }
 }
