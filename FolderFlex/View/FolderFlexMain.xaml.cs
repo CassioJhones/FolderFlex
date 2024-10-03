@@ -38,12 +38,11 @@ namespace FolderFlex.View
         private void LimparTela()
         {
             if (_viewModel.Contador == 0) return;
+
             _viewModel.Contador = 0;
             _viewModel.Progresso = 0;
-            _viewModel.ArquivosMovidos.Clear();
             _viewModel.Cronometro.Reset();
             _viewModel.MensagemStatus = "Selecione as pastas para começar";
-            _viewModel.MensagemErro = string.Empty;
             //MensagemStatus.Foreground = Brushes.Black;
             //TempoDecorrido.Text = "";
         }
