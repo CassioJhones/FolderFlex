@@ -9,6 +9,8 @@ namespace FolderFlexCommon.Messages
     public static class MessageMap
     {
         private static Dictionary<string, Dictionary<string, string>> _messages;
+
+        // TODO: deve carregar das configuracoes .ini ou xml
         private static string _defaultLanguage = "pt";
 
         static MessageMap()

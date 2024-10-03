@@ -12,6 +12,7 @@ namespace FolderFlex.ViewModel
 {
     public class FolderFlexMessageProviderViewModel: INotifyPropertyChanged
     {
+        // deve carregar das configuracoes .ini ou xml
         private string _language = "pt";
 
         public string Language
