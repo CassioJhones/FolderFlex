@@ -10,9 +10,12 @@
         WindowStyle="None"
         BorderBrush="Transparent"
         Background="Transparent"
-        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:language="clr-namespace:FolderFlex.ViewModel" d:DataContext="{d:DesignInstance Type=language:FolderFlexViewModel}"
         Title="FolderFlex" Height="340" Width="480">
     <Window.Resources>
+
+        <language:FolderFlexMessageProviderViewModel x:Key="FolderFlexMessageProviderViewModel" />
+        
         <Style TargetType="ProgressBar" x:Key="RoundedProgressBar">
             <Setter Property="Template">
                 <Setter.Value>
@@ -214,35 +217,35 @@
                 <Border Grid.Row="1" CornerRadius="15" Margin="5" >
 
                     <StackPanel Orientation="Vertical">
-                        <TextBlock x:Name="MensagemStatus" Text="{Binding MensagemStatus}" FontSize="16" Foreground="#A0A3BD" TextAlignment="Center"  Margin="0,0,0,10"/>
+                        <TextBlock x:Name="StatusMessage" Text="{Binding StatusMessage}" FontSize="16" Foreground="#A0A3BD" TextAlignment="Center"  Margin="0,0,0,10"/>
                         <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center"  Margin="20,10,0,0">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock  Text="Origem" Foreground="#A0A3BD" FontWeight="SemiBold" FontSize="10" Margin="7,0"/>
+                                <StackPanel Orientation="Vertical"  >
+                                    <TextBlock Text="{Binding OriginLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Foreground="#A0A3BD" FontWeight="SemiBold" FontSize="10" Margin="7,0"/>
                                     <TextBox x:Name="OriginLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270"  Foreground="#A0A3BD" Text="{Binding PastaOrigem}"  Height="25" IsEnabled="True"  Background="WhiteSmoke" Margin="5,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
                                     <TextBlock  Text="{Binding PastaOrigemError}" Foreground="#ea516a" FontWeight="SemiBold" FontSize="10" Margin="7,0"/>
                                 </StackPanel>
-                                <Button Margin="10,0,0,0" Content="Origem" Height="24" Width="100" Style="{StaticResource RoundedButtonStyle}"  Background="#526cca" Foreground="White" VerticalAlignment="Center" Click="Click_SelecionarOrigem"/>
+                                <Button Margin="10,0,0,0"  Content="{Binding OriginLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Height="24" Width="100" Style="{StaticResource RoundedButtonStyle}"  Background="#526cca" Foreground="White" VerticalAlignment="Center" Click="Click_SelecionarOrigem"/>
 
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="20,10,0,0">
                                 <StackPanel Orientation="Vertical">
-                                    <TextBlock  Text="Destino" Foreground="#A0A3BD" FontWeight="SemiBold" FontSize="10" Margin="7,0"/>
+                                    <TextBlock Text="{Binding DestinationLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Foreground="#A0A3BD" FontWeight="SemiBold" FontSize="10" Margin="7,0"/>
                                     <TextBox x:Name="DestinationLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270"  Foreground="#A0A3BD" Text="{Binding PastaDestino}"  Height="25" IsEnabled="True" Background="WhiteSmoke" Margin="5,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
                                     <TextBlock  Text="{Binding PastaDestinoError}" Foreground="#ea516a" FontWeight="SemiBold" FontSize="10" Margin="7,0"/>
                                 </StackPanel>
-                                <Button Margin="10,0,0,0" Content="Destino" Height="24" Width="100" Style="{StaticResource RoundedButtonStyle}" Background="#526cca" Foreground="White" VerticalAlignment="Center" Click="Click_SelecionarDestino"/>
+                                <Button Margin="10,0,0,0"  Content="{Binding DestinationLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Height="24" Width="100" Style="{StaticResource RoundedButtonStyle}" Background="#526cca" Foreground="White" VerticalAlignment="Center" Click="Click_SelecionarDestino" Cursor="Hand"/>
                         </StackPanel>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,18,0,0">
 
-                            <Button Click="StartMove_Click" Content="Mover" Style="{StaticResource RoundedButtonStyle}" Margin="0,0,5,0" Background="#526cca" Foreground="White" FontWeight="SemiBold"/>
-                            <Button Click="Cancelation_Click" Content="Cancelar" Style="{StaticResource RoundedButtonStyle}" Margin="5,0,0,0" Background="#399fa1" Foreground="White" FontWeight="SemiBold"/>
+                            <Button Click="StartMove_Click"  Content="{Binding MoveLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Style="{StaticResource RoundedButtonStyle}" Margin="0,0,5,0" Background="#526cca" Foreground="White" FontWeight="SemiBold"/>
+                            <Button Click="Cancelation_Click"  Content="{Binding CancelLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Style="{StaticResource RoundedButtonStyle}" Margin="5,0,0,0" Background="#399fa1" Foreground="White" FontWeight="SemiBold"/>
                             
                         </StackPanel>
                         <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,9,0,0">
-                            <CheckBox x:Name="cbRename"  IsChecked="{Binding Renomear}" Content="Renomear" VerticalAlignment="Center"  Foreground="#A0A3BD" ToolTip="Marque para renomear os arquivos iguais que já existem na pasta" Margin="4,0,10,0"/>
-                            <CheckBox x:Name="cbCopy"  IsChecked="{Binding SomenteCopiar}" Content="Copiar" VerticalAlignment="Center" Foreground="#A0A3BD" ToolTip="Marque para copiar os arquivos ao invés de mover" Margin="4,0,10,0"/>
+                            <CheckBox x:Name="cbRename"  IsChecked="{Binding Renomear}" Content="{Binding RenameLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" VerticalAlignment="Center"  Foreground="#A0A3BD" ToolTip="Marque para renomear os arquivos iguais que já existem na pasta" Margin="4,0,10,0"/>
+                            <CheckBox x:Name="cbCopy"  IsChecked="{Binding SomenteCopiar}"  Content="{Binding CopyLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" VerticalAlignment="Center" Foreground="#A0A3BD" ToolTip="Marque para copiar os arquivos ao invés de mover" Margin="4,0,10,0"/>
                         </StackPanel>
 
                     </StackPanel>

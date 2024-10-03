@@ -1,5 +1,5 @@
 ﻿using FolderFlex.ViewModel;
-using System.IO;
+using FolderFlexCommon.Messages;
 using System.Windows;
 using System.Windows.Input;
 
@@ -12,6 +12,7 @@ namespace FolderFlex.View
         {
             InitializeComponent();
             _viewModel = new FolderFlexViewModel(this);
+
             DataContext = _viewModel;
         }
 
@@ -42,7 +43,7 @@ namespace FolderFlex.View
             _viewModel.Contador = 0;
             _viewModel.Progresso = 0;
             _viewModel.Cronometro.Reset();
-            _viewModel.MensagemStatus = "Selecione as pastas para começar";
+            _viewModel.StatusMessage = MessageMap.GetMessage("select_to_start");
             //MensagemStatus.Foreground = Brushes.Black;
             //TempoDecorrido.Text = "";
         }

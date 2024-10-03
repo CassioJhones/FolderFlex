@@ -1,18 +1,16 @@
 ﻿using FolderFlex.Factory.MainWindow.ComponentFactory;
 using FolderFlex.Services;
 using FolderFlex.Services.ErrorManager;
-using FolderFlex.Util;
 using FolderFlex.View;
 using MahApps.Metro.IconPacks;
 using System.Buffers;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 using System.Windows.Threading;
+using FolderFlexCommon.Messages;
 
 namespace FolderFlex.ViewModel
 {
@@ -64,14 +62,14 @@ namespace FolderFlex.ViewModel
                 OnPropertyChanged(nameof(Progresso));
             }
         }
-        private string _mensagemStatus = "Selecione as pastas para começar";
-        public string MensagemStatus
+        private string _statusMessage = MessageMap.GetMessage("select_to_start");
+        public string StatusMessage
         {
-            get => _mensagemStatus;
+            get => _statusMessage;
             set
             {
-                _mensagemStatus = value;
-                OnPropertyChanged(nameof(MensagemStatus));
+                _statusMessage = value;
+                OnPropertyChanged(nameof(StatusMessage));
             }
         }
         private string? _ultimaPastaSelecionada;
@@ -116,7 +114,7 @@ namespace FolderFlex.ViewModel
         {
             PastaDestino = string.Empty;
 
-            var dialog = DialogService.OpenFolderDialog("SELECIONE A PASTA RAIZ", selectedPath: UltimaPastaSelecionada);
+            var dialog = DialogService.OpenFolderDialog(MessageMap.GetMessage("select_root_folder"), selectedPath: UltimaPastaSelecionada);
             try
             {
                 PastaOrigem = dialog.ShowDialog() == DialogResult.OK ? dialog.SelectedPath : string.Empty;
@@ -129,7 +127,7 @@ namespace FolderFlex.ViewModel
 
         public string SelecionarDestino()
         {
-            var dialog = DialogService.OpenFolderDialog("SELECIONE O DESTINO DOS ARQUIVOS", selectedPath: UltimaPastaSelecionada);
+            var dialog = DialogService.OpenFolderDialog(MessageMap.GetMessage("select_destination_folder"), selectedPath: UltimaPastaSelecionada);
 
             try
             {
@@ -139,13 +137,13 @@ namespace FolderFlex.ViewModel
 
                     DirectoryInfo infoPasta = new(PastaDestino);
 
-                    MensagemStatus = $"Todos arquivos serão {(SomenteCopiar ? "copiados" : "movidos")} para: {infoPasta.Name}";
+                    StatusMessage = string.Format(MessageMap.GetMessage("all_files_moved_to"), (SomenteCopiar ? "copiados" : "movidos"), infoPasta.Name);
                     return dialog.SelectedPath;
                 }
 
                 PastaDestino = string.Empty;
 
-                MensagemStatus = $"Sem o destino, Todos arquivos serão {(SomenteCopiar ? "copiados" : "movidos")} para a Raiz da pasta de origem";
+                StatusMessage = string.Format(MessageMap.GetMessage("without_destiny_moved_to"), (SomenteCopiar ? "copiados" : "movidos"));
 
                 return dialog.SelectedPath;
             }
@@ -164,7 +162,7 @@ namespace FolderFlex.ViewModel
 
             if (listaSubPastas.Length <= 0 && listaArquivosSoltos.Length <= 0)
             {
-                errorHandler.AddError($"Nenhuma subpasta ou arquivo encontrado em: {infoPasta.Name}");
+                errorHandler.AddError(string.Format(MessageMap.GetMessage("folder_file_not_found"), infoPasta.Name));
 
                 return;
             }
@@ -291,13 +289,7 @@ namespace FolderFlex.ViewModel
 
             namesRegistered.Add(cancelIcon.Name);
 
-            PackIconLucide fileSearchIcon = new PackIconLucide
-            {
-                Kind = PackIconLucideKind.FileSearch,
-                Foreground = (System.Windows.Media.Brush)new BrushConverter().ConvertFromString("#AAB8C2")!,
-                Height = 18,
-                Visibility = Visibility.Collapsed 
-            };
+            PackIconLucide fileSearchIcon = FileComponentFactory.CreateFileSearchIcon();
 
             fileSearchIcon.Name = $"SearchIcon{index}";
 
@@ -421,7 +413,7 @@ namespace FolderFlex.ViewModel
                 return;
             }
 
-           errorHandler.AddError($"O arquivo {Path.GetFileName(arquivo)} já existe na pasta {Path.GetDirectoryName(destinoArquivo)}.");
+            errorHandler.AddError(string.Format(MessageMap.GetMessage("file_already_exist_on_path"), Path.GetFileName(arquivo), Path.GetDirectoryName(destinoArquivo)));
 
             AtualizarProgresso(totalArquivos);
 
@@ -466,8 +458,8 @@ namespace FolderFlex.ViewModel
             }
             catch (OperationCanceledException)
             {
-                errorHandler.AddError($"Operação cancelada pelo usuário após {(SomenteCopiar ? "copiar" : "mover")} {Contador}.");
-
+                errorHandler.AddError(string.Format(MessageMap.GetMessage("operation_cancelled_after_move"), SomenteCopiar ? "copiar" : "mover", Contador));
+               
                 ClearRegisteredNames();
 
                 _mainWindow.StackContainer.Children.Clear();
@@ -475,15 +467,15 @@ namespace FolderFlex.ViewModel
             }
             catch (DirectoryNotFoundException)
             {
-                errorHandler.AddError($"Pasta raiz inexistente ou não selecionada");
+                errorHandler.AddError(MessageMap.GetMessage("root_folder_not_exists"));
             }
             catch (IOException)
             {
-                errorHandler.AddError($"Sendo usado por outro processo");
+                errorHandler.AddError(MessageMap.GetMessage("file_used_by_process"));
             }
             catch (Exception ex)
             {
-                errorHandler.AddError($"Erro: {ex.Message}");
+                errorHandler.AddError(string.Format(MessageMap.GetMessage("throw_error"), ex.Message));
             }
             finally
             {
@@ -506,7 +498,7 @@ namespace FolderFlex.ViewModel
                 }
                 catch (Exception ex)
                 {
-                    errorHandler.AddError($"Erro ao deletar a pasta {subPasta}:\n{ex.Message}");
+                    errorHandler.AddError(string.Format(MessageMap.GetMessage("error_when_delete_folder"), subPasta, ex.Message));
                 }
             }
         }
