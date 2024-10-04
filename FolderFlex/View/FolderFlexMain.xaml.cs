@@ -1,5 +1,6 @@
 ﻿using FolderFlex.ViewModel;
 using FolderFlexCommon.Messages;
+using FolderFlexCommon.Settings;
 using FolderFlexCommon.Settings.ApplicationSettings;
 using System.Windows;
 using System.Windows.Input;
@@ -13,11 +14,12 @@ namespace FolderFlex.View
         public FolderFlexMain()
         {
             InitializeComponent();
-            _viewModel = new FolderFlexViewModel(this);
-            
-            DataContext = _viewModel;
             
             _languageController = (FolderFlexMessageProviderViewModel)this.FindResource("FolderFlexMessageProviderViewModel");
+
+            _viewModel = new FolderFlexViewModel(this, _languageController);
+
+            DataContext = _viewModel;
 
             var selectedLanguage = MessageMap.ListLanguages().FirstOrDefault(x => x.Key == _languageController.Language).Value;
 
@@ -52,7 +54,7 @@ namespace FolderFlex.View
             _viewModel.Contador = 0;
             _viewModel.Progresso = 0;
             _viewModel.Cronometro.Reset();
-            _viewModel.StatusMessage = MessageMap.GetMessage("select_to_start");
+            _languageController.StatusMessage = MessageMap.GetMessage("select_to_start");
         }
 
         private void Click_Cancelar(object sender, RoutedEventArgs e) => _viewModel.Cancelar();
@@ -71,9 +73,11 @@ namespace FolderFlex.View
         {
             var selectedLanguageKey = MessageMap.ListLanguages().FirstOrDefault(x => x.Value == LanguageCombo.SelectedItem.ToString()).Key;
 
-            _languageController.Language = selectedLanguageKey; 
+            _languageController.Language = selectedLanguageKey;
 
             MessageMap.SetDefaultLanguage(selectedLanguageKey);
+
+            _languageController.StatusMessage = MessageMap.GetMessage("select_to_start");
         }
     }
 }

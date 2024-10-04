@@ -217,7 +217,7 @@
                 <Border Grid.Row="1" CornerRadius="15" Margin="5" >
 
                     <StackPanel Orientation="Vertical">
-                        <TextBlock x:Name="StatusMessage" Text="{Binding StatusMessage}" FontSize="16" Foreground="#A0A3BD" TextAlignment="Center"  Margin="0,0,0,10"/>
+                        <TextBlock x:Name="StatusMessage" Text="{Binding StatusMessage, Source={StaticResource FolderFlexMessageProviderViewModel}}" FontSize="16" Foreground="#A0A3BD" TextAlignment="Center"  Margin="0,0,0,10"/>
                         <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center"  Margin="20,10,0,0">
                                 <StackPanel Orientation="Vertical"  >

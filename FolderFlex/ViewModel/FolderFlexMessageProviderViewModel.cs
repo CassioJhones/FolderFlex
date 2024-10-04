@@ -33,7 +33,17 @@ namespace FolderFlex.ViewModel
         }
 
         public List<string> LanguageOptions => ListLanguages();
-        public string StatusMessage => MessageMap.GetMessage("select_to_start", Language);
+
+        private string _statusMessage;
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set
+            {
+                _statusMessage = value;
+                OnPropertyChanged(nameof(StatusMessage));
+            }
+        }
 
         public string OriginLabel => MessageMap.GetMessage("origin_label", Language);
 
@@ -54,6 +64,8 @@ namespace FolderFlex.ViewModel
         public FolderFlexMessageProviderViewModel()
         {
             ChangeLanguageCommand = new RelayCommand<string>(ChangeLanguage);
+
+            _statusMessage = MessageMap.GetMessage("select_to_start", Language);
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

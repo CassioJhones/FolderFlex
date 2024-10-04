@@ -19,10 +19,13 @@ namespace FolderFlex.ViewModel
         #region PROPRIEDADES
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
         private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
         public CancellationTokenSource? Cancelador { get; set; }
 
         private int _contador;
+
         public int Contador
         {
             get => _contador;
@@ -32,7 +35,9 @@ namespace FolderFlex.ViewModel
                 OnPropertyChanged(nameof(Contador));
             }
         }
+
         private bool _renomear = false;
+
         public bool Renomear
         {
             get => _renomear;
@@ -42,7 +47,9 @@ namespace FolderFlex.ViewModel
                 OnPropertyChanged(nameof(Renomear));
             }
         }
+
         private bool _somenteCopiar = false;
+
         public bool SomenteCopiar
         {
             get => _somenteCopiar;
@@ -52,7 +59,9 @@ namespace FolderFlex.ViewModel
                 OnPropertyChanged(nameof(SomenteCopiar));
             }
         }
+
         private double _progresso;
+
         public double Progresso
         {
             get => _progresso;
@@ -62,17 +71,9 @@ namespace FolderFlex.ViewModel
                 OnPropertyChanged(nameof(Progresso));
             }
         }
-        private string _statusMessage = MessageMap.GetMessage("select_to_start");
-        public string StatusMessage
-        {
-            get => _statusMessage;
-            set
-            {
-                _statusMessage = value;
-                OnPropertyChanged(nameof(StatusMessage));
-            }
-        }
+
         private string? _ultimaPastaSelecionada;
+
         public string? UltimaPastaSelecionada
         {
             get => _ultimaPastaSelecionada;
@@ -82,11 +83,17 @@ namespace FolderFlex.ViewModel
                 OnPropertyChanged(nameof(UltimaPastaSelecionada));
             }
         }
+
         public string? PastaDestino { get; set; }
+
         public string? PastaOrigem { get; set; }
+
         public string? Nome { get; set; }
+
         public string? Tamanho { get; set; }
+
         public Stopwatch Cronometro { get; private set; }
+
         public int ArquivosProcessados = 0;
 
         private readonly List<string> fileComponents = [];
@@ -97,15 +104,19 @@ namespace FolderFlex.ViewModel
 
         private readonly ErrorHandler errorHandler;
 
+        private readonly FolderFlexMessageProviderViewModel _languageController;
+
         #endregion PROPRIEDADES
 
-        public FolderFlexViewModel(FolderFlexMain mainWindow) {
+        public FolderFlexViewModel(FolderFlexMain mainWindow, FolderFlexMessageProviderViewModel languageController) {
 
             Cancelador = new CancellationTokenSource();
             Cronometro = new Stopwatch();
 
             errorHandler = new ErrorHandler();
             errorHandler.Attach(new ErrorLogger());
+            
+            _languageController = languageController;
 
             _mainWindow = mainWindow;
         }
@@ -137,13 +148,13 @@ namespace FolderFlex.ViewModel
 
                     DirectoryInfo infoPasta = new(PastaDestino);
 
-                    StatusMessage = string.Format(MessageMap.GetMessage("all_files_moved_to"), (SomenteCopiar ? "copiados" : "movidos"), infoPasta.Name);
+                    _languageController.StatusMessage = string.Format(MessageMap.GetMessage("all_files_moved_to"), (SomenteCopiar ? "copiados" : "movidos"), infoPasta.Name);
                     return dialog.SelectedPath;
                 }
 
                 PastaDestino = string.Empty;
 
-                StatusMessage = string.Format(MessageMap.GetMessage("without_destiny_moved_to"), (SomenteCopiar ? "copiados" : "movidos"));
+                _languageController.StatusMessage = string.Format(MessageMap.GetMessage("without_destiny_moved_to"), (SomenteCopiar ? "copiados" : "movidos"));
 
                 return dialog.SelectedPath;
             }
