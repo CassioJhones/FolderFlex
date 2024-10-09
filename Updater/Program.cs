@@ -1,9 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO.Compression;
 using System.Reflection;
-using System.Text.Json;
 using System.Text.Json.Nodes;
-using static System.Net.Mime.MediaTypeNames;
 
 public class Updater
 {
@@ -11,7 +9,7 @@ public class Updater
 
     private readonly static string AppName = "FolderFlex.exe";
     private static JsonNode? GithubRepoResponse { get; set; }
-    private static string AppPath { get; set; }
+    private static string? AppPath { get; set; }
 
     private static string TempPath = $"{Path.Combine(Path.GetTempPath())}%0%";
 
@@ -27,7 +25,7 @@ public class Updater
 
             client.DefaultRequestHeaders.UserAgent.TryParseAdd("request");
 
-            var response = await client.GetAsync(GitHubApiUrl).Result.Content.ReadAsStringAsync();
+            string response = await client.GetAsync(GitHubApiUrl).Result.Content.ReadAsStringAsync();
 
             GithubRepoResponse = JsonNode.Parse(response);
 
@@ -38,7 +36,7 @@ public class Updater
             ReplaceFiles();
 
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             StartApplication();
 
@@ -58,7 +56,7 @@ public class Updater
 
         string downloadLink = GithubRepoResponse["assets"][0]["browser_download_url"].ToString();
 
-        var fileName = Path.GetFileName(downloadLink);
+        string fileName = Path.GetFileName(downloadLink);
         HttpResponseMessage response = await client.GetAsync(downloadLink);
 
         if (response.IsSuccessStatusCode)
@@ -68,7 +66,7 @@ public class Updater
             int bufferSize = 8192;
             byte[] buffer = new byte[bufferSize];
 
-            await using FileStream fs = new FileStream(tempPath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize, useAsync: true);
+            await using FileStream fs = new(tempPath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize, useAsync: true);
 
             await using Stream contentStream = await response.Content.ReadAsStreamAsync();
             long totalBytesRead = 0;
@@ -103,14 +101,11 @@ public class Updater
         }
     }
 
-    private static void UnzipFiles()
-    {
-        ZipFile.ExtractToDirectory(TempPath, ExtractionPath, true);
-    }
+    private static void UnzipFiles() => ZipFile.ExtractToDirectory(TempPath, ExtractionPath, true);
 
     private static void StartApplication()
     {
-        ProcessStartInfo startInfo = new ProcessStartInfo
+        ProcessStartInfo startInfo = new()
         {
             FileName = Path.GetFileName(AppPath),
             WindowStyle = ProcessWindowStyle.Normal
