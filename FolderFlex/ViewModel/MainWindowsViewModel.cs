@@ -1,5 +1,4 @@
 ﻿using FolderFlex.Util;
-using FolderFlex.View;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -127,7 +126,6 @@ public class MainWindowsViewModel : INotifyPropertyChanged
         Cronometro = new Stopwatch();
     }
     #region Tarefas
-    
 
     public async Task IniciarMovimento()
     {

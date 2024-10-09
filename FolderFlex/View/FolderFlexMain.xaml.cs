@@ -1,79 +1,71 @@
 ﻿using FolderFlex.ViewModel;
 using FolderFlexCommon.Messages;
-using FolderFlexCommon.Settings.ApplicationSettings;
 using System.Windows;
 using System.Windows.Input;
 
-namespace FolderFlex.View
+namespace FolderFlex.View;
+
+public partial class FolderFlexMain : Window
 {
-    public partial class FolderFlexMain : Window
+    private readonly FolderFlexViewModel _viewModel;
+    private readonly FolderFlexMessageProviderViewModel _languageController;
+    public FolderFlexMain()
     {
-        private readonly FolderFlexViewModel _viewModel;
-        private readonly FolderFlexMessageProviderViewModel _languageController;
-        public FolderFlexMain()
-        {
-            InitializeComponent();
-            _viewModel = new FolderFlexViewModel(this);
-            
-            DataContext = _viewModel;
-            
-            _languageController = (FolderFlexMessageProviderViewModel)this.FindResource("FolderFlexMessageProviderViewModel");
+        InitializeComponent();
+        _viewModel = new FolderFlexViewModel(this);
 
-            var selectedLanguage = MessageMap.ListLanguages().FirstOrDefault(x => x.Key == _languageController.Language).Value;
+        DataContext = _viewModel;
 
-            LanguageCombo.SelectedItem = selectedLanguage;
+        _languageController = (FolderFlexMessageProviderViewModel)this.FindResource("FolderFlexMessageProviderViewModel");
 
-        }
+        string selectedLanguage = MessageMap.ListLanguages().FirstOrDefault(x => x.Key == _languageController.Language).Value;
 
-        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            this.DragMove();
-        }
+        LanguageCombo.SelectedItem = selectedLanguage;
 
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
+    }
 
-        private void Click_SelecionarOrigem(object sender, RoutedEventArgs e)
-        {
-            LimparTela();
-            _viewModel.SelecionarOrigem();
-        }
-        private void Click_SelecionarDestino(object sender, RoutedEventArgs e)
-        {
-            LimparTela();
-            _viewModel.SelecionarDestino();
-        }
-        private void LimparTela()
-        {
-            if (_viewModel.Contador == 0) return;
+    private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => this.DragMove();
 
-            _viewModel.Contador = 0;
-            _viewModel.Progresso = 0;
-            _viewModel.Cronometro.Reset();
-            _viewModel.StatusMessage = MessageMap.GetMessage("select_to_start");
-        }
+    private void CloseButton_Click(object sender, RoutedEventArgs e) => Close();
 
-        private void Click_Cancelar(object sender, RoutedEventArgs e) => _viewModel.Cancelar();
+    private void Click_SelecionarOrigem(object sender, RoutedEventArgs e)
+    {
+        LimparTela();
+        _viewModel.SelecionarOrigem();
+    }
+    private void Click_SelecionarDestino(object sender, RoutedEventArgs e)
+    {
+        LimparTela();
+        _viewModel.SelecionarDestino();
+    }
+    private void LimparTela()
+    {
+        if (_viewModel.Contador == 0) return;
 
-        private async void StartMove_Click(object sender, RoutedEventArgs e)
-        {
-            StackContainer.Children.Clear();
-            await _viewModel.IniciarMovimento();
-        }
+        _viewModel.Contador = 0;
+        _viewModel.Progresso = 0;
+        _viewModel.Cronometro.Reset();
+        _viewModel.StatusMessage = MessageMap.GetMessage("select_to_start");
+    }
 
-        private void Cancelation_Click(object sender, RoutedEventArgs e) => _viewModel.Cancelar();
+    private void Click_Cancelar(object sender, RoutedEventArgs e) => _viewModel.Cancelar();
 
-        private void ButtonGithub_Click(object sender, RoutedEventArgs e) => _viewModel.LinkIcone();
+    private async void StartMove_Click(object sender, RoutedEventArgs e)
+    {
+        StackContainer.Children.Clear();
+        await _viewModel.IniciarMovimento();
+    }
 
-        private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            var selectedLanguageKey = MessageMap.ListLanguages().FirstOrDefault(x => x.Value == LanguageCombo.SelectedItem.ToString()).Key;
+    private void Cancelation_Click(object sender, RoutedEventArgs e) => _viewModel.Cancelar();
 
-            _languageController.Language = selectedLanguageKey; 
+    private void ButtonGithub_Click(object sender, RoutedEventArgs e) => _viewModel.LinkIcone();
 
-            MessageMap.SetDefaultLanguage(selectedLanguageKey);
-        }
+    private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+        string selectedLanguageKey = MessageMap.ListLanguages().FirstOrDefault(x => x.Value == LanguageCombo.SelectedItem.ToString()).Key;
+
+        _languageController.Language = selectedLanguageKey;
+
+        MessageMap.SetDefaultLanguage(selectedLanguageKey);
     }
 }
