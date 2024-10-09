@@ -1,25 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace FolderFlex.Services;
 
-namespace FolderFlex.Services
+static class DialogService
 {
-    static class DialogService
+    static internal FolderBrowserDialog OpenFolderDialog(string description, string? selectedPath, bool useDescriptionForTitle = true, bool showNewFolderButton = true)
     {
-        static internal FolderBrowserDialog OpenFolderDialog(string description, string? selectedPath, bool useDescriptionForTitle = true, bool showNewFolderButton = true)
+        FolderBrowserDialog dialog = new()
         {
-            FolderBrowserDialog dialog = new()
-            {
-                Description = description,
-                UseDescriptionForTitle = useDescriptionForTitle,
-                ShowNewFolderButton = showNewFolderButton,
-                SelectedPath = selectedPath ?? string.Empty
-            };
+            Description = description,
+            UseDescriptionForTitle = useDescriptionForTitle,
+            ShowNewFolderButton = showNewFolderButton,
+            SelectedPath = selectedPath ?? string.Empty
+        };
 
-             return dialog;
-          
-        }
+        return dialog;
+
     }
 }

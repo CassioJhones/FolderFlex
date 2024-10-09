@@ -35,16 +35,16 @@ public static class AtualizacaoChecker
 
             return false;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return false;
         }
     }
     public static void StartUpdaterAndExit()
     {
-        var updaterPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Updater.exe");
+        string updaterPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Updater.exe");
 
-        ProcessStartInfo startInfo = new ProcessStartInfo
+        ProcessStartInfo startInfo = new()
         {
             FileName = "Updater.exe",
             WindowStyle = ProcessWindowStyle.Hidden,

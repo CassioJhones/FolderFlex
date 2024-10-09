@@ -1,4 +1,4 @@
-﻿using FolderFlex.Factory.MainWindow.ComponentFactory;
+using FolderFlex.Factory.MainWindow.ComponentFactory;
 using FolderFlex.Services;
 using FolderFlex.Services.ErrorManager;
 using FolderFlex.View;
