@@ -33,17 +33,17 @@ jobs:
         run: dotnet test FolderFlexTeste/FolderFlexTeste.csproj --configuration ${{ matrix.configuration }} --no-build --verbosity normal
 
       - name: Publicando FolderFlex
-        run: dotnet publish FolderFlex/FolderFlex.csproj --configuration ${{ matrix.configuration }} --output ./output/FolderFlex
+        run: dotnet publish FolderFlex/FolderFlex.csproj --configuration ${{ matrix.configuration }} --output ./output/
 
       - name: Publicando Updater
-        run: dotnet publish Updater/Updater.csproj --configuration ${{ matrix.configuration }} --output ./output/Updater
+        run: dotnet publish Updater/Updater.csproj --configuration ${{ matrix.configuration }} --output ./output/
 
       - name: Compactando tudo em um zip
         run: |
-          powershell Compress-Archive -Path ./output/* -DestinationPath ./output/FolderFlex_Updater.zip
+          powershell Compress-Archive -Path ./output/* -DestinationPath ./output/FolderFlex.zip
 
       - name: Upload dos Artefatos
         uses: actions/upload-artifact@v3
         with:
           name: Build Outputs
-          path: ./output/FolderFlex_Updater.zip
+          path: ./output/FolderFlex.zip

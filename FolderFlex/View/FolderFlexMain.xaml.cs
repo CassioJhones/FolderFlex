@@ -1,5 +1,7 @@
 ﻿using FolderFlex.ViewModel;
 using FolderFlexCommon.Messages;
+using FolderFlexCommon.Settings;
+using FolderFlexCommon.Settings.ApplicationSettings;
 using System.Windows;
 using System.Windows.Input;
 
@@ -9,16 +11,18 @@ public partial class FolderFlexMain : Window
 {
     private readonly FolderFlexViewModel _viewModel;
     private readonly FolderFlexMessageProviderViewModel _languageController;
+    
     public FolderFlexMain()
     {
         InitializeComponent();
-        _viewModel = new FolderFlexViewModel(this);
-
-        DataContext = _viewModel;
 
         _languageController = (FolderFlexMessageProviderViewModel)this.FindResource("FolderFlexMessageProviderViewModel");
 
-        string selectedLanguage = MessageMap.ListLanguages().FirstOrDefault(x => x.Key == _languageController.Language).Value;
+        _viewModel = new FolderFlexViewModel(this, _languageController);
+
+        DataContext = _viewModel;
+
+        var selectedLanguage = MessageMap.ListLanguages().FirstOrDefault(x => x.Key == _languageController.Language).Value;
 
         LanguageCombo.SelectedItem = selectedLanguage;
 
@@ -33,7 +37,8 @@ public partial class FolderFlexMain : Window
         LimparTela();
         _viewModel.SelecionarOrigem();
     }
-    private void Click_SelecionarDestino(object sender, RoutedEventArgs e)
+    
+     private void Click_SelecionarDestino(object sender, RoutedEventArgs e)
     {
         LimparTela();
         _viewModel.SelecionarDestino();
@@ -45,7 +50,7 @@ public partial class FolderFlexMain : Window
         _viewModel.Contador = 0;
         _viewModel.Progresso = 0;
         _viewModel.Cronometro.Reset();
-        _viewModel.StatusMessage = MessageMap.GetMessage("select_to_start");
+        _languageController.StatusMessage = MessageMap.GetMessage("select_to_start");
     }
 
     private void Click_Cancelar(object sender, RoutedEventArgs e) => _viewModel.Cancelar();
@@ -62,10 +67,12 @@ public partial class FolderFlexMain : Window
 
     private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
-        string selectedLanguageKey = MessageMap.ListLanguages().FirstOrDefault(x => x.Value == LanguageCombo.SelectedItem.ToString()).Key;
+        var selectedLanguageKey = MessageMap.ListLanguages().FirstOrDefault(x => x.Value == LanguageCombo.SelectedItem.ToString()).Key;
 
         _languageController.Language = selectedLanguageKey;
 
         MessageMap.SetDefaultLanguage(selectedLanguageKey);
+
+        _languageController.StatusMessage = MessageMap.GetMessage("select_to_start");
     }
 }

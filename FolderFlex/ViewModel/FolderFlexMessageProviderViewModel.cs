@@ -28,7 +28,18 @@ public class FolderFlexMessageProviderViewModel : INotifyPropertyChanged
     }
 
     public List<string> LanguageOptions => ListLanguages();
-    public string StatusMessage => MessageMap.GetMessage("select_to_start", Language);
+
+    private string _statusMessage;
+    
+    public string StatusMessage
+    {
+        get => _statusMessage;
+        set
+        {
+            _statusMessage = value;
+            OnPropertyChanged(nameof(StatusMessage));
+        }
+    }
 
     public string OriginLabel => MessageMap.GetMessage("origin_label", Language);
 
@@ -37,14 +48,22 @@ public class FolderFlexMessageProviderViewModel : INotifyPropertyChanged
     public string MoveLabel => MessageMap.GetMessage("move_label", Language);
 
     public string CopyLabel => MessageMap.GetMessage("copy_label", Language);
-
+    
     public string RenameLabel => MessageMap.GetMessage("rename_label", Language);
+    
     public string CancelLabel => MessageMap.GetMessage("cancel_label", Language);
+    
     protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    
     public ICommand ChangeLanguageCommand { get; }
+    
+    public FolderFlexMessageProviderViewModel()
+    {
+        ChangeLanguageCommand = new RelayCommand<string>(ChangeLanguage);
 
-    public FolderFlexMessageProviderViewModel() => ChangeLanguageCommand = new RelayCommand<string>(ChangeLanguage);
-
+        _statusMessage = MessageMap.GetMessage("select_to_start", Language);
+    }
+    
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private void ChangeLanguage(string newLanguage) => Language = newLanguage;
