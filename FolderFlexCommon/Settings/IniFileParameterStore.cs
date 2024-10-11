@@ -27,9 +27,7 @@ public class IniFileParameterStore : IParameterStorage
     public void SetParameter(string section, string key, string value)
     {
         if (!_data.ContainsKey(section))
-        {
             _data[section] = new Dictionary<string, string>();
-        }
         _data[section][key] = value;
 
         Save();
@@ -46,9 +44,7 @@ public class IniFileParameterStore : IParameterStorage
             {
                 string section = line.Trim('[', ']');
                 if (!_data.ContainsKey(section))
-                {
                     _data[section] = new Dictionary<string, string>();
-                }
 
                 continue;
             }
@@ -70,9 +66,7 @@ public class IniFileParameterStore : IParameterStorage
         {
             sb.AppendLine($"[{section.Key}]");
             foreach (KeyValuePair<string, string> kvp in section.Value)
-            {
                 sb.AppendLine($"{kvp.Key}={kvp.Value}");
-            }
         }
         File.WriteAllText(_filePath, sb.ToString());
     }

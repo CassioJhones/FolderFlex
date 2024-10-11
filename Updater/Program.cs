@@ -73,10 +73,9 @@ public class Updater
             long totalBytes = response.Content.Headers.ContentLength ?? -1;
 
             int bytesRead;
-
+            Console.ForegroundColor = ConsoleColor.Green;
             while ((bytesRead = await contentStream.ReadAsync(buffer.AsMemory(0, bufferSize))) > 0)
             {
-
                 await fs.WriteAsync(buffer.AsMemory(0, bytesRead));
 
                 totalBytesRead += bytesRead;
@@ -84,9 +83,11 @@ public class Updater
                 if (totalBytes > 0)
                 {
                     double progress = (double)totalBytesRead / totalBytes * 100;
+                    Console.Clear();
                     Console.WriteLine($"Progress: {progress:F2}%");
                 }
             }
+            Console.ForegroundColor = ConsoleColor.White;
         }
     }
 

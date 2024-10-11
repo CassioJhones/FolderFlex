@@ -39,9 +39,7 @@ public static class MessageMap
         language ??= _defaultLanguage;
 
         if (_messages.ContainsKey(language) && _messages[language].ContainsKey(key))
-        {
             return _messages[language][key];
-        }
 
         return _messages.ContainsKey(_defaultLanguage) && _messages[_defaultLanguage].ContainsKey(key)
             ? _messages[_defaultLanguage][key]
@@ -57,9 +55,7 @@ public static class MessageMap
         foreach (string language in _messages.Keys)
         {
             if (_messages[language].ContainsKey("language_description"))
-            {
                 languageList.Add(language, _messages[language]["language_description"]);
-            }
         }
 
         return languageList;
