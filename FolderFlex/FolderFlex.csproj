@@ -12,15 +12,14 @@
 	</PropertyGroup>
 	
 	<PropertyGroup>
-		<AssemblyVersion>4.0.1.0</AssemblyVersion>
-		<FileVersion>4.0.1.0</FileVersion>
+		<AssemblyVersion>5.0.1.0</AssemblyVersion>
+		<FileVersion>5.0.1.0</FileVersion>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="Recursos\git.ico" />
 	</ItemGroup>
 	<ItemGroup>
 	  <PackageReference Include="MahApps.Metro.IconPacks" Version="5.0.0" />
-	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
