@@ -10,184 +10,12 @@
         WindowStyle="None"
         BorderBrush="Transparent"
         Background="Transparent"
-        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:language="clr-namespace:FolderFlex.ViewModel" d:DataContext="{d:DesignInstance Type=language:FolderFlexViewModel}"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:language="clr-namespace:FolderFlex.ViewModel"
+        d:DataContext="{d:DesignInstance Type=language:FolderFlexViewModel}"
+        DataContext="{StaticResource FolderFlexMessageProviderViewModel}"
         Title="FolderFlex" Height="340" Width="480">
-    <Window.Resources>
-
-        <language:FolderFlexMessageProviderViewModel x:Key="FolderFlexMessageProviderViewModel" />
-        
-        <Style TargetType="ProgressBar" x:Key="RoundedProgressBar">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ProgressBar">
-                        <Border CornerRadius="5" Background="LightGray" Padding="2">
-                            <Grid>
-                                <Rectangle Name="PART_Track" Fill="Transparent" />
-                                <Rectangle Name="PART_Indicator" Fill="#526cca" RadiusX="4" RadiusY="4"  HorizontalAlignment="Left"/>
-                            </Grid>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Height" Value="10"/>
-            <Setter Property="Foreground" Value="#604ee1"/>
-        </Style>
-
-        <Style x:Key="ScrollBarThumb" TargetType="{x:Type Thumb}">
-            <Setter Property="OverridesDefaultStyle" Value="true"/>
-            <Setter Property="IsTabStop" Value="false"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Thumb}">
-                        <Border x:Name="rectangle"
-                            SnapsToDevicePixels="True"
-                            Background="#526cca" 
-                            CornerRadius="3"
-                            Height="{TemplateBinding Height}"
-                            Width="{TemplateBinding Width}"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style TargetType="{x:Type ScrollBar}">
-            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="false"/>
-            <Setter Property="Stylus.IsFlicksEnabled" Value="false"/>
-            <Setter Property="Width" Value="14"/>
-            <Setter Property="Margin" Value="-14 0 0 0"/>
-            <Setter Property="MinWidth" Value="{Binding Width, RelativeSource={RelativeSource Self}}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ScrollBar}">
-                        <Grid x:Name="Bg" SnapsToDevicePixels="true" Background="Transparent">
-                            <Border Padding="0 4">
-                                <Track x:Name="PART_Track"
-                                   IsDirectionReversed="true"
-                                   IsEnabled="{TemplateBinding IsMouseOver}"
-                                   Width="6"
-                                   HorizontalAlignment="Center">
-                                    <Track.DecreaseRepeatButton>
-                                        <RepeatButton Opacity="0" Command="{x:Static ScrollBar.PageUpCommand}" />
-                                    </Track.DecreaseRepeatButton>
-                                    <Track.IncreaseRepeatButton>
-                                        <RepeatButton Opacity="0" Command="{x:Static ScrollBar.PageDownCommand}" />
-                                    </Track.IncreaseRepeatButton>
-                                    <Track.Thumb>
-                                        <Thumb Style="{StaticResource ScrollBarThumb}"/>
-                                    </Track.Thumb>
-                                </Track>
-                            </Border>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-
-            <Style.Triggers>
-                <Trigger Property="Orientation" Value="Horizontal">
-                    <Setter Property="Width" Value="Auto"/>
-                    <Setter Property="MinWidth" Value="0"/>
-                    <Setter Property="Height" Value="14"/>
-                    <Setter Property="MinHeight" Value="{Binding Height, RelativeSource={RelativeSource Self}}"/>
-                    <Setter Property="Margin" Value="0 -14 0 0"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type ScrollBar}">
-                                <Grid x:Name="Bg" SnapsToDevicePixels="true">
-                                    <Track x:Name="PART_Track"
-                                       IsEnabled="{TemplateBinding IsMouseOver}"
-                                       Height="6">
-                                        <Track.DecreaseRepeatButton>
-                                            <RepeatButton Opacity="0" Command="{x:Static ScrollBar.PageLeftCommand}"/>
-                                        </Track.DecreaseRepeatButton>
-                                        <Track.IncreaseRepeatButton>
-                                            <RepeatButton Opacity="0" Command="{x:Static ScrollBar.PageRightCommand}"/>
-                                        </Track.IncreaseRepeatButton>
-                                        <Track.Thumb>
-                                            <Thumb Style="{StaticResource ScrollBarThumb}"/>
-                                        </Track.Thumb>
-                                    </Track>
-                                </Grid>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style TargetType="{x:Type ScrollViewer}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ScrollViewer}">
-                        <Grid x:Name="Grid" Background="{TemplateBinding Background}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-
-                            <ScrollContentPresenter x:Name="PART_ScrollContentPresenter"
-                                                CanContentScroll="{TemplateBinding CanContentScroll}"
-                                                ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                Content="{TemplateBinding Content}"
-                                                Grid.Column="0"
-                                                Grid.Row="0"
-                                                Margin="{TemplateBinding Padding}" />
-
-                            <ScrollBar x:Name="PART_VerticalScrollBar" 
-                                   Opacity="0.2" 
-                                Grid.Column="1"
-                                   Grid.Row="0"
-                                   Maximum="{TemplateBinding ScrollableHeight}"
-                                   Minimum="0"
-                                   Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                   ViewportSize="{TemplateBinding ViewportHeight}"
-                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" />
-
-
-                            <ScrollBar x:Name="PART_HorizontalScrollBar"
-                                   Orientation="Horizontal"
-                                   Opacity="0.2"
-                                    Grid.Column="0"
-                                   Grid.Row="1"
-                                   Maximum="{TemplateBinding ScrollableWidth}"
-                                   Minimum="0"
-                                   Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                   ViewportSize="{TemplateBinding ViewportWidth}"
-                                   Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" />
-                            <Rectangle x:Name="Corner"
-                                   Grid.Column="1"
-                                   Grid.Row="1"
-                                   Fill="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
-                        </Grid>
-
-                        <!-- Animação de fade ao passar o mouse -->
-                        <ControlTemplate.Triggers>
-                            <EventTrigger RoutedEvent="MouseEnter">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation To="1" Duration="0:0:0.3" Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Opacity"/>
-                                        <DoubleAnimation To="1" Duration="0:0:0.3" Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Opacity"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                            <EventTrigger RoutedEvent="MouseLeave">
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation To="0.2" Duration="0:0:0.3" Storyboard.TargetName="PART_VerticalScrollBar" Storyboard.TargetProperty="Opacity"/>
-                                        <DoubleAnimation To="0.2" Duration="0:0:0.3" Storyboard.TargetName="PART_HorizontalScrollBar" Storyboard.TargetProperty="Opacity"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-    </Window.Resources>
+    
     <Grid>
         <Border CornerRadius="5" MouseLeftButtonDown="Border_MouseLeftButtonDown">
             <Border.Background>
@@ -223,7 +51,7 @@
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center"  Margin="20,10,0,0">
                                 <StackPanel Orientation="Vertical"  >
                                     <TextBlock Text="{Binding OriginLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Foreground="#A0A3BD" FontWeight="SemiBold" FontSize="10" Margin="7,0"/>
-                                    <TextBox x:Name="OriginLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270"  Foreground="#A0A3BD" Text="{Binding PastaOrigem}"  Height="25" IsEnabled="True"  Background="WhiteSmoke" Margin="5,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                    <TextBox x:Name="OriginLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270"  Foreground="#A0A3BD" Text="{Binding PastaOrigem}" IsReadOnly="True" Height="25" IsEnabled="True"  Background="WhiteSmoke" Margin="5,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
                                     <TextBlock  Text="{Binding PastaOrigemError}" Foreground="#ea516a" FontWeight="SemiBold" FontSize="10" Margin="7,0"/>
                                 </StackPanel>
                                 <Button Margin="10,0,0,0"  Content="{Binding OriginLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Height="24" Width="100" Style="{StaticResource RoundedButtonStyle}"  Background="#526cca" Foreground="White" VerticalAlignment="Center" Click="Click_SelecionarOrigem"/>
@@ -232,7 +60,7 @@
                         <StackPanel Orientation="Horizontal" Margin="20,10,0,0">
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="{Binding DestinationLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Foreground="#A0A3BD" FontWeight="SemiBold" FontSize="10" Margin="7,0"/>
-                                    <TextBox x:Name="DestinationLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270"  Foreground="#A0A3BD" Text="{Binding PastaDestino}"  Height="25" IsEnabled="True" Background="WhiteSmoke" Margin="5,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                                    <TextBox x:Name="DestinationLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270"  Foreground="#A0A3BD" Text="{Binding PastaDestino}" IsReadOnly="True" Height="25" IsEnabled="True" Background="WhiteSmoke" Margin="5,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
                                     <TextBlock  Text="{Binding PastaDestinoError}" Foreground="#ea516a" FontWeight="SemiBold" FontSize="10" Margin="7,0"/>
                                 </StackPanel>
                                 <Button Margin="10,0,0,0"  Content="{Binding DestinationLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Height="24" Width="100" Style="{StaticResource RoundedButtonStyle}" Background="#526cca" Foreground="White" VerticalAlignment="Center" Click="Click_SelecionarDestino" Cursor="Hand"/>
@@ -257,7 +85,6 @@
                 <Grid Grid.Row="2">
 
                     <ScrollViewer x:Name="ScrollViewerContainer" VerticalScrollBarVisibility="Auto" Margin="10,10" Style="{StaticResource {x:Type ScrollViewer}}">
-
                         <StackPanel x:Name="StackContainer">
 
                             <!--<Border Background="White" BorderBrush="#EBECF4" BorderThickness="1" CornerRadius="10" Height="60" Margin="0,0,14,0">
@@ -275,8 +102,6 @@
                                     </Button>
                                 </Grid>
                             </Border>-->
-
-                           
 
                         </StackPanel>
                     </ScrollViewer>

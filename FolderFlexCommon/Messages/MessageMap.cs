@@ -38,10 +38,9 @@ public static class MessageMap
     {
         language ??= _defaultLanguage;
 
-        if (_messages.ContainsKey(language) && _messages[language].ContainsKey(key))
-            return _messages[language][key];
-
-        return _messages.ContainsKey(_defaultLanguage) && _messages[_defaultLanguage].ContainsKey(key)
+        return _messages.ContainsKey(language) && _messages[language].ContainsKey(key)
+            ? _messages[language][key]
+            : _messages.ContainsKey(_defaultLanguage) && _messages[_defaultLanguage].ContainsKey(key)
             ? _messages[_defaultLanguage][key]
             : null;
     }
