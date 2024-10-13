@@ -21,7 +21,6 @@ public class LogManager
         try
         {
             using StreamWriter writer = new(logFilePath, true);
-
             writer.WriteLine(logEntry);
         }
         catch (Exception ex)

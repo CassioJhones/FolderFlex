@@ -1,7 +1,5 @@
 ﻿using FolderFlex.ViewModel;
 using FolderFlexCommon.Messages;
-using FolderFlexCommon.Settings;
-using FolderFlexCommon.Settings.ApplicationSettings;
 using System.Windows;
 using System.Windows.Input;
 
@@ -11,7 +9,7 @@ public partial class FolderFlexMain : Window
 {
     private readonly FolderFlexViewModel _viewModel;
     private readonly FolderFlexMessageProviderViewModel _languageController;
-    
+
     public FolderFlexMain()
     {
         InitializeComponent();
@@ -22,7 +20,7 @@ public partial class FolderFlexMain : Window
 
         DataContext = _viewModel;
 
-        var selectedLanguage = MessageMap.ListLanguages().FirstOrDefault(x => x.Key == _languageController.Language).Value;
+        string selectedLanguage = MessageMap.ListLanguages().FirstOrDefault(x => x.Key == _languageController.Language).Value;
 
         LanguageCombo.SelectedItem = selectedLanguage;
 
@@ -37,8 +35,8 @@ public partial class FolderFlexMain : Window
         LimparTela();
         _viewModel.SelecionarOrigem();
     }
-    
-     private void Click_SelecionarDestino(object sender, RoutedEventArgs e)
+
+    private void Click_SelecionarDestino(object sender, RoutedEventArgs e)
     {
         LimparTela();
         _viewModel.SelecionarDestino();
@@ -67,7 +65,7 @@ public partial class FolderFlexMain : Window
 
     private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
     {
-        var selectedLanguageKey = MessageMap.ListLanguages().FirstOrDefault(x => x.Value == LanguageCombo.SelectedItem.ToString()).Key;
+        string selectedLanguageKey = MessageMap.ListLanguages().FirstOrDefault(x => x.Value == LanguageCombo.SelectedItem.ToString()).Key;
 
         _languageController.Language = selectedLanguageKey;
 
