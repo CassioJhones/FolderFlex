@@ -1,10 +1,13 @@
-name: Compilação, Publicação e Lançamento FolderFlex
+name: Compilação e Publicação FolderFlex
 
 on:
   push:
     branches: ['master']
   pull_request:
     branches: ['master']
+
+permissions:  
+  contents: write 
 
 jobs:
   build:
@@ -40,11 +43,11 @@ jobs:
           powershell Compress-Archive -Path ./output/* -DestinationPath ./output/FolderFlex.zip
 
       - name: Criando uma tag para a versão
-        id: tag_version  
+        id: tag_version
         run: |
-          # Define a nova versão da tag (pode ser adaptado conforme sua necessidade)
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
           git tag v1.0.${{ github.run_number }}
-          # Faz o push da nova tag para o repositório remoto
           git push origin v1.0.${{ github.run_number }}
 
       - name: Criando a nova release
@@ -53,10 +56,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: 5.0.${{ github.run_number }}  
+          tag_name: 5.0.${{ github.run_number }}
           release_name: "FolderFlex v1.0.${{ github.run_number }}"
           draft: false
-          prerelease: false
+          prerelease: true
 
       - name: Anexando o artefato à release
         uses: actions/upload-release-asset@v1
