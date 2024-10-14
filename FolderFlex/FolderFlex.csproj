@@ -12,8 +12,15 @@
 	</PropertyGroup>
 	
 	<PropertyGroup>
-		<AssemblyVersion>5.0.1.0</AssemblyVersion>
-		<FileVersion>5.0.1.0</FileVersion>
+		<AssemblyVersion>5.0.16.0</AssemblyVersion>
+		<FileVersion>5.0.16.0</FileVersion>
+		<Title>FolderFlex</Title>
+		<Authors>$(AssemblyName),CassioJhones</Authors>
+		<Company>$(Authors),MySefl</Company>
+		<Product>$(AssemblyName)</Product>
+		<PackageProjectUrl>https://github.com/CassioJhones/FolderFlex</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/CassioJhones/FolderFlex</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
 	<ItemGroup>
 	  <None Remove="Recursos\git.ico" />

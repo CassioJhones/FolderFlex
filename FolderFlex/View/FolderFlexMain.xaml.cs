@@ -1,6 +1,7 @@
 ﻿using FolderFlex.ViewModel;
 using FolderFlexCommon.Messages;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace FolderFlex.View;
@@ -63,7 +64,7 @@ public partial class FolderFlexMain : Window
 
     private void ButtonGithub_Click(object sender, RoutedEventArgs e) => _viewModel.LinkIcone();
 
-    private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         string selectedLanguageKey = MessageMap.ListLanguages().FirstOrDefault(x => x.Value == LanguageCombo.SelectedItem.ToString()).Key;
 

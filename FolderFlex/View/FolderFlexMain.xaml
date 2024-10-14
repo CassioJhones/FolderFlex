@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
-        WindowStyle="None"
+        WindowStyle="None" 
         BorderBrush="Transparent"
         Background="Transparent"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -34,7 +34,8 @@
                 <Grid  Grid.Row="0" Background="Transparent" Height="40" VerticalAlignment="Top" Panel.ZIndex="1">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Recursos/pasta.ico" Height="24" Margin="15,0,10,0"/>
-                        <TextBlock Text="FolderFlex" FontSize="16" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="#AAB8C2" FontWeight="SemiBold" />
+                        <TextBlock Text="FolderFlex" FontSize="16" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="#273e45" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding VersionLabel}" FontSize="15" VerticalAlignment="Center" Margin="10,02,0,0" Foreground="#273e45" FontWeight="Light" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
                         <Button x:Name="CloseButton"  Style="{StaticResource TransparentButton}" Margin="10,0" Click="CloseButton_Click">
@@ -107,10 +108,11 @@
                     </ScrollViewer>
                 </Grid>
                 <DockPanel Grid.Row="3" VerticalAlignment="Center">
-                    <Button Style="{StaticResource TransparentButton}" Click="ButtonGithub_Click" HorizontalAlignment="Left">
+                    <Button Style="{StaticResource TransparentButton}" Click="ButtonGithub_Click" HorizontalAlignment="Left" ToolTip="Pagina do Projeto">
                         <iconPacks:PackIconFontisto Kind="Github" Margin="10,4,0,5" Foreground="#272727"/>
                     </Button>
-                    <ComboBox Style="{StaticResource ComboBoxRoundedStyle}" Foreground="#A0A3BD" Background="WhiteSmoke" x:Name="LanguageCombo" SelectionChanged="ComboBox_SelectionChanged" ItemsSource="{Binding LanguageOptions, Source={StaticResource FolderFlexMessageProviderViewModel}}" HorizontalAlignment="Right" Width="80" Height="20" Margin="0,0,10,0">
+                    <ComboBox Style="{StaticResource ComboBoxRoundedStyle}" Foreground="#A0A3BD" Background="WhiteSmoke" x:Name="LanguageCombo"
+                              SelectionChanged="ComboBox_SelectionChanged" ItemsSource="{Binding LanguageOptions, Source={StaticResource FolderFlexMessageProviderViewModel}}" HorizontalAlignment="Right" Width="90" Height="20" Margin="0,0,10,0">
                     </ComboBox>
                 </DockPanel>
             </Grid>

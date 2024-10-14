@@ -1,10 +1,10 @@
 ﻿using FolderFlexCommon.Settings;
 using FolderFlexCommon.Settings.ApplicationSettings;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Text.Json;
 
 namespace FolderFlexCommon.Messages;
 
@@ -31,7 +31,7 @@ public static class MessageMap
         using Stream stream = assembly.GetManifestResourceStream(resourceName);
         using StreamReader reader = new(stream);
         string jsonContent = reader.ReadToEnd();
-        _messages = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(jsonContent);
+        _messages = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(jsonContent);
     }
 
     public static string GetMessage(string key, string language = null)
@@ -45,7 +45,8 @@ public static class MessageMap
             : null;
     }
 
-    public static void SetDefaultLanguage(string language) => _defaultLanguage = _messages.ContainsKey(language) ? language : throw new ArgumentException($"Language '{language}' not supported.");
+    public static void SetDefaultLanguage(string language)
+        => _defaultLanguage = _messages.ContainsKey(language) ? language : throw new ArgumentException($"Language '{language}' not supported.");
 
     public static Dictionary<string, string> ListLanguages()
     {
