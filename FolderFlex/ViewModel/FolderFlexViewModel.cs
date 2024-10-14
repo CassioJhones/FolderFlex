@@ -83,9 +83,27 @@ class FolderFlexViewModel : INotifyPropertyChanged
         }
     }
 
-    public string? PastaDestino { get; set; }
+    private string? _pastaDestino;
+    public string? PastaDestino
+    {
+        get => _pastaDestino;
+        set
+        {
+            _pastaDestino = value;
+            OnPropertyChanged(nameof(PastaDestino));
+        }
+    }
 
-    public string? PastaOrigem { get; set; }
+    private string? _pastaOrigem;
+    public string? PastaOrigem
+    {
+        get => _pastaOrigem;
+        set
+        {
+            _pastaOrigem = value;
+            OnPropertyChanged(nameof(PastaOrigem));
+        }
+    }
 
     public string? Nome { get; set; }
 
