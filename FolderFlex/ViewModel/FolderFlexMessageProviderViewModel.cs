@@ -11,6 +11,17 @@ public class FolderFlexMessageProviderViewModel : INotifyPropertyChanged
 {
 
     private ApplicationSettings _settings = ApplicationSettings.New(new IniFileParameterStore("config.flx"));
+    private bool _somenteCopiar;
+    public bool SomenteCopiar
+    {
+        get => _somenteCopiar;
+        set
+        {
+            _somenteCopiar = value;
+            OnPropertyChanged(nameof(SomenteCopiar));
+            OnPropertyChanged(nameof(MoveLabel));
+        }
+    }
     public string Language
     {
         get => _settings.Language;
@@ -45,7 +56,7 @@ public class FolderFlexMessageProviderViewModel : INotifyPropertyChanged
 
     public string DestinationLabel => MessageMap.GetMessage("destination_label", Language);
 
-    public string MoveLabel => MessageMap.GetMessage("move_label", Language);
+    public string MoveLabel => SomenteCopiar ? MessageMap.GetMessage("copy_label", Language) : MessageMap.GetMessage("move_label", Language);
 
     public string CopyLabel => MessageMap.GetMessage("copy_label", Language);
 
@@ -69,5 +80,5 @@ public class FolderFlexMessageProviderViewModel : INotifyPropertyChanged
     private void ChangeLanguage(string newLanguage) => Language = newLanguage;
 
     private static List<string> ListLanguages() => MessageMap.ListLanguages().Values.ToList();
-
+    
 }
