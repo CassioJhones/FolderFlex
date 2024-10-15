@@ -3,6 +3,10 @@ name: Compilação e Publicação FolderFlex
 on:
   push:
     branches: ['master']
+    paths-ignore:
+      - 'README.md'
+      - 'social_preview.jpg'
+      - 'docs/**'
   pull_request:
     branches: ['master']
 
@@ -57,7 +61,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: 5.0.${{ github.run_number }}
-          release_name: "FolderFlex v1.0.${{ github.run_number }}"
+          release_name: "FolderFlex v5.0.${{ github.run_number }}"
           draft: false
           prerelease: true
 

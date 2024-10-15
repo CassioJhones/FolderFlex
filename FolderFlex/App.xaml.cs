@@ -7,8 +7,8 @@ public partial class App : Application
 {
     private void Application_Startup(object sender, System.Windows.StartupEventArgs e)
     {
+#if !DEBUG
         bool hasNewVersion = AtualizacaoChecker.VerificarAtualizacaoAsync().Result;
-
         if (hasNewVersion)
         {
             MessageBoxResult resultado = MessageBox.Show(
@@ -19,6 +19,7 @@ public partial class App : Application
             if (resultado == MessageBoxResult.Yes)
                 AtualizacaoChecker.StartUpdaterAndExit();
         }
+#endif
     }
 }
 
