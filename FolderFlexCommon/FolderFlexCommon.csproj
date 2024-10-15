@@ -10,9 +10,4 @@
   <ItemGroup>
     <EmbeddedResource Include="Messages\Resources\messages.json" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.3</Version>
-    </PackageReference>
-  </ItemGroup>
 </Project>

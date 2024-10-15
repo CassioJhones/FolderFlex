@@ -8,9 +8,14 @@ using System.Buffers;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using Button = System.Windows.Controls.Button;
+using Control = System.Windows.Controls.Control;
+using MessageBox = System.Windows.MessageBox;
+using ProgressBar = System.Windows.Controls.ProgressBar;
 
 namespace FolderFlex.ViewModel;
 
@@ -83,9 +88,37 @@ class FolderFlexViewModel : INotifyPropertyChanged
         }
     }
 
-    public string? PastaDestino { get; set; }
+    private string? _pastaDestino;
+    public string? PastaDestino
+    {
+        get => _pastaDestino;
+        set
+        {
+            _pastaDestino = value;
+            OnPropertyChanged(nameof(PastaDestino));
+        }
+    }
+    private string? _versionLabel;
+    public string? VersionLabel
+    {
+        get => _versionLabel;
+        set
+        {
+            _versionLabel = value;
+            OnPropertyChanged(nameof(VersionLabel));
+        }
+    }
 
-    public string? PastaOrigem { get; set; }
+    private string? _pastaOrigem;
+    public string? PastaOrigem
+    {
+        get => _pastaOrigem;
+        set
+        {
+            _pastaOrigem = value;
+            OnPropertyChanged(nameof(PastaOrigem));
+        }
+    }
 
     public string? Nome { get; set; }
 
@@ -109,7 +142,7 @@ class FolderFlexViewModel : INotifyPropertyChanged
 
     public FolderFlexViewModel(FolderFlexMain mainWindow, FolderFlexMessageProviderViewModel languageController)
     {
-
+        VersionLabel = Assembly.GetExecutingAssembly().GetName()?.Version?.ToString();
         Cancelador = new CancellationTokenSource();
         Cronometro = new Stopwatch();
 
@@ -214,7 +247,7 @@ class FolderFlexViewModel : INotifyPropertyChanged
 
             if (_mainWindow.Height < 580) _mainWindow.Height = 580;
 
-            (CancellationToken canceladorItem, System.Windows.Controls.ProgressBar progressBar) = AddFileComponent(item, destino);
+            (CancellationToken canceladorItem, ProgressBar progressBar) = AddFileComponent(item, destino);
 
             await semaphore.WaitAsync(cancelador);
 
@@ -241,7 +274,7 @@ class FolderFlexViewModel : INotifyPropertyChanged
         await Task.WhenAll(tasks);
     }
 
-    private (CancellationToken itemCancelator, System.Windows.Controls.ProgressBar?) AddFileComponent(string file, string destination)
+    private (CancellationToken itemCancelator, ProgressBar?) AddFileComponent(string file, string destination)
     {
         CancellationTokenSource cancelatorItem = new();
 
@@ -268,13 +301,13 @@ class FolderFlexViewModel : INotifyPropertyChanged
 
         stackPanel.Children.Add(fileNameTextBlock);
 
-        System.Windows.Controls.Button fileButton = FileComponentFactory.CreateFileButton(_mainWindow);
+        Button fileButton = FileComponentFactory.CreateFileButton(_mainWindow);
 
         fileButton.Content = stackPanel;
 
         grid.Children.Add(fileButton);
 
-        System.Windows.Controls.ProgressBar progressBar = FileComponentFactory.CreateItemProgressBar(_mainWindow);
+        ProgressBar progressBar = FileComponentFactory.CreateItemProgressBar(_mainWindow);
 
         fileButton.Click += (s, e) =>
         {
@@ -290,7 +323,7 @@ class FolderFlexViewModel : INotifyPropertyChanged
 
         grid.Children.Add(fileSizeTextBlock);
 
-        System.Windows.Controls.Button actionButton = FileComponentFactory.CreateActionButton(_mainWindow);
+        Button actionButton = FileComponentFactory.CreateActionButton(_mainWindow);
 
         PackIconGameIcons cancelIcon = FileComponentFactory.CreateGameIcon();
 
@@ -348,7 +381,7 @@ class FolderFlexViewModel : INotifyPropertyChanged
         return (cancelatorItem.Token, progressBar);
     }
 
-    private async Task MoverCopiar(string arquivo, string destinoArquivo, int totalArquivos, System.Windows.Controls.ProgressBar? progressBar, CancellationToken cancelador, CancellationToken canceladorItem)
+    private async Task MoverCopiar(string arquivo, string destinoArquivo, int totalArquivos, ProgressBar? progressBar, CancellationToken cancelador, CancellationToken canceladorItem)
     {
         FileInfo fileInfo = new(arquivo);
         long fileSize = fileInfo.Length;
@@ -356,7 +389,6 @@ class FolderFlexViewModel : INotifyPropertyChanged
 
         if (!File.Exists(destinoArquivo))
         {
-
             using (FileStream sourceStream = new(arquivo, FileMode.Open, FileAccess.Read))
             using (FileStream destinationStream = new(destinoArquivo, FileMode.CreateNew, FileAccess.Write))
             {
@@ -374,10 +406,7 @@ class FolderFlexViewModel : INotifyPropertyChanged
                     await Task.Delay(10, canceladorItem);
 
                     if (canceladorItem.IsCancellationRequested)
-                    {
                         progressBar?.Dispatcher.Invoke(() => progressBar.Visibility = Visibility.Hidden, DispatcherPriority.Render);
-
-                    }
                 }
             }
 
@@ -387,12 +416,10 @@ class FolderFlexViewModel : INotifyPropertyChanged
             {
                 int index = fileComponents.IndexOf(arquivo);
 
-                System.Windows.Controls.Control? searchIcon = _mainWindow.FindName($"SearchIcon{index}") as System.Windows.Controls.Control;
-
-                System.Windows.Controls.Control? cancelIcon = _mainWindow.FindName($"CancelIcon{index}") as System.Windows.Controls.Control;
+                Control? searchIcon = (Control)_mainWindow.FindName($"SearchIcon{index}");
+                Control? cancelIcon = (Control)_mainWindow.FindName($"CancelIcon{index}");
 
                 searchIcon!.Visibility = Visibility.Visible;
-
                 cancelIcon!.Visibility = Visibility.Collapsed;
             });
 
@@ -420,7 +447,6 @@ class FolderFlexViewModel : INotifyPropertyChanged
         AtualizarProgresso(totalArquivos);
 
         await Task.Delay(10, cancelador);
-
     }
 
     private void BeforeStart()
@@ -437,15 +463,12 @@ class FolderFlexViewModel : INotifyPropertyChanged
     private void ClearRegisteredNames()
     {
         fileComponents.Clear();
-
         namesRegistered.ForEach(name => _mainWindow.UnregisterName(name));
-
         namesRegistered.Clear();
     }
     public async Task IniciarMovimento()
     {
         string? caminhoDestino = string.IsNullOrEmpty(PastaDestino) ? PastaOrigem : PastaDestino;
-
         BeforeStart();
 
         try
@@ -465,7 +488,6 @@ class FolderFlexViewModel : INotifyPropertyChanged
             ClearRegisteredNames();
 
             _mainWindow.StackContainer.Children.Clear();
-
         }
         catch (DirectoryNotFoundException)
         {
@@ -483,9 +505,7 @@ class FolderFlexViewModel : INotifyPropertyChanged
         {
             if (errorHandler.GetErrors().Count > 0)
             {
-
-                System.Windows.MessageBox.Show(string.Join('\n', errorHandler.GetErrors()));
-
+                MessageBox.Show(string.Join('\n', errorHandler.GetErrors()));
                 errorHandler.ClearErrors();
             };
         }
@@ -505,7 +525,8 @@ class FolderFlexViewModel : INotifyPropertyChanged
             }
         }
     }
-    public void LinkIcone() => FileService.OpenLink("https://github.com/CassioJhones/FolderFlex");
+    public void LinkIcone()
+        => FileService.OpenLink("https://github.com/CassioJhones/FolderFlex");
 
     public void AtualizarProgresso(int totalArquivos)
     {
@@ -513,5 +534,6 @@ class FolderFlexViewModel : INotifyPropertyChanged
         ArquivosProcessados += 1;
         Progresso = (double)ArquivosProcessados / totalArquivos * 100;
     }
-    public void Cancelar() => Cancelador?.Cancel();
+    public void Cancelar()
+        => Cancelador?.Cancel();
 }

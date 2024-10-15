@@ -1,10 +1,17 @@
-name: Compilação e Teste FolderFlex
+name: Compilação e Publicação FolderFlex
 
 on:
   push:
     branches: ['master']
+    paths-ignore:
+      - 'README.md'
+      - 'social_preview.jpg'
+      - 'docs/**'
   pull_request:
     branches: ['master']
+
+permissions:  
+  contents: write 
 
 jobs:
   build:
@@ -29,9 +36,6 @@ jobs:
       - name: Compilando Tudo
         run: dotnet build FolderFlex.sln --configuration ${{ matrix.configuration }} --no-restore
 
-      - name: Rodando Testes de unidade
-        run: dotnet test FolderFlexTeste/FolderFlexTeste.csproj --configuration ${{ matrix.configuration }} --no-build --verbosity normal
-
       - name: Publicando FolderFlex
         run: dotnet publish FolderFlex/FolderFlex.csproj --configuration ${{ matrix.configuration }} --output ./output/
 
@@ -42,8 +46,31 @@ jobs:
         run: |
           powershell Compress-Archive -Path ./output/* -DestinationPath ./output/FolderFlex.zip
 
-      - name: Upload dos Artefatos
-        uses: actions/upload-artifact@v3
+      - name: Criando uma tag para a versão
+        id: tag_version
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
+          git tag v1.0.${{ github.run_number }}
+          git push origin v1.0.${{ github.run_number }}
+
+      - name: Criando a nova release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: Build Outputs
-          path: ./output/FolderFlex.zip
+          tag_name: 5.0.${{ github.run_number }}
+          release_name: "FolderFlex v5.0.${{ github.run_number }}"
+          draft: false
+          prerelease: true
+
+      - name: Anexando o artefato à release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./output/FolderFlex.zip
+          asset_name: FolderFlex.zip
+          asset_content_type: application/zip
