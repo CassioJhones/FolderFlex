@@ -70,14 +70,17 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,18,0,0">
 
-                            <Button Click="StartMove_Click"  Content="{Binding MoveLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Style="{StaticResource RoundedButtonStyle}" Margin="0,0,5,0" Background="#526cca" Foreground="White" FontWeight="SemiBold"/>
+                            <Button Content="{Binding MoveLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" 
+                                    Style="{StaticResource RoundedButtonStyle}" Margin="0,0,5,0" Background="#526cca" Foreground="White" FontWeight="SemiBold" Click="StartMove_Click"/>
                             <Button Click="Cancelation_Click"  Content="{Binding CancelLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Style="{StaticResource RoundedButtonStyle}" Margin="5,0,0,0" Background="#399fa1" Foreground="White" FontWeight="SemiBold"/>
                             
                         </StackPanel>
                         
                         <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,9,0,0">
                             <CheckBox x:Name="cbRename"  IsChecked="{Binding Renomear}" Content="{Binding RenameLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" VerticalAlignment="Center"  Foreground="#A0A3BD" ToolTip="Marque para renomear os arquivos iguais que já existem na pasta" Margin="4,0,10,0"/>
-                            <CheckBox x:Name="cbCopy"  IsChecked="{Binding SomenteCopiar}"  Content="{Binding CopyLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" VerticalAlignment="Center" Foreground="#A0A3BD" ToolTip="Marque para copiar os arquivos ao invés de mover" Margin="4,0,10,0"/>
+                            <CheckBox x:Name="cbCopy" IsChecked="{Binding SomenteCopiar, Source={StaticResource FolderFlexMessageProviderViewModel}}"  
+                                Content="{Binding CopyLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" VerticalAlignment="Center"
+                                      Foreground="#A0A3BD" ToolTip="Marque para copiar os arquivos ao invés de mover" Margin="4,0,10,0"/>
                         </StackPanel>
 
                     </StackPanel>
