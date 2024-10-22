@@ -7,9 +7,9 @@ on:
       - 'README.md'
       - 'social_preview.jpg'
       - 'docs/**'
-  pull_request:
-    branches: ['master']
-
+      - '.github/workflows/dotnet-desktop.yml'
+      - 'dotnet-desktop.yml'
+  
 permissions:  
   contents: write 
 
