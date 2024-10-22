@@ -36,10 +36,11 @@ public class Updater
             ReplaceFiles();
 
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             StartApplication();
-
+            Console.WriteLine($"Baixe a nova versao no github\n {ex}");
+            Console.ReadKey();
             Environment.Exit(0);
         }
         finally
