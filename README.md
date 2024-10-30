@@ -40,6 +40,10 @@ Imagine que você precisa acessar `diversas subpastas` contendo arquivos como fo
 <img src="https://hatscripts.github.io/circle-flags/flags/ru.svg" width="48">
 <img src="https://hatscripts.github.io/circle-flags/flags/de.svg" width="48">
 <img src="https://hatscripts.github.io/circle-flags/flags/fr.svg" width="48">
+<img src="https://hatscripts.github.io/circle-flags/flags/cn.svg" width="48">
+<img src="https://hatscripts.github.io/circle-flags/flags/in.svg" width="48">
+<img src="https://hatscripts.github.io/circle-flags/flags/kr.svg" width="48">
+<img src="https://hatscripts.github.io/circle-flags/flags/it.svg" width="48">
 <img src="https://github.com/user-attachments/assets/3ecf333c-2d84-4084-8bc2-7fb4b703e38d" alt="Languages" width="60%" />
 
 </div>

@@ -12,8 +12,8 @@
 	</PropertyGroup>
 	
 	<PropertyGroup>
-		<AssemblyVersion>5.0.17.0</AssemblyVersion>
-		<FileVersion>5.0.17.0</FileVersion>
+		<AssemblyVersion>5.0.20.0</AssemblyVersion>
+		<FileVersion>5.0.20.0</FileVersion>
 		<Title>FolderFlex</Title>
 		<Authors>$(AssemblyName),CassioJhones</Authors>
 		<Company>$(Authors),MySefl</Company>
