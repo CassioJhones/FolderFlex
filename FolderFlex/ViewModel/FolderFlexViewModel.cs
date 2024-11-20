@@ -19,9 +19,9 @@ using ProgressBar = System.Windows.Controls.ProgressBar;
 
 namespace FolderFlex.ViewModel;
 
-class FolderFlexViewModel : INotifyPropertyChanged
+public class FolderFlexViewModel : INotifyPropertyChanged
 {
-    #region PROPRIEDADES
+    #region PROPERTIES
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -120,10 +120,6 @@ class FolderFlexViewModel : INotifyPropertyChanged
         }
     }
 
-    public string? Nome { get; set; }
-
-    public string? Tamanho { get; set; }
-
     public Stopwatch Cronometro { get; private set; }
 
     public int ArquivosProcessados = 0;
@@ -137,8 +133,31 @@ class FolderFlexViewModel : INotifyPropertyChanged
     private readonly ErrorHandler errorHandler;
 
     private readonly FolderFlexMessageProviderViewModel _languageController;
+    private Visibility _allDoneVisibility = Visibility.Hidden;
 
-    #endregion PROPRIEDADES
+    public Visibility AllDoneVisibility
+    {
+        get => _allDoneVisibility;
+        set
+        {
+            _allDoneVisibility = value;
+            OnPropertyChanged(nameof(AllDoneVisibility));
+        }
+    }
+
+    private string? _tempoFormatado;
+
+    public string? TempoFormatado
+    {
+        get => _tempoFormatado;
+        set
+        {
+            _tempoFormatado = value;
+            OnPropertyChanged(nameof(TempoFormatado));
+        }
+    }
+
+    #endregion PROPERTIES
 
     public FolderFlexViewModel(FolderFlexMain mainWindow, FolderFlexMessageProviderViewModel languageController)
     {
@@ -154,7 +173,7 @@ class FolderFlexViewModel : INotifyPropertyChanged
         _mainWindow = mainWindow;
     }
 
-    public void SelecionarOrigem()
+    public void SelectSource()
     {
         PastaDestino = string.Empty;
 
@@ -169,7 +188,7 @@ class FolderFlexViewModel : INotifyPropertyChanged
         }
     }
 
-    public string SelecionarDestino()
+    public string SelectDestination()
     {
         FolderBrowserDialog dialog = DialogService.OpenFolderDialog(MessageMap.GetMessage("select_destination_folder"), selectedPath: UltimaPastaSelecionada);
 
@@ -197,7 +216,7 @@ class FolderFlexViewModel : INotifyPropertyChanged
         }
     }
 
-    public async Task MoverParaRaiz(string pastaRaiz, string destino, CancellationToken cancelador)
+    public async Task MoveToRoot(string pastaRaiz, string destino, CancellationToken cancelador)
     {
         DirectoryInfo infoPasta = new(pastaRaiz);
 
@@ -215,12 +234,13 @@ class FolderFlexViewModel : INotifyPropertyChanged
 
         string[] listaCompleta = listaArquivosSoltos.Concat(listaSubPastas).ToArray();
 
-        await ProcessarArquivosOuPastas(listaCompleta, destino, cancelador, totalArquivos);
+        await ProcessFilesOrFolders(listaCompleta, destino, cancelador, totalArquivos);
 
         if (!SomenteCopiar)
-            DeletarPastas(listaSubPastas);
+            DeleteFolders(listaSubPastas);
     }
-    private async Task ProcessarArquivosOuPastas(string[] lista, string destino, CancellationToken cancelador, int totalArquivos)
+
+    private async Task ProcessFilesOrFolders(string[] lista, string destino, CancellationToken cancelador, int totalArquivos)
     {
         SemaphoreSlim semaphore = new(10);
         List<Task> tasks = new();
@@ -234,9 +254,9 @@ class FolderFlexViewModel : INotifyPropertyChanged
                 string[] arquivos = Directory.GetFiles(item);
                 string[] subPastas = Directory.GetDirectories(item);
 
-                await ProcessarArquivosOuPastas(arquivos, destino, cancelador, totalArquivos);
+                await ProcessFilesOrFolders(arquivos, destino, cancelador, totalArquivos);
 
-                await ProcessarArquivosOuPastas(subPastas, destino, cancelador, totalArquivos);
+                await ProcessFilesOrFolders(subPastas, destino, cancelador, totalArquivos);
 
                 continue;
             }
@@ -255,7 +275,7 @@ class FolderFlexViewModel : INotifyPropertyChanged
             {
                 try
                 {
-                    await MoverCopiar(item, destinoArquivo, totalArquivos, progressBar, cancelador, canceladorItem);
+                    await MoveCopy(item, destinoArquivo, totalArquivos, progressBar, cancelador, canceladorItem);
                 }
                 catch (Exception)
                 {
@@ -274,7 +294,8 @@ class FolderFlexViewModel : INotifyPropertyChanged
         await Task.WhenAll(tasks);
     }
 
-    private (CancellationToken itemCancelator, ProgressBar?) AddFileComponent(string file, string destination)
+    private (CancellationToken itemCancelator, ProgressBar?)
+        AddFileComponent(string file, string destination)
     {
         CancellationTokenSource cancelatorItem = new();
 
@@ -381,7 +402,8 @@ class FolderFlexViewModel : INotifyPropertyChanged
         return (cancelatorItem.Token, progressBar);
     }
 
-    private async Task MoverCopiar(string arquivo, string destinoArquivo, int totalArquivos, ProgressBar? progressBar, CancellationToken cancelador, CancellationToken canceladorItem)
+    private async Task MoveCopy
+        (string arquivo, string destinoArquivo, int totalArquivos, ProgressBar? progressBar, CancellationToken cancelador, CancellationToken canceladorItem)
     {
         FileInfo fileInfo = new(arquivo);
         long fileSize = fileInfo.Length;
@@ -424,7 +446,7 @@ class FolderFlexViewModel : INotifyPropertyChanged
             });
 
             Contador++;
-            AtualizarProgresso(totalArquivos);
+            UpdateProgress(totalArquivos);
 
             return;
         }
@@ -437,14 +459,14 @@ class FolderFlexViewModel : INotifyPropertyChanged
 
             Contador++;
 
-            AtualizarProgresso(totalArquivos);
+            UpdateProgress(totalArquivos);
 
             return;
         }
 
         errorHandler.AddError(string.Format(MessageMap.GetMessage("file_already_exist_on_path"), Path.GetFileName(arquivo), Path.GetDirectoryName(destinoArquivo)));
 
-        AtualizarProgresso(totalArquivos);
+        UpdateProgress(totalArquivos);
 
         await Task.Delay(10, cancelador);
     }
@@ -456,7 +478,9 @@ class FolderFlexViewModel : INotifyPropertyChanged
         Cancelador = new CancellationTokenSource();
 
         ArquivosProcessados = 0;
-
+        TempoFormatado = string.Empty;
+        AllDoneVisibility = Visibility.Hidden;
+        Cronometro.Reset();
         ClearRegisteredNames();
     }
 
@@ -466,7 +490,8 @@ class FolderFlexViewModel : INotifyPropertyChanged
         namesRegistered.ForEach(name => _mainWindow.UnregisterName(name));
         namesRegistered.Clear();
     }
-    public async Task IniciarMovimento()
+
+    public async Task StartMovement()
     {
         string? caminhoDestino = string.IsNullOrEmpty(PastaDestino) ? PastaOrigem : PastaDestino;
         BeforeStart();
@@ -477,9 +502,11 @@ class FolderFlexViewModel : INotifyPropertyChanged
 
             Cronometro.Start();
 
-            await MoverParaRaiz(PastaOrigem, caminhoDestino, Cancelador.Token);
+            await MoveToRoot(PastaOrigem, caminhoDestino, Cancelador.Token);
 
             Cronometro.Stop();
+            TimeSpan tempoDecorrido = Cronometro.Elapsed;
+            FinishProcessing(tempoDecorrido);
         }
         catch (OperationCanceledException)
         {
@@ -510,14 +537,30 @@ class FolderFlexViewModel : INotifyPropertyChanged
             };
         }
     }
-    public void DeletarPastas(string[] subpastas)
+
+    public void FinishProcessing(TimeSpan? tempoDecorrido = null)
+    {
+        if (tempoDecorrido is null)
+            return;
+
+        if (tempoDecorrido?.TotalSeconds < 1)
+            TempoFormatado = $"{tempoDecorrido?.Milliseconds}ms";
+        else if (tempoDecorrido?.TotalMinutes < 1)
+            TempoFormatado = $"{tempoDecorrido?.Seconds}s {tempoDecorrido?.Milliseconds}ms";
+        else
+            TempoFormatado = $"{tempoDecorrido?.Minutes}m {tempoDecorrido?.Seconds}s {tempoDecorrido?.Milliseconds}ms";
+
+        AllDoneVisibility = Visibility.Visible;
+        _languageController.AllDoneLabel = string.Format(MessageMap.GetMessage("all_done"), ArquivosProcessados, TempoFormatado);
+    }
+
+    public void DeleteFolders(string[] subpastas)
     {
         foreach (string subPasta in subpastas.OrderByDescending(pasta => pasta.Count(c => c == '\\')))
         {
             try
             {
-                if (Directory.GetFiles(subPasta).Length == 0 && Directory.GetDirectories(subPasta).Length == 0)
-                    Directory.Delete(subPasta);
+                DeleteRecursively(subPasta);
             }
             catch (Exception ex)
             {
@@ -525,15 +568,27 @@ class FolderFlexViewModel : INotifyPropertyChanged
             }
         }
     }
-    public void LinkIcone()
+
+    private void DeleteRecursively(string folderPath)
+    {
+        foreach (string file in Directory.GetFiles(folderPath))
+            File.Delete(file);
+
+        foreach (string subDir in Directory.GetDirectories(folderPath))
+            DeleteRecursively(subDir);
+
+        Directory.Delete(folderPath, true);
+    }
+
+    public void LinkIcon()
         => FileService.OpenLink("https://github.com/CassioJhones/FolderFlex");
 
-    public void AtualizarProgresso(int totalArquivos)
+    public void UpdateProgress(int totalArquivos)
     {
-        if (totalArquivos is 0) throw new DivideByZeroException();
         ArquivosProcessados += 1;
         Progresso = (double)ArquivosProcessados / totalArquivos * 100;
     }
-    public void Cancelar()
+
+    public void Cancel()
         => Cancelador?.Cancel();
 }

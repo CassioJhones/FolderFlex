@@ -24,25 +24,25 @@ public partial class FolderFlexMain : Window
         string selectedLanguage = MessageMap.ListLanguages().FirstOrDefault(x => x.Key == _languageController.Language).Value;
 
         LanguageCombo.SelectedItem = selectedLanguage;
-
     }
 
     private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) => this.DragMove();
 
     private void CloseButton_Click(object sender, RoutedEventArgs e) => Close();
 
-    private void Click_SelecionarOrigem(object sender, RoutedEventArgs e)
+    private void Click_SelectSource(object sender, RoutedEventArgs e)
     {
-        LimparTela();
-        _viewModel.SelecionarOrigem();
+        ClearScreen();
+        _viewModel.SelectSource();
     }
 
-    private void Click_SelecionarDestino(object sender, RoutedEventArgs e)
+    private void Click_SelectDestination(object sender, RoutedEventArgs e)
     {
-        LimparTela();
-        _viewModel.SelecionarDestino();
+        ClearScreen();
+        _viewModel.SelectDestination();
     }
-    private void LimparTela()
+
+    private void ClearScreen()
     {
         if (_viewModel.Contador == 0) return;
 
@@ -52,17 +52,15 @@ public partial class FolderFlexMain : Window
         _languageController.StatusMessage = MessageMap.GetMessage("select_to_start");
     }
 
-    private void Click_Cancelar(object sender, RoutedEventArgs e) => _viewModel.Cancelar();
-
     private async void StartMove_Click(object sender, RoutedEventArgs e)
     {
         StackContainer.Children.Clear();
-        await _viewModel.IniciarMovimento();
+        await _viewModel.StartMovement();
     }
 
-    private void Cancelation_Click(object sender, RoutedEventArgs e) => _viewModel.Cancelar();
+    private void Cancelation_Click(object sender, RoutedEventArgs e) => _viewModel.Cancel();
 
-    private void ButtonGithub_Click(object sender, RoutedEventArgs e) => _viewModel.LinkIcone();
+    private void ButtonGithub_Click(object sender, RoutedEventArgs e) => _viewModel.LinkIcon();
 
     private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -73,5 +71,14 @@ public partial class FolderFlexMain : Window
         MessageMap.SetDefaultLanguage(selectedLanguageKey);
 
         _languageController.StatusMessage = MessageMap.GetMessage("select_to_start");
+
+        if (!string.IsNullOrEmpty(_languageController.AllDoneLabel))
+        {
+            _languageController.AllDoneLabel = string.Format(
+                MessageMap.GetMessage("all_done"),
+                _viewModel.ArquivosProcessados,
+                _viewModel.TempoFormatado
+            );
+        }
     }
 }

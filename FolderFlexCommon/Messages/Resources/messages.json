@@ -18,7 +18,8 @@
     "move_label": "Mover",
     "cancel_label": "Cancelar",
     "rename_label": "Renomear",
-    "copy_label": "Copiar"
+    "copy_label": "Copiar",
+    "all_done": "{0} Arquivos em {1}"
   },
   "en": {
     "language_description": "English",
@@ -39,7 +40,8 @@
     "move_label": "Move",
     "cancel_label": "Cancel",
     "rename_label": "Rename",
-    "copy_label": "Copy"
+    "copy_label": "Copy",
+    "all_done": "{0} Files in {1}"
   },
   "es": {
     "language_description": "Español",
@@ -60,7 +62,8 @@
     "move_label": "Mover",
     "cancel_label": "Cancelar",
     "rename_label": "Renombrar",
-    "copy_label": "Copiar"
+    "copy_label": "Copiar",
+    "all_done": "{0} Archivos en {1}"
   },
   "jp": {
     "language_description": "日本語",
@@ -81,7 +84,8 @@
     "move_label": "移動",
     "cancel_label": "キャンセル",
     "rename_label": "名前を変更",
-    "copy_label": "コピー"
+    "copy_label": "コピー",
+    "all_done": "{0} ファイル {1} に"
   },
   "ru": {
     "language_description": "Русский",
@@ -102,7 +106,8 @@
     "move_label": "Переместить",
     "cancel_label": "Отмена",
     "rename_label": "Переименовать",
-    "copy_label": "Копировать"
+    "copy_label": "Копировать",
+    "all_done": "{0} файлов за {1}"
   },
   "de": {
     "language_description": "Deutsch",
@@ -123,7 +128,8 @@
     "move_label": "Verschieben",
     "cancel_label": "Abbrechen",
     "rename_label": "Umbenennen",
-    "copy_label": "Kopieren"
+    "copy_label": "Kopieren",
+    "all_done": "{0} Dateien in {1}"
   },
   "fr": {
     "language_description": "Français",
@@ -144,7 +150,8 @@
     "move_label": "Déplacer",
     "cancel_label": "Annuler",
     "rename_label": "Renommer",
-    "copy_label": "Copier"
+    "copy_label": "Copier",
+    "all_done": "{0} Fichiers en {1}"
   },
   "hi": {
     "language_description": "हिन्दी",
@@ -165,7 +172,8 @@
     "move_label": "स्थानांतरित करें",
     "cancel_label": "रद्द करें",
     "rename_label": "नाम बदलें",
-    "copy_label": "कॉपी करें"
+    "copy_label": "कॉपी करें",
+    "all_done": "{0} फ़ाइलें {1} में"
   },
   "ko": {
     "language_description": "한국어",
@@ -186,7 +194,8 @@
     "move_label": "이동",
     "cancel_label": "취소",
     "rename_label": "이름 변경",
-    "copy_label": "복사"
+    "copy_label": "복사",
+    "all_done": "{0} 파일 {1}에"
   },
   "it": {
     "language_description": "Italiano",
@@ -207,7 +216,8 @@
     "move_label": "Sposta",
     "cancel_label": "Annulla",
     "rename_label": "Rinomina",
-    "copy_label": "Copia"
+    "copy_label": "Copia",
+    "all_done": "{0} File in {1}"
   },
   "zh": {
     "language_description": "简体中文",
@@ -228,7 +238,8 @@
     "move_label": "移动",
     "cancel_label": "取消",
     "rename_label": "重命名",
-    "copy_label": "复制"
+    "copy_label": "复制",
+    "all_done": "{0} 个文件耗时 {1}"
   }
 
 }

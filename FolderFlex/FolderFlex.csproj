@@ -12,8 +12,8 @@
 	</PropertyGroup>
 	
 	<PropertyGroup>
-		<AssemblyVersion>5.0.20.0</AssemblyVersion>
-		<FileVersion>5.0.20.0</FileVersion>
+		<AssemblyVersion>6.0.0.0</AssemblyVersion>
+		<FileVersion>6.0.0.0</FileVersion>
 		<Title>FolderFlex</Title>
 		<Authors>$(AssemblyName),CassioJhones</Authors>
 		<Company>$(Authors),MySefl</Company>
@@ -26,7 +26,7 @@
 	  <None Remove="Recursos\git.ico" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="MahApps.Metro.IconPacks" Version="5.0.0" />
+	  <PackageReference Include="MahApps.Metro.IconPacks" Version="5.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -4,6 +4,9 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Button = System.Windows.Controls.Button;
+using Orientation = System.Windows.Controls.Orientation;
+using ProgressBar = System.Windows.Controls.ProgressBar;
 
 namespace FolderFlex.Factory.MainWindow.ComponentFactory;
 
@@ -21,7 +24,7 @@ public static class FileComponentFactory
 
     public static StackPanel CreateStackPanel() => new()
     {
-        Orientation = System.Windows.Controls.Orientation.Horizontal,
+        Orientation = Orientation.Horizontal,
         VerticalAlignment = VerticalAlignment.Center,
         HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
     };
@@ -42,7 +45,8 @@ public static class FileComponentFactory
         Margin = new Thickness(0, 0, 0, 4),
         Foreground = (System.Windows.Media.Brush)new BrushConverter().ConvertFromString("#1f1446")!
     };
-    public static System.Windows.Controls.Button CreateFileButton(FolderFlexMain mainWindow) => new()
+
+    public static Button CreateFileButton(FolderFlexMain mainWindow) => new()
     {
         Style = (Style)mainWindow.FindResource("TransparentButton"),
         Margin = new Thickness(10, 0, 0, 2),
@@ -51,7 +55,7 @@ public static class FileComponentFactory
         ToolTip = "Abrir Arquivo"
     };
 
-    public static System.Windows.Controls.ProgressBar CreateItemProgressBar(FolderFlexMain mainWindow) => new()
+    public static ProgressBar CreateItemProgressBar(FolderFlexMain mainWindow) => new()
     {
         Style = (Style)mainWindow.FindResource("RoundedProgressBar"),
         Value = 0,
@@ -73,7 +77,7 @@ public static class FileComponentFactory
         FontSize = 12
     };
 
-    public static System.Windows.Controls.Button CreateActionButton(FolderFlexMain mainWindow) => new()
+    public static Button CreateActionButton(FolderFlexMain mainWindow) => new()
     {
         Style = (Style)mainWindow.FindResource("TransparentButton"),
         Margin = new Thickness(10, 0, 10, 0),
