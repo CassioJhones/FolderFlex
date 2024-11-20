@@ -9,9 +9,9 @@ on:
       - 'docs/**'
       - '.github/workflows/dotnet-desktop.yml'
       - 'dotnet-desktop.yml'
-  
-permissions:  
-  contents: write 
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -38,9 +38,6 @@ jobs:
 
       - name: Publicando FolderFlex
         run: dotnet publish FolderFlex/FolderFlex.csproj --configuration ${{ matrix.configuration }} --output ./output/
-
-      - name: Publicando Updater
-        run: dotnet publish Updater/Updater.csproj --configuration ${{ matrix.configuration }} --output ./output/
 
       - name: Compactando tudo em um zip
         run: |

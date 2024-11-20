@@ -53,7 +53,6 @@ public class FolderFlexViewModel : INotifyPropertyChanged
     }
 
     private bool _somenteCopiar = false;
-
     public bool SomenteCopiar
     {
         get => _somenteCopiar;
@@ -236,7 +235,7 @@ public class FolderFlexViewModel : INotifyPropertyChanged
 
         await ProcessFilesOrFolders(listaCompleta, destino, cancelador, totalArquivos);
 
-        if (!SomenteCopiar)
+        if (!_languageController.SomenteCopiar)
             DeleteFolders(listaSubPastas);
     }
 
