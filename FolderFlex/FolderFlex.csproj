@@ -26,7 +26,11 @@
 	  <None Remove="Recursos\git.ico" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="MahApps.Metro.IconPacks" Version="5.1.0" />
+	  <PackageReference Include="MahApps.Metro.IconPacks.EvaIcons" Version="5.1.0" />
+	  <PackageReference Include="MahApps.Metro.IconPacks.Fontisto" Version="5.1.0" />
+	  <PackageReference Include="MahApps.Metro.IconPacks.GameIcons" Version="5.1.0" />
+	  <PackageReference Include="MahApps.Metro.IconPacks.Lucide" Version="5.1.0" />
+	  <PackageReference Include="MahApps.Metro.IconPacks.PhosphorIcons" Version="5.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
