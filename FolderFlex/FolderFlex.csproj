@@ -38,9 +38,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Resource Include="Recursos\git.ico" />
-	</ItemGroup>
-	<ItemGroup>
 		<ProjectReference Include="..\FolderFlexCommon\FolderFlexCommon.csproj" />
 	</ItemGroup>
 
