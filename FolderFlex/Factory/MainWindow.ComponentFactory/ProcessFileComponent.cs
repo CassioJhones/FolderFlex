@@ -1,9 +1,9 @@
 ﻿using FolderFlex.View;
-using MahApps.Metro.IconPacks;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Button = System.Windows.Controls.Button;
 using Orientation = System.Windows.Controls.Orientation;
 using ProgressBar = System.Windows.Controls.ProgressBar;
@@ -29,12 +29,17 @@ public static class FileComponentFactory
         HorizontalAlignment = System.Windows.HorizontalAlignment.Left,
     };
 
-    public static PackIconPhosphorIcons CreateFileIcon() => new()
+    public static System.Windows.Controls.Image CreateFileIcon()
     {
-        Kind = PackIconPhosphorIconsKind.FileArrowUpLight,
-        Margin = new Thickness(0, 2, 7, 0),
-        Foreground = (System.Windows.Media.Brush)new BrushConverter().ConvertFromString("#1f1446")!
-    };
+        System.Windows.Controls.Image image = new()
+        {
+            Source = new BitmapImage(new Uri("pack://application:,,,/Recursos/file-up.png")),
+            Width = 18,
+            Height = 18,
+            VerticalAlignment = VerticalAlignment.Center
+        };
+        return image;
+    }
 
     public static TextBlock CreateFileNameTextBlock(string fileName) => new()
     {
@@ -83,19 +88,28 @@ public static class FileComponentFactory
         Margin = new Thickness(10, 0, 10, 0),
         HorizontalAlignment = System.Windows.HorizontalAlignment.Right
     };
-
-    public static PackIconGameIcons CreateGameIcon() => new()
+   
+    public static System.Windows.Controls.Image CreateGameIcon()
     {
-        Kind = PackIconGameIconsKind.Cancel,
-        Foreground = (System.Windows.Media.Brush)new BrushConverter().ConvertFromString("#AAB8C2")!,
-        Height = 18
-    };
+        System.Windows.Controls.Image image = new()
+        {
+            Source = new BitmapImage(new Uri("pack://application:,,,/Recursos/cancel.png")),
+            Width = 18,
+            Height = 18,
+            VerticalAlignment = VerticalAlignment.Center
+        };
+        return image;
+    }
 
-    public static PackIconLucide CreateFileSearchIcon() => new()
+    public static System.Windows.Controls.Image CreateFileSearchIcon()
     {
-        Kind = PackIconLucideKind.FileSearch,
-        Foreground = (System.Windows.Media.Brush)new BrushConverter().ConvertFromString("#AAB8C2")!,
-        Height = 18,
-        Visibility = Visibility.Collapsed
-    };
+        System.Windows.Controls.Image image = new()
+        {
+            Source = new BitmapImage(new Uri("pack://application:,,,/Recursos/file-search.png")),
+            Width = 18,
+            Height = 18,
+            VerticalAlignment = VerticalAlignment.Center
+        };
+        return image;
+    }
 }

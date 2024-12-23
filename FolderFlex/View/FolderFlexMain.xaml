@@ -10,7 +10,6 @@
         WindowStyle="None" 
         BorderBrush="Transparent"
         Background="Transparent"
-        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:language="clr-namespace:FolderFlex.ViewModel"
         d:DataContext="{d:DesignInstance Type=language:FolderFlexViewModel}"
         DataContext="{StaticResource FolderFlexMessageProviderViewModel}"
@@ -39,7 +38,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
                         <Button x:Name="CloseButton"  Style="{StaticResource TransparentButton}" Margin="10,0" Click="CloseButton_Click">
-                            <iconPacks:PackIconEvaIcons Kind="Close" Foreground="#AAB8C2" />
+                            <Image Source="pack://application:,,,/Recursos/x.png" Width="18" Height="18" />
                         </Button>
                     </StackPanel>
                 </Grid>
@@ -84,7 +83,6 @@
                                    FontWeight="bold" FontSize="13"
                                    Visibility="{Binding AllDoneLabel, Converter={StaticResource StringToVisibilityConverter}}"
                                    Content="{Binding AllDoneLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}"/>
-
                             </StackPanel>
 
                         </StackPanel>
@@ -103,7 +101,8 @@
                 <DockPanel Grid.Row="3" VerticalAlignment="Center">
                     <Button Style="{StaticResource TransparentButton}" Click="ButtonGithub_Click"
                             HorizontalAlignment="Left" ToolTip="Pagina do Projeto">
-                        <iconPacks:PackIconFontisto Kind="Github" Margin="10,4,0,5" Foreground="#272727"/>
+                        <!--<iconPacks:PackIconFontisto Kind="Github" Margin="10,4,0,5" Foreground="#272727"/>-->
+                        <Image Source="pack://application:,,,/Recursos/github.png" Width="35" Height="20" />
                     </Button>
                     <ComboBox Style="{StaticResource ComboBoxRoundedStyle}" Foreground="#A0A3BD"
                               Background="WhiteSmoke" x:Name="LanguageCombo"
