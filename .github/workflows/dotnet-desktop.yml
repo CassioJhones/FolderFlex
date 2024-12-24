@@ -45,12 +45,22 @@ jobs:
         run: |
           [xml]$csproj = Get-Content "FolderFlex/FolderFlex.csproj"
           $version = $csproj.Project.PropertyGroup.AssemblyVersion
+          
           if (-not $version) {
             $version = $csproj.Project.PropertyGroup.FileVersion
           }
+          
+          if (-not $version) {
+            $version = "0.0.0.0"  # Valor padrão, se necessário
+          }
+          
           $version = $version.Trim()
+      
           echo "Version found: $version"
           echo "VERSION=$version" >> $GITHUB_ENV
+          shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+          env:
+            DOTNET_ROOT: C:\Program Files\dotnet
     
       - name: Criando Pasta para os Arquivos
         run: |
