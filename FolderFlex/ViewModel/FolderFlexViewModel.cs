@@ -3,7 +3,6 @@ using FolderFlex.Services;
 using FolderFlex.Services.ErrorManager;
 using FolderFlex.View;
 using FolderFlexCommon.Messages;
-using MahApps.Metro.IconPacks;
 using System.Buffers;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -13,7 +12,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using Button = System.Windows.Controls.Button;
-using Control = System.Windows.Controls.Control;
 using MessageBox = System.Windows.MessageBox;
 using ProgressBar = System.Windows.Controls.ProgressBar;
 
@@ -313,7 +311,7 @@ public class FolderFlexViewModel : INotifyPropertyChanged
 
         StackPanel stackPanel = FileComponentFactory.CreateStackPanel();
 
-        PackIconPhosphorIcons fileIcon = FileComponentFactory.CreateFileIcon();
+        System.Windows.Controls.Image fileIcon = FileComponentFactory.CreateFileIcon();
 
         stackPanel.Children.Add(fileIcon);
 
@@ -345,7 +343,7 @@ public class FolderFlexViewModel : INotifyPropertyChanged
 
         Button actionButton = FileComponentFactory.CreateActionButton(_mainWindow);
 
-        PackIconGameIcons cancelIcon = FileComponentFactory.CreateGameIcon();
+        System.Windows.Controls.Image cancelIcon = FileComponentFactory.CreateGameIcon();
 
         cancelIcon.Name = $"CancelIcon{index}";
 
@@ -353,7 +351,7 @@ public class FolderFlexViewModel : INotifyPropertyChanged
 
         namesRegistered.Add(cancelIcon.Name);
 
-        PackIconLucide fileSearchIcon = FileComponentFactory.CreateFileSearchIcon();
+        System.Windows.Controls.Image fileSearchIcon = FileComponentFactory.CreateFileSearchIcon();
 
         fileSearchIcon.Name = $"SearchIcon{index}";
 
@@ -437,8 +435,8 @@ public class FolderFlexViewModel : INotifyPropertyChanged
             {
                 int index = fileComponents.IndexOf(arquivo);
 
-                Control? searchIcon = (Control)_mainWindow.FindName($"SearchIcon{index}");
-                Control? cancelIcon = (Control)_mainWindow.FindName($"CancelIcon{index}");
+                FrameworkElement? searchIcon = (FrameworkElement)_mainWindow.FindName($"SearchIcon{index}");
+                FrameworkElement? cancelIcon = (FrameworkElement)_mainWindow.FindName($"CancelIcon{index}");
 
                 searchIcon!.Visibility = Visibility.Visible;
                 cancelIcon!.Visibility = Visibility.Collapsed;

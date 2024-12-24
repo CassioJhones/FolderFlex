@@ -10,32 +10,58 @@
 		<ApplicationIcon>Recursos\pasta.ico</ApplicationIcon>
 		<StartupObject></StartupObject>
 	</PropertyGroup>
-	
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>portable</DebugType>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<DebugSymbols>false</DebugSymbols>
+		<DebugType>none</DebugType>
+	</PropertyGroup>
+
 	<PropertyGroup>
 		<AssemblyVersion>5.0.21.0</AssemblyVersion>
 		<FileVersion>5.0.21.0</FileVersion>
 		<Title>FolderFlex</Title>
-		<Authors>$(AssemblyName),CassioJhones</Authors>
-		<Company>$(Authors),MySefl</Company>
-		<Product>$(AssemblyName)</Product>
+		<Authors>CassioJhones</Authors>
+		<Company>CassioJhones</Company>
+		<Product>CassioJhones</Product>
 		<PackageProjectUrl>https://github.com/CassioJhones/FolderFlex</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/CassioJhones/FolderFlex</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
 	<ItemGroup>
+	  <None Remove="Recursos\cancel.png" />
+	  <None Remove="Recursos\cancel.svg" />
+	  <None Remove="Recursos\file-search.png" />
+	  <None Remove="Recursos\file-search.svg" />
+	  <None Remove="Recursos\file-up.png" />
+	  <None Remove="Recursos\file-up.svg" />
 	  <None Remove="Recursos\git.ico" />
+	  <None Remove="Recursos\github.png" />
+	  <None Remove="Recursos\github.svg" />
+	  <None Remove="Recursos\x.png" />
+	  <None Remove="Recursos\x.svg" />
 	</ItemGroup>
 	<ItemGroup>
-	  <PackageReference Include="MahApps.Metro.IconPacks" Version="5.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<Resource Include="Recursos\cancel.png" />
+		<Resource Include="Recursos\cancel.svg" />
+		<Resource Include="Recursos\file-search.png" />
+		<Resource Include="Recursos\file-search.svg" />
+		<Resource Include="Recursos\file-up.png" />
+		<Resource Include="Recursos\file-up.svg" />
+		<Resource Include="Recursos\github.png" />
+		<Resource Include="Recursos\github.svg" />
 		<Resource Include="Recursos\pasta.ico" />
+		<Resource Include="Recursos\x.png" />
+		<Resource Include="Recursos\x.svg" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Resource Include="Recursos\git.ico" />
-	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\FolderFlexCommon\FolderFlexCommon.csproj" />
 	</ItemGroup>

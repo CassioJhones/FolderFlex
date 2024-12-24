@@ -10,7 +10,6 @@
         WindowStyle="None" 
         BorderBrush="Transparent"
         Background="Transparent"
-        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
         xmlns:language="clr-namespace:FolderFlex.ViewModel"
         d:DataContext="{d:DesignInstance Type=language:FolderFlexViewModel}"
         DataContext="{StaticResource FolderFlexMessageProviderViewModel}"
@@ -39,7 +38,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
                         <Button x:Name="CloseButton"  Style="{StaticResource TransparentButton}" Margin="10,0" Click="CloseButton_Click">
-                            <iconPacks:PackIconEvaIcons Kind="Close" Foreground="#AAB8C2" />
+                            <Image Source="pack://application:,,,/Recursos/x.png" Width="18" Height="18" />
                         </Button>
                     </StackPanel>
                 </Grid>
@@ -81,12 +80,10 @@
                             </StackPanel>
                             <StackPanel HorizontalAlignment="Center" Margin="0,-12,0,0">
                                 <Label Margin="0 10 0 0" HorizontalAlignment="Center" Foreground="#399fa1"
-       FontWeight="bold" FontSize="13"
-       Visibility="{Binding AllDoneLabel, Converter={StaticResource StringToVisibilityConverter}}"
-       Content="{Binding AllDoneLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}"/>
-
+                                   FontWeight="bold" FontSize="13"
+                                   Visibility="{Binding AllDoneLabel, Converter={StaticResource StringToVisibilityConverter}}"
+                                   Content="{Binding AllDoneLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}"/>
                             </StackPanel>
-
 
                         </StackPanel>
 
@@ -98,31 +95,21 @@
                     <ScrollViewer x:Name="ScrollViewerContainer" VerticalScrollBarVisibility="Auto" Margin="10,10" Style="{StaticResource {x:Type ScrollViewer}}">
                         <StackPanel x:Name="StackContainer">
 
-                            <!--<Border Background="White" BorderBrush="#EBECF4" BorderThickness="1" CornerRadius="10" Height="60" Margin="0,0,14,0">
-                                <Grid>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,0">
-                                        <iconPacks:PackIconPhosphorIcons Kind="FileArrowUpLight" Margin="0,2,7,0" Foreground="#1f1446" />
-                                        <TextBlock Text="World-of-Warcraft(2016).mkv" VerticalAlignment="Center" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,2" Foreground="#1f1446"/>
-                                    </StackPanel>
-                                    <ProgressBar Style="{StaticResource RoundedProgressBar}" Value="100" Height="10" Width="340" VerticalAlignment="Center" Margin="10,40,0,0" HorizontalAlignment="Left"/>
-
-                                    <TextBlock Text="1,5 GB" FontWeight="SemiBold" Foreground="#A0A3BD" HorizontalAlignment="Right" Margin="0,0,50,0" VerticalAlignment="Center" FontSize="12"/>
-                                    <Button  Style="{StaticResource TransparentButton}" Margin="10,0" HorizontalAlignment="Right">
-                                        <iconPacks:PackIconLucide Kind="FileSearch" Foreground="#AAB8C2" Height="18" />
-                                        <iconPacks:PackIconGameIcons Kind="Cancel"  Foreground="#AAB8C2" Height="18" />
-                                    </Button>
-                                </Grid>
-                            </Border>-->
-
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>
                 <DockPanel Grid.Row="3" VerticalAlignment="Center">
-                    <Button Style="{StaticResource TransparentButton}" Click="ButtonGithub_Click" HorizontalAlignment="Left" ToolTip="Pagina do Projeto">
-                        <iconPacks:PackIconFontisto Kind="Github" Margin="10,4,0,5" Foreground="#272727"/>
+                    <Button Style="{StaticResource TransparentButton}" Click="ButtonGithub_Click"
+                            HorizontalAlignment="Left" ToolTip="Pagina do Projeto">
+                        <!--<iconPacks:PackIconFontisto Kind="Github" Margin="10,4,0,5" Foreground="#272727"/>-->
+                        <Image Source="pack://application:,,,/Recursos/github.png" Width="35" Height="20" />
                     </Button>
-                    <ComboBox Style="{StaticResource ComboBoxRoundedStyle}" Foreground="#A0A3BD" Background="WhiteSmoke" x:Name="LanguageCombo"
-                              SelectionChanged="ComboBox_SelectionChanged" ItemsSource="{Binding LanguageOptions, Source={StaticResource FolderFlexMessageProviderViewModel}}" HorizontalAlignment="Right" Width="90" Height="20" Margin="0,0,10,0">
+                    <ComboBox Style="{StaticResource ComboBoxRoundedStyle}" Foreground="#A0A3BD"
+                              Background="WhiteSmoke" x:Name="LanguageCombo"
+                              SelectionChanged="ComboBox_SelectionChanged"
+                              ItemsSource="{Binding LanguageOptions, Source={StaticResource FolderFlexMessageProviderViewModel}}"
+                              HorizontalAlignment="Right" Width="90" Height="20"
+                              Margin="0,0,10,0">
                     </ComboBox>
                 </DockPanel>
             </Grid>
