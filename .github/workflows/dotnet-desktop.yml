@@ -48,11 +48,14 @@ jobs:
           if (-not $version) {
             $version = $csproj.Project.PropertyGroup.FileVersion
           }
+          if (-not $version) {
+            $version = "0.0.0.0"
+          }
           echo "Version found: $version"
           echo "VERSION=$version" >> $GITHUB_ENV
-          shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
-          env:
-            DOTNET_ROOT: C:\Program Files\dotnet
+        shell: pwsh
+        env:
+          DOTNET_ROOT: C:\Program Files\dotnet
     
       - name: Criando Pasta para os Arquivos
         run: |
