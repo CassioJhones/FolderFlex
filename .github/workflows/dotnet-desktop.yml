@@ -40,14 +40,15 @@ jobs:
       - name: Publicando FolderFlex
         run: dotnet publish FolderFlex/FolderFlex.csproj --configuration ${{ matrix.configuration }} --output ./output/
 
-      - name: Obter versão do Assembly do arquivo .csproj (PowerShell)
+      - name: Assembly do arquivo .csproj
         id: get_version
         run: |
           [xml]$csproj = Get-Content "FolderFlex/FolderFlex.csproj"
           $version = $csproj.Project.PropertyGroup.AssemblyVersion
           if (-not $version) {
-          $version = $csproj.Project.PropertyGroup.FileVersion
+            $version = $csproj.Project.PropertyGroup.FileVersion
           }
+          $version = $version.Trim()
           echo "Version found: $version"
           echo "VERSION=$version" >> $GITHUB_ENV
     
