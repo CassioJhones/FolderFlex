@@ -40,6 +40,17 @@ jobs:
       - name: Publicando FolderFlex
         run: dotnet publish FolderFlex/FolderFlex.csproj --configuration ${{ matrix.configuration }} --output ./output/
 
+      - name: Obter versão do Assembly do arquivo .csproj (PowerShell)
+        id: get_version
+        run: |
+          [xml]$csproj = Get-Content "FolderFlex/FolderFlex.csproj"
+          $version = $csproj.Project.PropertyGroup.AssemblyVersion
+          if (-not $version) {
+          $version = $csproj.Project.PropertyGroup.FileVersion
+          }
+          echo "Version found: $version"
+          echo "VERSION=$version" >> $GITHUB_ENV
+    
       - name: Criando Pasta para os Arquivos
         run: |
           mkdir ./output/FolderFlexFiles
