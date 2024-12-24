@@ -35,7 +35,7 @@ jobs:
         run: dotnet restore FolderFlex.sln
 
       - name: Compilando Tudo
-        run: dotnet build FolderFlex.sln --configuration ${{ matrix.configuration }} --no-restore
+        run: dotnet build FolderFlex.sln --configuration ${{ matrix.configuration }} --no-restore /p:WarningLevel=0
 
       - name: Publicando FolderFlex
         run: dotnet publish FolderFlex/FolderFlex.csproj --configuration ${{ matrix.configuration }} --output ./output/
@@ -48,9 +48,9 @@ jobs:
         run: |
           Get-ChildItem ./output/ | Where-Object { $_.Name -ne 'FolderFlexFiles' } | Move-Item -Destination ./output/FolderFlexFiles/ -Force
 
-      - name: Compactando Arquivos
+      - name: Compactando a Pasta
         run: |
-          powershell Compress-Archive -Path ./output/FolderFlexFiles/* -DestinationPath ./output/FolderFlex.zip
+          powershell Compress-Archive -Path ./output/FolderFlexFiles -DestinationPath ./output/FolderFlex.zip
 
       - name: Criando Tag da versão
         id: tag_version
