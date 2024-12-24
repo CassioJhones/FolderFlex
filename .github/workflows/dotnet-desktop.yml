@@ -56,19 +56,20 @@ jobs:
           [xml]$csproj = Get-Content "FolderFlex/FolderFlex.csproj"
 
           $version = $csproj.Project.PropertyGroup.AssemblyVersion
-          if ($version) {
-            $version = $version.Trim()
-          } else {
-            $version = $csproj.Project.PropertyGroup.FileVersion
-            if ($version) {
+          if ($version -and $version.Trim()) {
               $version = $version.Trim()
-            } else {
-              $version = "0.0.0.0"  # Valor padrão
-            }
+          } else {
+              $version = $csproj.Project.PropertyGroup.FileVersion
+              if ($version -and $version.Trim()) {
+                  $version = $version.Trim()
+              } else {
+                  $version = "0.0.0.0"  # Valor padrão
+              }
           }
           
           echo "Version found: $version"
           echo "VERSION=$version" >> $GITHUB_ENV
+
 
       - name: Criando Pasta para os Arquivos
         run: |
