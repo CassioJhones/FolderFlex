@@ -9,6 +9,7 @@ on:
       - 'docs/**'
       - '.github/workflows/dotnet-desktop.yml'
       - 'dotnet-desktop.yml'
+  workflow_dispatch:
 
 permissions:
   contents: write
