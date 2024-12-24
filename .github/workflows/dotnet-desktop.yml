@@ -50,27 +50,6 @@ jobs:
       - name: Publicando FolderFlex
         run: dotnet publish FolderFlex/FolderFlex.csproj --configuration ${{ matrix.configuration }} --output ./output/
 
-      - name: Assembly do arquivo .csproj
-        id: get_version
-        run: |
-          [xml]$csproj = Get-Content "FolderFlex/FolderFlex.csproj"
-
-          $version = $csproj.Project.PropertyGroup.AssemblyVersion
-          if ($version -and $version.Trim()) {
-              $version = $version.Trim()
-          } else {
-              $version = $csproj.Project.PropertyGroup.FileVersion
-              if ($version -and $version.Trim()) {
-                  $version = $version.Trim()
-              } else {
-                  $version = "0.0.0.0"  # Valor padrão
-              }
-          }
-          
-          echo "Version found: $version"
-          echo "VERSION=$version" >> $GITHUB_ENV
-
-
       - name: Criando Pasta para os Arquivos
         run: |
           mkdir ./output/FolderFlexFiles
@@ -88,8 +67,8 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "github-actions@github.com"
-          git tag "v${{ env.VERSION }}"
-          git push origin "v${{ env.VERSION }}"
+          git tag v1.0.${{ github.run_number }}
+          git push origin v1.0.${{ github.run_number }}
 
       - name: Criando Nova Release
         id: create_release
@@ -97,12 +76,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "v${{ env.VERSION }}"
-          release_name: "FolderFlex v${{ env.VERSION }}"
+          tag_name: v1.0.${{ github.run_number }}
+          release_name: "FolderFlex v6.0.${{ github.run_number }}"
           draft: false
           prerelease: true
 
-      - name: Anexando o artefato à release
+      - name: Anexando arquivos à release
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
