@@ -68,8 +68,8 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "github-actions@github.com"
-          git tag v1.0.${{ github.run_number }}
-          git push origin v1.0.${{ github.run_number }}
+          git tag "v${{ env.VERSION }}"
+          git push origin "v${{ env.VERSION }}"
 
       - name: Criando Nova Release
         id: create_release
@@ -77,8 +77,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: 5.0.${{ github.run_number }}
-          release_name: "FolderFlex v5.0.${{ github.run_number }}"
+          tag_name: "v${{ env.VERSION }}"
+          release_name: "FolderFlex v${{ env.VERSION }}"
           draft: false
           prerelease: true
 
