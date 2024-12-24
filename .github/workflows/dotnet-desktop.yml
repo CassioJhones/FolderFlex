@@ -42,7 +42,10 @@ jobs:
       - name: Criando Pasta para os Arquivos
         run: |
           mkdir ./output/FolderFlexFiles
-          Move-Item ./output/* ./output/FolderFlexFiles/ -Force
+
+      - name: Movendo Arquivos para a Nova Pasta
+        run: |
+          Get-ChildItem ./output/ | Where-Object { $_.Name -ne 'FolderFlexFiles' } | Move-Item -Destination ./output/FolderFlexFiles/ -Force
 
       - name: Compactando Arquivos
         run: |
