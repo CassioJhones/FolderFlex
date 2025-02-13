@@ -28,8 +28,10 @@ jobs:
 
       - name: Removendo versões antigas do .NET
         run: |
-          rm -rf ~/.dotnet
-          rm -rf ~/.nuget/packages
+          Remove-Item -Path "$env:USERPROFILE\.dotnet" -Recurse -Force -ErrorAction SilentlyContinue
+          Remove-Item -Path "$env:USERPROFILE\.nuget\packages" -Recurse -Force -ErrorAction SilentlyContinue
+        shell: pwsh
+
           
       - name: Configurando Ambiente .NET
         uses: actions/setup-dotnet@v4
