@@ -37,6 +37,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.200'
+          include-prerelease: true
 
       - name: Restaurando Dependências do .NET (Cache)
         uses: actions/cache@v3
