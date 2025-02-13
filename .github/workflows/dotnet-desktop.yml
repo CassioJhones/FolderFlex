@@ -26,10 +26,15 @@ jobs:
       - name: Sincronizando Repositório
         uses: actions/checkout@v4
 
+      - name: Removendo versões antigas do .NET
+        run: |
+          rm -rf ~/.dotnet
+          rm -rf ~/.nuget/packages
+          
       - name: Configurando Ambiente .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '9.0.200'
 
       - name: Restaurando Dependências do .NET (Cache)
         uses: actions/cache@v3
