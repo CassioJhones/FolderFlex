@@ -540,12 +540,11 @@ public class FolderFlexViewModel : INotifyPropertyChanged
         if (tempoDecorrido is null)
             return;
 
-        if (tempoDecorrido?.TotalSeconds < 1)
-            TempoFormatado = $"{tempoDecorrido?.Milliseconds}ms";
-        else if (tempoDecorrido?.TotalMinutes < 1)
-            TempoFormatado = $"{tempoDecorrido?.Seconds}s {tempoDecorrido?.Milliseconds}ms";
-        else
-            TempoFormatado = $"{tempoDecorrido?.Minutes}m {tempoDecorrido?.Seconds}s {tempoDecorrido?.Milliseconds}ms";
+        TempoFormatado = tempoDecorrido?.TotalSeconds < 1
+            ? $"{tempoDecorrido?.Milliseconds}ms"
+            : tempoDecorrido?.TotalMinutes < 1
+            ? $"{tempoDecorrido?.Seconds}s {tempoDecorrido?.Milliseconds}ms"
+            : $"{tempoDecorrido?.Minutes}m {tempoDecorrido?.Seconds}s {tempoDecorrido?.Milliseconds}ms";
 
         AllDoneVisibility = Visibility.Visible;
         _languageController.AllDoneLabel = string.Format(MessageMap.GetMessage("all_done"), ArquivosProcessados, TempoFormatado);
@@ -587,5 +586,10 @@ public class FolderFlexViewModel : INotifyPropertyChanged
     }
 
     public void Cancel()
-        => Cancelador?.Cancel();
+    {
+        Cancelador?.Cancel();
+        if (_mainWindow.Height >= 580) _mainWindow.Height = 340;
+        PastaDestino = string.Empty;
+        PastaOrigem = string.Empty;
+    }
 }
