@@ -22,8 +22,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<AssemblyVersion>1.0.35.0</AssemblyVersion>
-		<FileVersion>1.0.35.0</FileVersion>
+		<AssemblyVersion>1.0.39.0</AssemblyVersion>
+		<FileVersion>1.0.39.0</FileVersion>
 		<Title>FolderFlex</Title>
 		<Authors>CassioJhones</Authors>
 		<Company>CassioJhones</Company>
