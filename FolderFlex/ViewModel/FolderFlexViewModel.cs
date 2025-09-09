@@ -3,11 +3,14 @@ using FolderFlex.Services;
 using FolderFlex.Services.ErrorManager;
 using FolderFlex.View;
 using FolderFlexCommon.Messages;
+using FolderFlexCommon.Settings;
+using FolderFlexCommon.Settings.ApplicationSettings;
 using System.Buffers;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -49,6 +52,18 @@ public class FolderFlexViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(Renomear));
         }
     }
+
+    private bool _separarPorExtensao = false;
+    public bool SepararPorExtensao
+    {
+        get => _separarPorExtensao;
+        set
+        {
+            _separarPorExtensao = value;
+            OnPropertyChanged(nameof(SepararPorExtensao));
+        }
+    }
+
 
     private bool _somenteCopiar = false;
     public bool SomenteCopiar
@@ -155,7 +170,7 @@ public class FolderFlexViewModel : INotifyPropertyChanged
     }
 
     #endregion PROPERTIES
-
+    private readonly ApplicationSettings _settings;
     public FolderFlexViewModel(FolderFlexMain mainWindow, FolderFlexMessageProviderViewModel languageController)
     {
         VersionLabel = Assembly.GetExecutingAssembly().GetName()?.Version?.ToString();
@@ -166,7 +181,7 @@ public class FolderFlexViewModel : INotifyPropertyChanged
         errorHandler.Attach(new ErrorLogger());
 
         _languageController = languageController;
-
+        _settings = ApplicationSettings.New(new IniFileParameterStore("config.flx"));
         _mainWindow = mainWindow;
     }
 
@@ -258,7 +273,19 @@ public class FolderFlexViewModel : INotifyPropertyChanged
                 continue;
             }
 
-            string destinoArquivo = Path.Combine(destino, Path.GetFileName(item));
+            string destinoFinal = destino;
+            if (SepararPorExtensao)
+            {
+                string extensao = Path.GetExtension(item).TrimStart('.');
+                if (string.IsNullOrEmpty(extensao))
+                {
+                    extensao = "SemExtensao";
+                }
+                destinoFinal = Path.Combine(destino, extensao);
+                Directory.CreateDirectory(destinoFinal);
+            }
+
+            string destinoArquivo = Path.Combine(destinoFinal, Path.GetFileName(item));
 
             if (File.Exists(destinoArquivo)) continue;
 
@@ -531,7 +558,8 @@ public class FolderFlexViewModel : INotifyPropertyChanged
             {
                 MessageBox.Show(string.Join('\n', errorHandler.GetErrors()));
                 errorHandler.ClearErrors();
-            };
+            }
+            ;
         }
     }
 
@@ -591,5 +619,14 @@ public class FolderFlexViewModel : INotifyPropertyChanged
         if (_mainWindow.Height >= 580) _mainWindow.Height = 340;
         PastaDestino = string.Empty;
         PastaOrigem = string.Empty;
+    }
+
+    public void ToggleTheme()
+    {
+        string currentTheme = _settings.Theme ?? "LightTheme";
+        string newTheme = currentTheme == "LightTheme" ? "DarkTheme" : "LightTheme";
+
+        ThemeService.ApplyTheme(newTheme);
+        _settings.Theme = newTheme;
     }
 }

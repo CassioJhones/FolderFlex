@@ -22,8 +22,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<AssemblyVersion>1.0.39.0</AssemblyVersion>
-		<FileVersion>1.0.39.0</FileVersion>
+		<AssemblyVersion>1.0.40.0</AssemblyVersion>
+		<FileVersion>1.0.40.0</FileVersion>
 		<Title>FolderFlex</Title>
 		<Authors>CassioJhones</Authors>
 		<Company>CassioJhones</Company>
@@ -42,10 +42,9 @@
 	  <None Remove="Recursos\git.ico" />
 	  <None Remove="Recursos\github.png" />
 	  <None Remove="Recursos\github.svg" />
+	  <None Remove="Recursos\sun-moon.png" />
 	  <None Remove="Recursos\x.png" />
 	  <None Remove="Recursos\x.svg" />
-	</ItemGroup>
-	<ItemGroup>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -58,8 +57,12 @@
 		<Resource Include="Recursos\github.png" />
 		<Resource Include="Recursos\github.svg" />
 		<Resource Include="Recursos\pasta.ico" />
+		<Resource Include="Recursos\sun-moon.png" />
 		<Resource Include="Recursos\x.png" />
 		<Resource Include="Recursos\x.svg" />
+		<Resource Include="Themes\DarkTheme.xaml" />
+		<Resource Include="Themes\GlobalStyles.xaml" />
+		<Resource Include="Themes\LightTheme.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>
