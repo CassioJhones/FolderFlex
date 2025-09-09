@@ -81,4 +81,6 @@ public partial class FolderFlexMain : Window
             );
         }
     }
+
+    private void ThemeToggleButton_Click(object sender, RoutedEventArgs e) => _viewModel.ToggleTheme();
 }

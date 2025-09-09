@@ -1,4 +1,6 @@
 ﻿using FolderFlex.Services;
+using FolderFlexCommon.Settings;
+using FolderFlexCommon.Settings.ApplicationSettings;
 using System.IO;
 using System.Windows;
 using Application = System.Windows.Application;
@@ -9,6 +11,9 @@ public partial class App : Application
 {
     private void Application_Startup(object sender, System.Windows.StartupEventArgs e)
     {
+        var settings = ApplicationSettings.New(new IniFileParameterStore("config.flx"));
+        ThemeService.ApplyTheme(settings.Theme ?? "LightTheme");
+
         string lastCheckDateFilePath = "lastCheckDate.txt";
 
         DateTime lastCheckDate;
