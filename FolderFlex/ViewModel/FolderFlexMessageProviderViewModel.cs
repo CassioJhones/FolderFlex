@@ -42,6 +42,7 @@ public class FolderFlexMessageProviderViewModel : INotifyPropertyChanged
             OnPropertyChanged("RenameLabel");
             OnPropertyChanged("CancelLabel");
             OnPropertyChanged("AllDoneLabel");
+            OnPropertyChanged("SeparateByExtensionLabel");
         }
     }
     public List<string> LanguageOptions => ListLanguages();
@@ -73,6 +74,7 @@ public class FolderFlexMessageProviderViewModel : INotifyPropertyChanged
     public string CopyLabel => MessageMap.GetMessage("copy_label", Language);
     public string RenameLabel => MessageMap.GetMessage("rename_label", Language);
     public string CancelLabel => MessageMap.GetMessage("cancel_label", Language);
+    public string SeparateByExtensionLabel => MessageMap.GetMessage("separate_by_extension_label", Language);
 
     protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     public ICommand ChangeLanguageCommand { get; }

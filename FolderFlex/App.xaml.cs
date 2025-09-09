@@ -25,9 +25,11 @@ public partial class App : Application
                 lastCheckDate = DateTime.Now.AddDays(-6);  
         }
         else
-            lastCheckDate = DateTime.Now.AddDays(-6);  
+            lastCheckDate = DateTime.Now.AddDays(-6);
 
-        if ((DateTime.Now - lastCheckDate).TotalDays >= 5)
+        bool hasConnection = System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+
+        if ((DateTime.Now - lastCheckDate).TotalDays >= 5 && hasConnection)
         {
             MessageBoxResult resultado = MessageBox.Show(
                 "Deseja verificar se existe uma nova versão disponível?",

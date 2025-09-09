@@ -11,7 +11,8 @@
         BorderBrush="Transparent"
         Background="Transparent"
         xmlns:language="clr-namespace:FolderFlex.ViewModel"
-        d:DataContext="{d:DesignInstance Type=language:FolderFlexViewModel}"
+  
+       d:DataContext="{d:DesignInstance Type=language:FolderFlexViewModel}"
         DataContext="{StaticResource FolderFlexMessageProviderViewModel}"
         Title="FolderFlex" Height="340" Width="480">
 
@@ -20,70 +21,96 @@
             <Border.Background>
                 <LinearGradientBrush StartPoint="0.5, 0" EndPoint="0.5,1">
                     <GradientStop Color="#ffffff" />
+
                     <GradientStop Color="#f4f9ff" Offset="0.5" />
                 </LinearGradientBrush>
             </Border.Background>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
+
                     <RowDefinition Height="240"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 <Grid  Grid.Row="0" Background="Transparent" Height="40" VerticalAlignment="Top" Panel.ZIndex="1">
+
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Recursos/pasta.ico" Height="24" Margin="15,0,10,0"/>
                         <TextBlock Text="FolderFlex" FontSize="16" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="#273e45" FontWeight="SemiBold" />
-                        <TextBlock Text="{Binding VersionLabel}" FontSize="15" VerticalAlignment="Center" Margin="10,02,0,0" Foreground="#273e45" FontWeight="Light" />
+                        <TextBlock Text="{Binding VersionLabel}" 
+ FontSize="15" VerticalAlignment="Center" Margin="10,02,0,0" Foreground="#273e45" FontWeight="Light" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
                         <Button x:Name="CloseButton"  Style="{StaticResource TransparentButton}" Margin="10,0" Click="CloseButton_Click">
+
                             <Image Source="pack://application:,,,/Recursos/x.png" Width="18" Height="18" />
                         </Button>
                     </StackPanel>
                 </Grid>
                 <Border Grid.Row="1" CornerRadius="15" Margin="3" >
 
+
                     <StackPanel Orientation="Vertical">
                         <TextBlock x:Name="StatusMessage" Text="{Binding StatusMessage, Source={StaticResource FolderFlexMessageProviderViewModel}}" FontSize="16" Foreground="#A0A3BD" TextAlignment="Center"  Margin="0,0,0,3"/>
 
                         <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
+
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="20,10,0,0">
                                 <StackPanel Orientation="Vertical"  >
                                     <TextBlock Text="{Binding OriginLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Foreground="#A0A3BD" FontWeight="SemiBold" FontSize="12" Margin="7,0"/>
+
                                     <TextBox x:Name="OriginLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270" Foreground="#A0A3BD" Text="{Binding PastaOrigem}" IsReadOnly="True" Height="30" IsEnabled="True" Background="WhiteSmoke" Margin="5,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
                                 </StackPanel>
-                                <Button Margin="10,0,0,0" Content="{Binding OriginLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Height="30" Width="100" Style="{StaticResource RoundedButtonStyle}" Background="#526cca" Foreground="White" VerticalAlignment="Bottom" Click="Click_SelectSource"/>
+                                <Button Margin="10,0,0,0" Content="{Binding 
+ OriginLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Height="30" Width="100" Style="{StaticResource RoundedButtonStyle}" Background="#526cca" Foreground="White" VerticalAlignment="Bottom" Click="Click_SelectSource"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="20,10,0,0">
+
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="{Binding DestinationLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Foreground="#A0A3BD" FontWeight="SemiBold" FontSize="12" Margin="7,0"/>
                                     <TextBox x:Name="DestinationLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270" Foreground="#A0A3BD" Text="{Binding PastaDestino}" IsReadOnly="True" Height="30" IsEnabled="True" Background="WhiteSmoke" Margin="5,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+
                                 </StackPanel>
                                 <Button Margin="10,0,0,0" Content="{Binding DestinationLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Height="30" Width="100" Style="{StaticResource RoundedButtonStyle}" Background="#526cca" Foreground="White" VerticalAlignment="Bottom" Click="Click_SelectDestination" Cursor="Hand"/>
+
                             </StackPanel>
 
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,9,0,0">
 
                             <Button Content="{Binding MoveLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" 
-                                    Style="{StaticResource RoundedButtonStyle}" Margin="0,0,5,0" Background="#526cca" Foreground="White" FontWeight="SemiBold" Click="StartMove_Click"/>
+              
+                       Style="{StaticResource RoundedButtonStyle}" Margin="0,0,5,0" Background="#526cca" Foreground="White" FontWeight="SemiBold" Click="StartMove_Click"/>
                             <Button Click="Cancelation_Click"  Content="{Binding CancelLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Style="{StaticResource RoundedButtonStyle}" Margin="5,0,0,0" Background="#399fa1" Foreground="White" FontWeight="SemiBold"/>
 
                         </StackPanel>
 
+
                         <StackPanel  Orientation="Vertical" HorizontalAlignment="Center">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
-                                <CheckBox x:Name="cbRename" IsChecked="{Binding Renomear}" Content="{Binding RenameLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" VerticalAlignment="Center" Foreground="#A0A3BD" ToolTip="Marque para renomear os arquivos iguais que já existem na pasta" Margin="4,00,10,0"/>
-                                <CheckBox x:Name="cbCopy" IsChecked="{Binding SomenteCopiar, Source={StaticResource FolderFlexMessageProviderViewModel}}" Content="{Binding CopyLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" VerticalAlignment="Center" Foreground="#A0A3BD" ToolTip="Marque para copiar os arquivos ao invés de mover" Margin="4,0,10,0"/>
+                                <CheckBox x:Name="cbRename" IsChecked="{Binding Renomear}"
+                                          Content="{Binding RenameLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}"
+                                          VerticalAlignment="Center" Foreground="#A0A3BD"
+                                          ToolTip="Marque para renomear os arquivos iguais que já existem na pasta" Margin="4,00,10,0"/>
+                                <CheckBox x:Name="cbCopy" IsChecked="{Binding SomenteCopiar, Source={StaticResource FolderFlexMessageProviderViewModel}}"
+                                          Content="{Binding CopyLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" VerticalAlignment="Center" Foreground="#A0A3BD"
+                                          ToolTip="Marque para copiar os arquivos ao invés de mover" Margin="4,0,10,0"/>
+                                <CheckBox x:Name="cbSeparate" IsChecked="{Binding SepararPorExtensao}"
+                                          Content="{Binding SeparateByExtensionLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}"
+                                          VerticalAlignment="Center" Foreground="#A0A3BD"
+                                          ToolTip="Marque para separar os arquivos em pastas por extensão" Margin="4,0,10,0"/>
                             </StackPanel>
+
                             <StackPanel HorizontalAlignment="Center" Margin="0,-12,0,0">
                                 <Label Margin="0 10 0 0" HorizontalAlignment="Center" Foreground="#399fa1"
                                    FontWeight="bold" FontSize="13"
-                                   Visibility="{Binding AllDoneLabel, Converter={StaticResource StringToVisibilityConverter}}"
+            
+                        Visibility="{Binding AllDoneLabel, Converter={StaticResource StringToVisibilityConverter}}"
                                    Content="{Binding AllDoneLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}"/>
                             </StackPanel>
+
 
                         </StackPanel>
 
@@ -93,23 +120,26 @@
                 <Grid Grid.Row="2">
 
                     <ScrollViewer x:Name="ScrollViewerContainer" VerticalScrollBarVisibility="Auto" Margin="10,10" Style="{StaticResource {x:Type ScrollViewer}}">
+
                         <StackPanel x:Name="StackContainer">
 
                         </StackPanel>
                     </ScrollViewer>
                 </Grid>
                 <DockPanel Grid.Row="3" VerticalAlignment="Center">
+
                     <Button Style="{StaticResource TransparentButton}" Click="ButtonGithub_Click"
                             HorizontalAlignment="Left" ToolTip="Pagina do Projeto">
-                        <!--<iconPacks:PackIconFontisto Kind="Github" Margin="10,4,0,5" Foreground="#272727"/>-->
                         <Image Source="pack://application:,,,/Recursos/github.png" Width="35" Height="20" />
                     </Button>
                     <ComboBox Style="{StaticResource ComboBoxRoundedStyle}" Foreground="#A0A3BD"
                               Background="WhiteSmoke" x:Name="LanguageCombo"
-                              SelectionChanged="ComboBox_SelectionChanged"
+                   
+           SelectionChanged="ComboBox_SelectionChanged"
                               ItemsSource="{Binding LanguageOptions, Source={StaticResource FolderFlexMessageProviderViewModel}}"
                               HorizontalAlignment="Right" Width="90" Height="20"
-                              Margin="0,0,10,0">
+                        
+       Margin="0,0,10,0">
                     </ComboBox>
                 </DockPanel>
             </Grid>

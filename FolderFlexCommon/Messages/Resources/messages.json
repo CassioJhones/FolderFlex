@@ -19,7 +19,8 @@
     "cancel_label": "Cancelar",
     "rename_label": "Renomear",
     "copy_label": "Copiar",
-    "all_done": "{0} Arquivos em {1}"
+    "all_done": "{0} Arquivos em {1}",
+    "separate_by_extension_label": "Separar por extensão"
   },
   "en": {
     "language_description": "English",
@@ -41,7 +42,8 @@
     "cancel_label": "Cancel",
     "rename_label": "Rename",
     "copy_label": "Copy",
-    "all_done": "{0} Files in {1}"
+    "all_done": "{0} Files in {1}",
+    "separate_by_extension_label": "Separate by extension"
   },
   "es": {
     "language_description": "Español",
@@ -63,7 +65,8 @@
     "cancel_label": "Cancelar",
     "rename_label": "Renombrar",
     "copy_label": "Copiar",
-    "all_done": "{0} Archivos en {1}"
+    "all_done": "{0} Archivos en {1}",
+    "separate_by_extension_label": "Separar por extensión"
   },
   "jp": {
     "language_description": "日本語",
@@ -85,7 +88,8 @@
     "cancel_label": "キャンセル",
     "rename_label": "名前を変更",
     "copy_label": "コピー",
-    "all_done": "{0} ファイル {1} に"
+    "all_done": "{0} ファイル {1} に",
+    "separate_by_extension_label": "拡張子で分ける"
   },
   "ru": {
     "language_description": "Русский",
@@ -107,7 +111,8 @@
     "cancel_label": "Отмена",
     "rename_label": "Переименовать",
     "copy_label": "Копировать",
-    "all_done": "{0} файлов за {1}"
+    "all_done": "{0} файлов за {1}",
+    "separate_by_extension_label": "Разделить по расширению"
   },
   "de": {
     "language_description": "Deutsch",
@@ -129,7 +134,8 @@
     "cancel_label": "Abbrechen",
     "rename_label": "Umbenennen",
     "copy_label": "Kopieren",
-    "all_done": "{0} Dateien in {1}"
+    "all_done": "{0} Dateien in {1}",
+    "separate_by_extension_label": "Nach Erweiterung trennen"
   },
   "fr": {
     "language_description": "Français",
@@ -151,7 +157,8 @@
     "cancel_label": "Annuler",
     "rename_label": "Renommer",
     "copy_label": "Copier",
-    "all_done": "{0} Fichiers en {1}"
+    "all_done": "{0} Fichiers en {1}",
+    "separate_by_extension_label": "Séparer par extension"
   },
   "hi": {
     "language_description": "हिन्दी",
@@ -173,7 +180,8 @@
     "cancel_label": "रद्द करें",
     "rename_label": "नाम बदलें",
     "copy_label": "कॉपी करें",
-    "all_done": "{0} फ़ाइलें {1} में"
+    "all_done": "{0} फ़ाइलें {1} में",
+    "separate_by_extension_label": "एक्सटेंशन द्वारा अलग करें"
   },
   "ko": {
     "language_description": "한국어",
@@ -195,7 +203,8 @@
     "cancel_label": "취소",
     "rename_label": "이름 변경",
     "copy_label": "복사",
-    "all_done": "{0} 파일 {1}에"
+    "all_done": "{0} 파일 {1}에",
+    "separate_by_extension_label": "확장자별로 분리"
   },
   "it": {
     "language_description": "Italiano",
@@ -217,7 +226,8 @@
     "cancel_label": "Annulla",
     "rename_label": "Rinomina",
     "copy_label": "Copia",
-    "all_done": "{0} File in {1}"
+    "all_done": "{0} File in {1}",
+    "separate_by_extension_label": "Separa per estensione"
   },
   "zh": {
     "language_description": "简体中文",
@@ -239,7 +249,8 @@
     "cancel_label": "取消",
     "rename_label": "重命名",
     "copy_label": "复制",
-    "all_done": "{0} 个文件耗时 {1}"
+    "all_done": "{0} 个文件耗时 {1}",
+    "separate_by_extension_label": "按扩展名分隔"
   }
 
 }
