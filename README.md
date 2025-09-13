@@ -6,7 +6,7 @@
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/cassiojhones/folderflex/total?style=plastic&label=Downloads)
 ![GitHub Repo stars](https://img.shields.io/github/stars/Cassiojhones/folderflex?style=plastic&label=Stars)
 ![Front](https://img.shields.io/badge/WPF-017ad7?style=plastic&logo=Windows&logoColor=white)
-![Back](https://img.shields.io/badge/.NET_8-512BD4?style=plastic&logo=dotnet&logoColor=white)
+![Back](https://img.shields.io/badge/.NET_9-512BD4?style=plastic&logo=dotnet&logoColor=white)
 [![CI/CD](https://github.com/CassioJhones/FolderFlex/actions/workflows/dotnet-desktop.yml/badge.svg?style=plastic)](https://github.com/CassioJhones/FolderFlex/actions/workflows/dotnet-desktop.yml)
 
 ## Descrição
@@ -51,7 +51,7 @@ Imagine que você precisa acessar `diversas subpastas` contendo arquivos como fo
 ## Download Gratuito
 
 1. Baixe a última versão do aplicativo na seção de [releases](https://github.com/CassioJhones/FolderFlex/releases)
-2. Caso já tiver instalado .NET 8, basta executar
+2. Caso já tiver instalado .NET 9, basta executar
 
 ## Como Usar
 
@@ -70,16 +70,12 @@ Imagine que você precisa acessar `diversas subpastas` contendo arquivos como fo
 2. **Copiar arquivos**:
    - Marque a opção "Copiar" para duplicar os arquivos em outro local ou na própria raiz.
 
-## Contribuição
-Contribuições são bem-vindas! Se você tiver sugestões, problemas ou correções de bugs, abra uma [issue](https://github.com/CassioJhones/Movedor/issues) ou envie um pull request.
-
-### Como Contribuir
-1. Fork este repositório.
-2. Crie uma branch para a sua feature (`git checkout -b feature/nova-feature`).
-3. Commit suas alterações (`git commit -m 'Adiciona nova feature'`).
-4. Push para a branch (`git push origin feature/nova-feature`).
-5. Abra um pull request.
-
 ## Autor
 
 [Cássio Jhones](https://github.com/CassioJhones)
+
+
+## 👥 Contribuidores
+
+[![Contribuidores](https://contrib.rocks/image?repo=CassioJhones/FolderFlex)](https://github.com/CassioJhones/FolderFlex/graphs/contributors)
+
