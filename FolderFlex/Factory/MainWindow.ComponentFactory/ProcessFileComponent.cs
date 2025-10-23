@@ -47,7 +47,7 @@ public static class FileComponentFactory
 
     public static TextBlock CreateFileNameTextBlock(string fileName) => new()
     {
-        Text = Path.GetFileName(fileName).Length > 35 ? $"{Path.GetFileName(fileName).Substring(0, 35)}..." : Path.GetFileName(fileName),
+        Text = Path.GetFileName(fileName).Length > 35 ? $"{Path.GetFileName(fileName)[..35]}..." : Path.GetFileName(fileName),
         VerticalAlignment = VerticalAlignment.Center,
         FontSize = 14,
         FontWeight = FontWeights.SemiBold,
