@@ -244,7 +244,7 @@ public class FolderFlexViewModel : INotifyPropertyChanged
 
         int totalArquivos = listaSubPastas.Sum(pasta => Directory.GetFiles(pasta).Length) + listaArquivosSoltos.Length;
 
-        string[] listaCompleta = listaArquivosSoltos.Concat(listaSubPastas).ToArray();
+        string[] listaCompleta = [.. listaArquivosSoltos, .. listaSubPastas];
 
         await ProcessFilesOrFolders(listaCompleta, destino, cancelador, totalArquivos);
 

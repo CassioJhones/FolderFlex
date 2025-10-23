@@ -81,6 +81,6 @@ public class FolderFlexMessageProviderViewModel : INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
     private void ChangeLanguage(string newLanguage) => Language = newLanguage;
-    private static List<string> ListLanguages() => MessageMap.ListLanguages().Values.ToList();
+    private static List<string> ListLanguages() => [.. MessageMap.ListLanguages().Values];
     #endregion PROPERTIES
 }
