@@ -244,7 +244,7 @@ public class FolderFlexViewModel : INotifyPropertyChanged
 
         int totalArquivos = listaSubPastas.Sum(pasta => Directory.GetFiles(pasta).Length) + listaArquivosSoltos.Length;
 
-        string[] listaCompleta = listaArquivosSoltos.Concat(listaSubPastas).ToArray();
+        string[] listaCompleta = [.. listaArquivosSoltos, .. listaSubPastas];
 
         await ProcessFilesOrFolders(listaCompleta, destino, cancelador, totalArquivos);
 
@@ -255,7 +255,7 @@ public class FolderFlexViewModel : INotifyPropertyChanged
     private async Task ProcessFilesOrFolders(string[] lista, string destino, CancellationToken cancelador, int totalArquivos)
     {
         SemaphoreSlim semaphore = new(10);
-        List<Task> tasks = new();
+        List<Task> tasks = [];
 
         foreach (string item in lista)
         {
@@ -291,7 +291,7 @@ public class FolderFlexViewModel : INotifyPropertyChanged
 
             if (_mainWindow.Height < 580) _mainWindow.Height = 580;
 
-            (CancellationToken canceladorItem, ProgressBar progressBar) = AddFileComponent(item, destino);
+            (CancellationToken canceladorItem, ProgressBar progressBar) = AddFileComponent(item);
 
             await semaphore.WaitAsync(cancelador);
 
@@ -319,7 +319,7 @@ public class FolderFlexViewModel : INotifyPropertyChanged
     }
 
     private (CancellationToken itemCancelator, ProgressBar?)
-        AddFileComponent(string file, string destination)
+        AddFileComponent(string file)
     {
         CancellationTokenSource cancelatorItem = new();
 
