@@ -26,6 +26,21 @@ jobs:
         with:
           dotnet-version: '11.0.x'
 
+      - name: Lendo Versão do Projeto (.csproj)
+        id: version
+        shell: pwsh
+        run: |
+          $version = (dotnet msbuild FolderFlex/FolderFlex.csproj -nologo -getProperty:Version).Trim()
+          if ([string]::IsNullOrWhiteSpace($version)) {
+            throw "Não foi possível ler a propriedade <Version> de FolderFlex/FolderFlex.csproj."
+          }
+          $tag = "v$version"
+          $zipName = "FolderFlex-$tag.zip"
+          "value=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "tag=$tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "zip_name=$zipName" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          Write-Host "Versão detectada: $version | Tag: $tag | Zip: $zipName"
+
       - name: Restaurando Cache NuGet
         uses: actions/cache@v4
         with:
@@ -41,16 +56,28 @@ jobs:
         run: dotnet build FolderFlex.slnx --configuration Release --no-restore
 
       - name: Publicando FolderFlex
-        run: dotnet publish FolderFlex/FolderFlex.csproj --configuration Release --output ./output/FolderFlexFiles
+        run: dotnet publish FolderFlex/FolderFlex.csproj --configuration Release --output ./output/FolderFlex-${{ steps.version.outputs.tag }}
 
       - name: Compactando Release
         shell: pwsh
-        run: Compress-Archive -Path ./output/FolderFlexFiles -DestinationPath ./output/FolderFlex.zip
+        run: |
+          Compress-Archive `
+            -Path "./output/FolderFlex-${{ steps.version.outputs.tag }}" `
+            -DestinationPath "./output/${{ steps.version.outputs.zip_name }}" `
+            -Force
 
       - name: Criando Tag e Release no GitHub
         shell: pwsh
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          $tag = "v1.0.${{ github.run_number }}"
-          gh release create $tag ./output/FolderFlex.zip --title "FolderFlex $tag" --prerelease --generate-notes
+          $tag = "${{ steps.version.outputs.tag }}"
+          $zipPath = "./output/${{ steps.version.outputs.zip_name }}"
+
+          gh release view $tag 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "Release $tag já existe. Atualize <Version> em FolderFlex/FolderFlex.csproj para publicar uma nova release."
+            exit 0
+          }
+
+          gh release create $tag $zipPath --title "FolderFlex $tag" --generate-notes
