@@ -1,0 +1,23 @@
+<Project>
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <Authors>CassioJhones</Authors>
+    <Company>CassioJhones</Company>
+    <Product>FolderFlex</Product>
+    <PackageProjectUrl>https://github.com/CassioJhones/FolderFlex</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/CassioJhones/FolderFlex</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+</Project>

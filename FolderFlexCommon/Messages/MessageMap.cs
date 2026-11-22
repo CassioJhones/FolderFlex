@@ -1,63 +1,100 @@
-﻿using FolderFlexCommon.Settings;
+using FolderFlexCommon.Settings;
 using FolderFlexCommon.Settings.ApplicationSettings;
-using System;
-using System.Collections.Generic;
-using System.IO;
+using System.Collections.Frozen;
+using System.Globalization;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace FolderFlexCommon.Messages;
 
+[JsonSerializable(typeof(Dictionary<string, Dictionary<string, string>>))]
+internal sealed partial class MessageJsonContext : JsonSerializerContext;
+
 public static class MessageMap
 {
-    private static Dictionary<string, Dictionary<string, string>> _messages;
+    private const string FallbackLanguage = "pt";
+    private const string ResourceName = "FolderFlexCommon.Messages.Resources.messages.json";
 
-    private static string _defaultLanguage;
+    private static readonly FrozenDictionary<string, FrozenDictionary<string, string>> Messages;
+    private static readonly FrozenDictionary<string, string> Languages;
+    private static volatile string _defaultLanguage;
 
     static MessageMap()
     {
-        _messages = new Dictionary<string, Dictionary<string, string>>();
+        Messages = LoadMessagesFromJson();
 
-        _defaultLanguage = ApplicationSettings.New(new IniFileParameterStore("config.flx")).Language ?? "pt";
+        Languages = Messages
+            .Where(pair => pair.Value.ContainsKey("language_description"))
+            .ToFrozenDictionary(
+                pair => pair.Key,
+                pair => pair.Value["language_description"],
+                StringComparer.OrdinalIgnoreCase);
 
-        LoadMessagesFromJson();
+        string configuredLanguage = ApplicationSettings.New(new IniFileParameterStore("config.flx")).Language;
+        _defaultLanguage = Messages.ContainsKey(configuredLanguage) ? configuredLanguage : FallbackLanguage;
     }
 
-    private static void LoadMessagesFromJson()
+    private static FrozenDictionary<string, FrozenDictionary<string, string>> LoadMessagesFromJson()
     {
         Assembly assembly = Assembly.GetExecutingAssembly();
-        string resourceName = "FolderFlexCommon.Messages.Resources.messages.json";
+        using Stream stream = assembly.GetManifestResourceStream(ResourceName)
+            ?? throw new InvalidOperationException($"Embedded resource '{ResourceName}' was not found.");
 
-        using Stream stream = assembly.GetManifestResourceStream(resourceName);
-        using StreamReader reader = new(stream);
-        string jsonContent = reader.ReadToEnd();
-        _messages = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string>>>(jsonContent);
+        Dictionary<string, Dictionary<string, string>> raw = JsonSerializer.Deserialize(
+            stream,
+            MessageJsonContext.Default.DictionaryStringDictionaryStringString)
+            ?? [];
+
+        return raw.ToFrozenDictionary(
+            outer => outer.Key,
+            outer => outer.Value.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase),
+            StringComparer.OrdinalIgnoreCase);
     }
 
-    public static string GetMessage(string key, string language = null)
+    public static string GetMessage(string key, string? language = null)
     {
-        language ??= _defaultLanguage;
+        string targetLanguage = language ?? _defaultLanguage;
 
-        return _messages.ContainsKey(language) && _messages[language].ContainsKey(key)
-            ? _messages[language][key]
-            : _messages.ContainsKey(_defaultLanguage) && _messages[_defaultLanguage].ContainsKey(key)
-            ? _messages[_defaultLanguage][key]
-            : null;
+        if (Messages.TryGetValue(targetLanguage, out FrozenDictionary<string, string>? langMessages) &&
+            langMessages.TryGetValue(key, out string? message))
+            return message;
+
+        if (Messages.TryGetValue(_defaultLanguage, out FrozenDictionary<string, string>? defaultMessages) &&
+            defaultMessages.TryGetValue(key, out string? defaultMessage))
+            return defaultMessage;
+
+        if (Messages.TryGetValue(FallbackLanguage, out FrozenDictionary<string, string>? fallbackMessages) &&
+            fallbackMessages.TryGetValue(key, out string? fallbackMessage))
+            return fallbackMessage;
+
+        return key;
     }
+
+    public static string FormatMessage(string key, params ReadOnlySpan<object?> args)
+        => string.Format(CultureInfo.CurrentCulture, GetMessage(key), args);
 
     public static void SetDefaultLanguage(string language)
-        => _defaultLanguage = _messages.ContainsKey(language) ? language : throw new ArgumentException($"Language '{language}' not supported.");
-
-    public static Dictionary<string, string> ListLanguages()
     {
-        Dictionary<string, string> languageList = new();
+        if (!Messages.ContainsKey(language))
+            throw new ArgumentException($"Language '{language}' is not supported.", nameof(language));
 
-        foreach (string language in _messages.Keys)
+        _defaultLanguage = language;
+    }
+
+    public static IReadOnlyDictionary<string, string> ListLanguages() => Languages;
+
+    public static string? GetLanguageKeyByDescription(string? description)
+    {
+        if (string.IsNullOrWhiteSpace(description))
+            return null;
+
+        foreach ((string key, string value) in Languages)
         {
-            if (_messages[language].ContainsKey("language_description"))
-                languageList.Add(language, _messages[language]["language_description"]);
+            if (string.Equals(value, description, StringComparison.OrdinalIgnoreCase))
+                return key;
         }
 
-        return languageList;
+        return null;
     }
 }

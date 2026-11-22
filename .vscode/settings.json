@@ -1,0 +1,9 @@
+{
+    "editor.fontFamily": "JetBrains Mono Regular",
+    "editor.codeLensFontFamily": "JetBrains Mono Regular",
+    "editor.inlayHints.fontFamily": "JetBrains Mono Regular",
+    "editor.inlineSuggest.fontFamily": "JetBrains Mono Regular",
+    "scm.inputFontFamily": "JetBrains Mono Regular",
+    "terminal.integrated.fontFamily": "JetBrains Mono Regular",
+    "editor.minimap.enabled": false
+}

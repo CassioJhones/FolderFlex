@@ -1,72 +1,84 @@
-﻿using FolderFlex.Util;
+using FolderFlex.Util;
 using FolderFlexCommon.Messages;
-using FolderFlexCommon.Settings;
 using FolderFlexCommon.Settings.ApplicationSettings;
-using System.ComponentModel;
-using System.Windows.Input;
 
 namespace FolderFlex.ViewModel;
 
-public class FolderFlexMessageProviderViewModel : INotifyPropertyChanged
+public sealed class FolderFlexMessageProviderViewModel : ObservableObject
 {
-    public FolderFlexMessageProviderViewModel()
-    {
-        ChangeLanguageCommand = new RelayCommand<string>(ChangeLanguage);
-        _statusMessage = MessageMap.GetMessage("select_to_start", Language);
-    }
-    #region PROPERTIES
+    private readonly ApplicationSettings _settings;
 
-    private ApplicationSettings _settings = ApplicationSettings.New(new IniFileParameterStore("config.flx"));
-    private bool _somenteCopiar;
-    public bool SomenteCopiar
+    public FolderFlexMessageProviderViewModel(ApplicationSettings settings)
     {
-        get => _somenteCopiar;
+        _settings = settings;
+        LanguageOptions = [.. MessageMap.ListLanguages().Values];
+        StatusMessage = MessageMap.GetMessage("select_to_start", Language);
+        SelectedLanguageName = MessageMap.ListLanguages().GetValueOrDefault(Language)
+            ?? (LanguageOptions.Count > 0 ? LanguageOptions[0] : string.Empty);
+    }
+
+    public IReadOnlyList<string> LanguageOptions { get; }
+
+    public string SelectedLanguageName
+    {
+        get => field;
         set
         {
-            _somenteCopiar = value;
-            OnPropertyChanged(nameof(SomenteCopiar));
-            OnPropertyChanged(nameof(MoveLabel));
+            if (!SetProperty(ref field, value))
+                return;
+
+            string? languageKey = MessageMap.GetLanguageKeyByDescription(value);
+            if (!string.IsNullOrEmpty(languageKey) && !string.Equals(Language, languageKey, StringComparison.OrdinalIgnoreCase))
+                Language = languageKey;
+        }
+    } = string.Empty;
+
+    public bool SomenteCopiar
+    {
+        get => field;
+        set
+        {
+            if (SetProperty(ref field, value))
+                OnPropertyChanged(nameof(MoveLabel));
         }
     }
+
     public string Language
     {
         get => _settings.Language;
         set
         {
+            if (string.Equals(_settings.Language, value, StringComparison.OrdinalIgnoreCase))
+                return;
+
             _settings.Language = value;
-            OnPropertyChanged("StatusMessage");
-            OnPropertyChanged("OriginLabel");
-            OnPropertyChanged("DestinationLabel");
-            OnPropertyChanged("MoveLabel");
-            OnPropertyChanged("CopyLabel");
-            OnPropertyChanged("RenameLabel");
-            OnPropertyChanged("CancelLabel");
-            OnPropertyChanged("AllDoneLabel");
-            OnPropertyChanged("SeparateByExtensionLabel");
-        }
-    }
-    public List<string> LanguageOptions => ListLanguages();
-    private string _statusMessage;
-    public string StatusMessage
-    {
-        get => _statusMessage;
-        set
-        {
-            _statusMessage = value;
-            OnPropertyChanged(nameof(StatusMessage));
+            MessageMap.SetDefaultLanguage(value);
+
+            StatusMessage = MessageMap.GetMessage("select_to_start", value);
+
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(OriginLabel));
+            OnPropertyChanged(nameof(DestinationLabel));
+            OnPropertyChanged(nameof(MoveLabel));
+            OnPropertyChanged(nameof(CopyLabel));
+            OnPropertyChanged(nameof(RenameLabel));
+            OnPropertyChanged(nameof(CancelLabel));
+            OnPropertyChanged(nameof(AllDoneLabel));
+            OnPropertyChanged(nameof(SeparateByExtensionLabel));
         }
     }
 
-    private string _allDoneLabel;
+    public string StatusMessage
+    {
+        get => field;
+        set => SetProperty(ref field, value);
+    } = string.Empty;
+
     public string AllDoneLabel
     {
-        get => _allDoneLabel;
-        set
-        {
-            _allDoneLabel = value;
-            OnPropertyChanged(nameof(AllDoneLabel));
-        }
-    }
+        get => field;
+        set => SetProperty(ref field, value);
+    } = string.Empty;
 
     public string OriginLabel => MessageMap.GetMessage("origin_label", Language);
     public string DestinationLabel => MessageMap.GetMessage("destination_label", Language);
@@ -75,12 +87,4 @@ public class FolderFlexMessageProviderViewModel : INotifyPropertyChanged
     public string RenameLabel => MessageMap.GetMessage("rename_label", Language);
     public string CancelLabel => MessageMap.GetMessage("cancel_label", Language);
     public string SeparateByExtensionLabel => MessageMap.GetMessage("separate_by_extension_label", Language);
-
-    protected void OnPropertyChanged(string name) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    public ICommand ChangeLanguageCommand { get; }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-    private void ChangeLanguage(string newLanguage) => Language = newLanguage;
-    private static List<string> ListLanguages() => [.. MessageMap.ListLanguages().Values];
-    #endregion PROPERTIES
 }

@@ -8,7 +8,6 @@ on:
       - 'social_preview.jpg'
       - 'docs/**'
       - '.github/workflows/dotnet-desktop.yml'
-      - 'dotnet-desktop.yml'
   workflow_dispatch:
 
 permissions:
@@ -16,85 +15,69 @@ permissions:
 
 jobs:
   build:
-    strategy:
-      matrix:
-        configuration: [Release]
-
     runs-on: windows-latest
 
     steps:
       - name: Sincronizando Repositório
         uses: actions/checkout@v4
 
-      - name: Removendo versões antigas do .NET
-        run: |
-          Remove-Item -Path "$env:USERPROFILE\.dotnet" -Recurse -Force -ErrorAction SilentlyContinue
-          Remove-Item -Path "$env:USERPROFILE\.nuget\packages" -Recurse -Force -ErrorAction SilentlyContinue
-        shell: pwsh
-
-          
-      - name: Configurando Ambiente .NET
+      - name: Configurando Ambiente .NET 11
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.200'
-          include-prerelease: true
+          dotnet-version: '11.0.x'
 
-      - name: Restaurando Dependências do .NET (Cache)
-        uses: actions/cache@v3
+      - name: Lendo Versão do Projeto (.csproj)
+        id: version
+        shell: pwsh
+        run: |
+          $version = (dotnet msbuild FolderFlex/FolderFlex.csproj -nologo -getProperty:Version).Trim()
+          if ([string]::IsNullOrWhiteSpace($version)) {
+            throw "Não foi possível ler a propriedade <Version> de FolderFlex/FolderFlex.csproj."
+          }
+          $tag = "v$version"
+          $zipName = "FolderFlex-$tag.zip"
+          "value=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "tag=$tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "zip_name=$zipName" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          Write-Host "Versão detectada: $version | Tag: $tag | Zip: $zipName"
+
+      - name: Restaurando Cache NuGet
+        uses: actions/cache@v4
         with:
-          path: |
-            ~/.nuget/packages
-            ~/.dotnet
-          key: ${{ runner.os }}-dotnet-${{ hashFiles('**/*.csproj', '**/*.sln') }}
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', 'Directory.Build.props') }}
           restore-keys: |
-            ${{ runner.os }}-dotnet-
+            ${{ runner.os }}-nuget-
 
-      - name: Restaurando as dependências
-        run: dotnet restore FolderFlex.sln
+      - name: Restaurando Dependências
+        run: dotnet restore FolderFlex.slnx
 
-      - name: Compilando Tudo
-        run: dotnet build FolderFlex.sln --configuration ${{ matrix.configuration }} --no-restore /p:WarningLevel=0
+      - name: Compilando Solução
+        run: dotnet build FolderFlex.slnx --configuration Release --no-restore
 
       - name: Publicando FolderFlex
-        run: dotnet publish FolderFlex/FolderFlex.csproj --configuration ${{ matrix.configuration }} --output ./output/
+        run: dotnet publish FolderFlex/FolderFlex.csproj --configuration Release --output ./output/FolderFlex-${{ steps.version.outputs.tag }}
 
-      - name: Criando Pasta para os Arquivos
+      - name: Compactando Release
+        shell: pwsh
         run: |
-          mkdir ./output/FolderFlexFiles
+          Compress-Archive `
+            -Path "./output/FolderFlex-${{ steps.version.outputs.tag }}" `
+            -DestinationPath "./output/${{ steps.version.outputs.zip_name }}" `
+            -Force
 
-      - name: Movendo Arquivos para a Nova Pasta
-        run: |
-          Get-ChildItem ./output/ | Where-Object { $_.Name -ne 'FolderFlexFiles' } | Move-Item -Destination ./output/FolderFlexFiles/ -Force
-
-      - name: Compactando a Pasta
-        run: |
-          powershell Compress-Archive -Path ./output/FolderFlexFiles -DestinationPath ./output/FolderFlex.zip
-
-      - name: Criando Tag da versão
-        id: tag_version
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "github-actions@github.com"
-          git tag v1.0.${{ github.run_number }}
-          git push origin v1.0.${{ github.run_number }}
-
-      - name: Criando Nova Release
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Criando Tag e Release no GitHub
+        shell: pwsh
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v1.0.${{ github.run_number }}
-          release_name: "FolderFlex v1.0.${{ github.run_number }}"
-          draft: false
-          prerelease: true
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $tag = "${{ steps.version.outputs.tag }}"
+          $zipPath = "./output/${{ steps.version.outputs.zip_name }}"
 
-      - name: Anexando arquivos à release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./output/FolderFlex.zip
-          asset_name: FolderFlex.zip
-          asset_content_type: application/zip
+          gh release view $tag 2>$null
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "Release $tag já existe. Atualize <Version> em FolderFlex/FolderFlex.csproj para publicar uma nova release."
+            exit 0
+          }
+
+          gh release create $tag $zipPath --title "FolderFlex $tag" --generate-notes

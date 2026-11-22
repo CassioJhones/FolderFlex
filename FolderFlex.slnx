@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="FolderFlex/FolderFlex.csproj" />
+  <Project Path="FolderFlexCommon/FolderFlexCommon.csproj" />
+</Solution>
