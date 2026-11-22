@@ -1,73 +1,107 @@
-﻿using FolderFlexCommon.Settings.Model;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using FolderFlexCommon.Settings.Model;
 using System.Text;
 
 namespace FolderFlexCommon.Settings;
 
-public class IniFileParameterStore : IParameterStorage
+public sealed class IniFileParameterStore : IParameterStorage
 {
-    private readonly Dictionary<string, Dictionary<string, string>> _data = new();
+    private const string DefaultSection = "Settings";
 
+    private readonly Lock _syncRoot = new();
+    private readonly Dictionary<string, Dictionary<string, string>> _data = new(StringComparer.OrdinalIgnoreCase);
     private readonly string _filePath;
+
     public IniFileParameterStore(string iniFile)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(iniFile);
         _filePath = iniFile;
 
         if (!File.Exists(_filePath))
         {
-            using FileStream file = File.Create(_filePath);
+            string? directory = Path.GetDirectoryName(_filePath);
+            if (!string.IsNullOrEmpty(directory))
+                Directory.CreateDirectory(directory);
+
+            using FileStream _ = File.Create(_filePath);
         }
 
         Load(_filePath);
     }
-    public string GetParameter(string section, string key) => _data.ContainsKey(section) && _data[section].ContainsKey(key) ? _data[section][key] : null;
+
+    public string? GetParameter(string section, string key)
+    {
+        lock (_syncRoot)
+        {
+            return _data.TryGetValue(section, out Dictionary<string, string>? sectionData) &&
+                   sectionData.TryGetValue(key, out string? value)
+                ? value
+                : null;
+        }
+    }
 
     public void SetParameter(string section, string key, string value)
     {
-        if (!_data.ContainsKey(section))
-            _data[section] = new Dictionary<string, string>();
-        _data[section][key] = value;
+        lock (_syncRoot)
+        {
+            if (!_data.TryGetValue(section, out Dictionary<string, string>? sectionData))
+            {
+                sectionData = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                _data[section] = sectionData;
+            }
 
-        Save();
+            sectionData[key] = value;
+            SaveUnsafe();
+        }
     }
 
     public void Load(string filePath)
     {
-        _data.Clear();
-        foreach (string line in File.ReadAllLines(filePath))
+        lock (_syncRoot)
         {
-            if (string.IsNullOrWhiteSpace(line) || line.StartsWith(";") || line.StartsWith("#")) continue;
+            _data.Clear();
+            string currentSection = DefaultSection;
 
-            if (line.StartsWith("[") && line.EndsWith("]"))
+            foreach (string rawLine in File.ReadLines(filePath))
             {
-                string section = line.Trim('[', ']');
-                if (!_data.ContainsKey(section))
-                    _data[section] = new Dictionary<string, string>();
+                ReadOnlySpan<char> line = rawLine.AsSpan().Trim();
+                if (line.IsEmpty || line[0] is ';' or '#')
+                    continue;
 
-                continue;
-            }
+                if (line.Length >= 2 && line[0] == '[' && line[^1] == ']')
+                {
+                    currentSection = line[1..^1].Trim().ToString();
+                    _data.TryAdd(currentSection, new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase));
+                    continue;
+                }
 
-            string[] parts = line.Split(new[] { '=' }, 2);
+                int separatorIndex = line.IndexOf('=');
+                if (separatorIndex <= 0)
+                    continue;
 
-            if (parts.Length == 2)
-            {
-                string section = _data.Keys.Last();
-                _data[section][parts[0].Trim()] = parts[1].Trim();
+                string key = line[..separatorIndex].Trim().ToString();
+                string value = line[(separatorIndex + 1)..].Trim().ToString();
+
+                if (!_data.TryGetValue(currentSection, out Dictionary<string, string>? sectionData))
+                {
+                    sectionData = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                    _data[currentSection] = sectionData;
+                }
+
+                sectionData[key] = value;
             }
         }
     }
 
-    private void Save()
+    private void SaveUnsafe()
     {
         StringBuilder sb = new();
-        foreach (KeyValuePair<string, Dictionary<string, string>> section in _data)
+        foreach ((string sectionName, Dictionary<string, string> values) in _data)
         {
-            sb.AppendLine($"[{section.Key}]");
-            foreach (KeyValuePair<string, string> kvp in section.Value)
-                sb.AppendLine($"{kvp.Key}={kvp.Value}");
+            sb.Append('[').Append(sectionName).AppendLine("]");
+            foreach ((string key, string value) in values)
+                sb.Append(key).Append('=').AppendLine(value);
         }
+
         File.WriteAllText(_filePath, sb.ToString());
     }
 }

@@ -1,20 +1,20 @@
-﻿<Window x:Class="FolderFlex.View.FolderFlexMain"
+<Window x:Class="FolderFlex.View.FolderFlexMain"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:FolderFlex.View"
+        xmlns:viewModel="clr-namespace:FolderFlex.ViewModel"
+        xmlns:models="clr-namespace:FolderFlex.Models"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
-        WindowStyle="None" 
+        WindowStyle="None"
         BorderBrush="Transparent"
         Background="Transparent"
-        xmlns:language="clr-namespace:FolderFlex.ViewModel"
-  
-        d:DataContext="{d:DesignInstance Type=language:FolderFlexViewModel}"
-        DataContext="{StaticResource FolderFlexMessageProviderViewModel}"
-        Title="FolderFlex" Height="340" Width="480">
+        d:DataContext="{d:DesignInstance Type=viewModel:FolderFlexViewModel}"
+        Title="FolderFlex"
+        Height="{Binding WindowHeight, Mode=TwoWay}"
+        Width="480">
 
     <Grid>
         <Border CornerRadius="5" MouseLeftButtonDown="Border_MouseLeftButtonDown" Background="{DynamicResource WindowBackgroundGradient}">
@@ -29,52 +29,52 @@
                 <Grid Grid.Row="0" Background="Transparent" Height="40" VerticalAlignment="Top" Panel.ZIndex="1">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Recursos/pasta.ico" Height="24" Margin="15,0,10,0"/>
-                        <TextBlock Text="FolderFlex" FontSize="16" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="{DynamicResource HeaderTitleBrush}" FontWeight="SemiBold" />
-                        <TextBlock Text="{Binding VersionLabel}" FontSize="15" VerticalAlignment="Center" Margin="10,02,0,0" Foreground="{DynamicResource HeaderTitleBrush}" FontWeight="Light" />
+                        <TextBlock Text="FolderFlex" FontSize="16" VerticalAlignment="Center" Foreground="{DynamicResource HeaderTitleBrush}" FontWeight="SemiBold"/>
+                        <TextBlock Text="{Binding VersionLabel}" FontSize="15" VerticalAlignment="Center" Margin="10,2,0,0" Foreground="{DynamicResource HeaderTitleBrush}" FontWeight="Light"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,10,0">
-                        <Button x:Name="CloseButton"  Style="{StaticResource TransparentButton}" Margin="10,0" Click="CloseButton_Click">
-                            <Image Source="pack://application:,,,/Recursos/x.png" Width="18" Height="18" />
+                        <Button x:Name="CloseButton" Style="{StaticResource TransparentButton}" Margin="10,0" Click="CloseButton_Click">
+                            <Image Source="pack://application:,,,/Recursos/x.png" Width="18" Height="18"/>
                         </Button>
                     </StackPanel>
                 </Grid>
 
-                <Border Grid.Row="1" CornerRadius="15" Margin="3" >
+                <Border Grid.Row="1" CornerRadius="15" Margin="3">
                     <StackPanel Orientation="Vertical">
-                        <TextBlock x:Name="StatusMessage" Text="{Binding StatusMessage, Source={StaticResource FolderFlexMessageProviderViewModel}}" FontSize="16" Foreground="{DynamicResource SecondaryTextBrush}" TextAlignment="Center"  Margin="0,0,0,3"/>
+                        <TextBlock x:Name="StatusMessage" Text="{Binding Messages.StatusMessage}" FontSize="16" Foreground="{DynamicResource SecondaryTextBrush}" TextAlignment="Center" Margin="0,0,0,3"/>
 
                         <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Center">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="20,10,0,0">
-                                <StackPanel Orientation="Vertical"  >
-                                    <TextBlock Text="{Binding OriginLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Foreground="{DynamicResource SecondaryTextBrush}" FontWeight="SemiBold" FontSize="12" Margin="7,0"/>
-                                    <TextBox x:Name="OriginLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270" Foreground="{DynamicResource SecondaryTextBrush}" Text="{Binding PastaOrigem}" IsReadOnly="True" Height="30" IsEnabled="True" Background="{DynamicResource TextBoxBackgroundBrush}" Margin="5,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="{Binding Messages.OriginLabel}" Foreground="{DynamicResource SecondaryTextBrush}" FontWeight="SemiBold" FontSize="12" Margin="7,0"/>
+                                    <TextBox x:Name="OriginLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270" Foreground="{DynamicResource SecondaryTextBrush}" Text="{Binding PastaOrigem}" IsReadOnly="True" Height="30" Background="{DynamicResource TextBoxBackgroundBrush}" Margin="5,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
                                 </StackPanel>
-                                <Button Margin="10,0,0,0" Content="{Binding OriginLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Height="30" Width="100" Style="{StaticResource RoundedButtonStyle}" Background="{DynamicResource AccentBrush}" Foreground="{DynamicResource ButtonTextBrush}" VerticalAlignment="Bottom" Click="Click_SelectSource"/>
+                                <Button Margin="10,0,0,0" Content="{Binding Messages.OriginLabel}" Height="30" Width="100" Style="{StaticResource RoundedButtonStyle}" Background="{DynamicResource AccentBrush}" Foreground="{DynamicResource ButtonTextBrush}" VerticalAlignment="Bottom" Command="{Binding SelectSourceCommand}"/>
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="20,10,0,0">
                                 <StackPanel Orientation="Vertical">
-                                    <TextBlock Text="{Binding DestinationLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Foreground="{DynamicResource SecondaryTextBrush}" FontWeight="SemiBold" FontSize="12" Margin="7,0"/>
-                                    <TextBox x:Name="DestinationLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270" Foreground="{DynamicResource SecondaryTextBrush}" Text="{Binding PastaDestino}" IsReadOnly="True" Height="30" IsEnabled="True" Background="{DynamicResource TextBoxBackgroundBrush}" Margin="5,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+                                    <TextBlock Text="{Binding Messages.DestinationLabel}" Foreground="{DynamicResource SecondaryTextBrush}" FontWeight="SemiBold" FontSize="12" Margin="7,0"/>
+                                    <TextBox x:Name="DestinationLabel" Style="{StaticResource TextBoxRoundedStyle}" Width="270" Foreground="{DynamicResource SecondaryTextBrush}" Text="{Binding PastaDestino}" IsReadOnly="True" Height="30" Background="{DynamicResource TextBoxBackgroundBrush}" Margin="5,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
                                 </StackPanel>
-                                <Button Margin="10,0,0,0" Content="{Binding DestinationLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Height="30" Width="100" Style="{StaticResource RoundedButtonStyle}" Background="{DynamicResource AccentBrush}" Foreground="{DynamicResource ButtonTextBrush}" VerticalAlignment="Bottom" Click="Click_SelectDestination" Cursor="Hand"/>
+                                <Button Margin="10,0,0,0" Content="{Binding Messages.DestinationLabel}" Height="30" Width="100" Style="{StaticResource RoundedButtonStyle}" Background="{DynamicResource AccentBrush}" Foreground="{DynamicResource ButtonTextBrush}" VerticalAlignment="Bottom" Command="{Binding SelectDestinationCommand}" Cursor="Hand"/>
                             </StackPanel>
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,9,0,0">
-                            <Button Content="{Binding MoveLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Style="{StaticResource RoundedButtonStyle}" Margin="0,0,5,0" Background="{DynamicResource AccentBrush}" Foreground="{DynamicResource ButtonTextBrush}" FontWeight="SemiBold" Click="StartMove_Click"/>
-                            <Button Click="Cancelation_Click"  Content="{Binding CancelLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" Style="{StaticResource RoundedButtonStyle}" Margin="5,0,0,0" Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource ButtonTextBrush}" FontWeight="SemiBold"/>
+                            <Button Content="{Binding Messages.MoveLabel}" Style="{StaticResource RoundedButtonStyle}" Margin="0,0,5,0" Background="{DynamicResource AccentBrush}" Foreground="{DynamicResource ButtonTextBrush}" FontWeight="SemiBold" Command="{Binding StartCommand}"/>
+                            <Button Content="{Binding Messages.CancelLabel}" Style="{StaticResource RoundedButtonStyle}" Margin="5,0,0,0" Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource ButtonTextBrush}" FontWeight="SemiBold" Command="{Binding CancelCommand}"/>
                         </StackPanel>
 
-                        <StackPanel  Orientation="Vertical" HorizontalAlignment="Center">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
-                                <CheckBox x:Name="cbRename" IsChecked="{Binding Renomear}" Content="{Binding RenameLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" VerticalAlignment="Center" Foreground="{DynamicResource SecondaryTextBrush}" ToolTip="Marque para renomear os arquivos iguais que já existem na pasta" Margin="4,00,10,0"/>
-                                <CheckBox x:Name="cbCopy" IsChecked="{Binding SomenteCopiar, Source={StaticResource FolderFlexMessageProviderViewModel}}" Content="{Binding CopyLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" VerticalAlignment="Center" Foreground="{DynamicResource SecondaryTextBrush}" ToolTip="Marque para copiar os arquivos ao invés de mover" Margin="4,0,10,0"/>
-                                <CheckBox x:Name="cbSeparate" IsChecked="{Binding SepararPorExtensao}" Content="{Binding SeparateByExtensionLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}" VerticalAlignment="Center" Foreground="{DynamicResource SecondaryTextBrush}" ToolTip="Marque para separar os arquivos em pastas por extensão" Margin="4,0,10,0"/>
+                                <CheckBox x:Name="cbRename" IsChecked="{Binding Renomear}" Content="{Binding Messages.RenameLabel}" VerticalAlignment="Center" Foreground="{DynamicResource SecondaryTextBrush}" ToolTip="Marque para renomear os arquivos iguais que já existem na pasta" Margin="4,0,10,0"/>
+                                <CheckBox x:Name="cbCopy" IsChecked="{Binding SomenteCopiar}" Content="{Binding Messages.CopyLabel}" VerticalAlignment="Center" Foreground="{DynamicResource SecondaryTextBrush}" ToolTip="Marque para copiar os arquivos ao invés de mover" Margin="4,0,10,0"/>
+                                <CheckBox x:Name="cbSeparate" IsChecked="{Binding SepararPorExtensao}" Content="{Binding Messages.SeparateByExtensionLabel}" VerticalAlignment="Center" Foreground="{DynamicResource SecondaryTextBrush}" ToolTip="Marque para separar os arquivos em pastas por extensão" Margin="4,0,10,0"/>
                             </StackPanel>
 
                             <StackPanel HorizontalAlignment="Center" Margin="0,-12,0,0">
-                                <Label Margin="0 10 0 0" HorizontalAlignment="Center" Foreground="{DynamicResource SecondaryAccentBrush}" FontWeight="bold" FontSize="13" Visibility="{Binding AllDoneLabel, Converter={StaticResource StringToVisibilityConverter}}" Content="{Binding AllDoneLabel, Source={StaticResource FolderFlexMessageProviderViewModel}}"/>
+                                <Label Margin="0,10,0,0" HorizontalAlignment="Center" Foreground="{DynamicResource SecondaryAccentBrush}" FontWeight="Bold" FontSize="13" Visibility="{Binding Messages.AllDoneLabel, Converter={StaticResource StringToVisibilityConverter}}" Content="{Binding Messages.AllDoneLabel}"/>
                             </StackPanel>
                         </StackPanel>
                     </StackPanel>
@@ -82,27 +82,125 @@
 
                 <Grid Grid.Row="2">
                     <ScrollViewer x:Name="ScrollViewerContainer" VerticalScrollBarVisibility="Auto" Margin="10,10" Style="{StaticResource {x:Type ScrollViewer}}">
-                        <StackPanel x:Name="StackContainer">
-                        </StackPanel>
+                        <ItemsControl ItemsSource="{Binding FileItems}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type models:FileTransferItem}">
+                                    <Border Background="{DynamicResource PrimaryBackgroundBrush}"
+                                            BorderBrush="{DynamicResource PrimaryBorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="10"
+                                            Height="56"
+                                            Margin="0,5,14,0">
+                                        <Grid>
+                                            <Button Style="{StaticResource TransparentButton}"
+                                                    Margin="10,0,0,2"
+                                                    Cursor="Hand"
+                                                    HorizontalAlignment="Left"
+                                                    ToolTip="Abrir Arquivo"
+                                                    Command="{Binding OpenFileCommand}">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                                    <Image Source="pack://application:,,,/Recursos/file-up.png" Width="18" Height="18" VerticalAlignment="Center"/>
+                                                    <TextBlock Text="{Binding DisplayName}"
+                                                               VerticalAlignment="Center"
+                                                               FontSize="14"
+                                                               FontWeight="SemiBold"
+                                                               Margin="0,0,0,4"
+                                                               Foreground="{DynamicResource PrimaryTextBrush}"/>
+                                                </StackPanel>
+                                            </Button>
+
+                                            <ProgressBar Value="{Binding Progress}"
+                                                         Height="10"
+                                                         Width="340"
+                                                         VerticalAlignment="Center"
+                                                         Margin="10,40,0,0"
+                                                         HorizontalAlignment="Left">
+                                                <ProgressBar.Style>
+                                                    <Style TargetType="ProgressBar" BasedOn="{StaticResource RoundedProgressBar}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsCancelled}" Value="True">
+                                                                <Setter Property="Visibility" Value="Hidden"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ProgressBar.Style>
+                                            </ProgressBar>
+
+                                            <TextBlock Text="{Binding FileSizeText}"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{DynamicResource SecondaryTextBrush}"
+                                                       HorizontalAlignment="Right"
+                                                       Margin="0,0,50,0"
+                                                       VerticalAlignment="Center"
+                                                       FontSize="12"/>
+
+                                            <Button Margin="10,0,10,0"
+                                                    HorizontalAlignment="Right"
+                                                    Command="{Binding ActionCommand}">
+                                                <Button.Style>
+                                                    <Style TargetType="Button" BasedOn="{StaticResource TransparentButton}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsCancelled}" Value="True">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Button.Style>
+                                                <Grid>
+                                                    <Image Source="pack://application:,,,/Recursos/cancel.png" Width="18" Height="18" VerticalAlignment="Center">
+                                                        <Image.Style>
+                                                            <Style TargetType="Image">
+                                                                <Setter Property="Visibility" Value="Visible"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsCompleted}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Image.Style>
+                                                    </Image>
+                                                    <Image Source="pack://application:,,,/Recursos/file-search.png" Width="18" Height="18" VerticalAlignment="Center">
+                                                        <Image.Style>
+                                                            <Style TargetType="Image">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsCompleted}" Value="True">
+                                                                        <Setter Property="Visibility" Value="Visible"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Image.Style>
+                                                    </Image>
+                                                </Grid>
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </ScrollViewer>
                 </Grid>
 
                 <DockPanel Grid.Row="3" VerticalAlignment="Center">
                     <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
-                        <Button Style="{StaticResource TransparentButton}" Click="ButtonGithub_Click" HorizontalAlignment="Left" Margin="0,0,10,0" ToolTip="Pagina do Projeto">
-                            <Image Source="pack://application:,,,/Recursos/github.png" Width="35" Height="20" />
+                        <Button Style="{StaticResource TransparentButton}" Command="{Binding OpenGitHubCommand}" HorizontalAlignment="Left" Margin="0,0,10,0" ToolTip="Pagina do Projeto">
+                            <Image Source="pack://application:,,,/Recursos/github.png" Width="35" Height="20"/>
                         </Button>
-                        <Button Style="{StaticResource TransparentButton}" Click="ThemeToggleButton_Click" HorizontalAlignment="Left" ToolTip="Alterar Tema">
-                            <Image Source="pack://application:,,,/Recursos/sun-moon.png" Width="25" Height="25"  />
+                        <Button Style="{StaticResource TransparentButton}" Command="{Binding ToggleThemeCommand}" HorizontalAlignment="Left" ToolTip="Alterar Tema">
+                            <Image Source="pack://application:,,,/Recursos/sun-moon.png" Width="25" Height="25"/>
                         </Button>
                     </StackPanel>
 
-                    <ComboBox Style="{StaticResource ComboBoxRoundedStyle}" Foreground="{DynamicResource SecondaryTextBrush}" Background="{DynamicResource TextBoxBackgroundBrush}" x:Name="LanguageCombo"
-                              SelectionChanged="ComboBox_SelectionChanged"
-                              ItemsSource="{Binding LanguageOptions, Source={StaticResource FolderFlexMessageProviderViewModel}}"
-                              HorizontalAlignment="Right" Width="90" Height="20"
-                              Margin="0,0,10,0">
-                    </ComboBox>
+                    <ComboBox Style="{StaticResource ComboBoxRoundedStyle}"
+                              Foreground="{DynamicResource SecondaryTextBrush}"
+                              Background="{DynamicResource TextBoxBackgroundBrush}"
+                              x:Name="LanguageCombo"
+                              ItemsSource="{Binding Messages.LanguageOptions}"
+                              SelectedItem="{Binding Messages.SelectedLanguageName}"
+                              HorizontalAlignment="Right"
+                              Width="90"
+                              Height="20"
+                              Margin="0,0,10,0"/>
                 </DockPanel>
             </Grid>
         </Border>

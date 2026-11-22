@@ -1,22 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>net9.0</TargetFramework>
-		<OutputType>Library</OutputType>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	</PropertyGroup>
-	<PropertyGroup>
-		<StartupObject />
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-		<DebugSymbols>true</DebugSymbols>
-		<DebugType>portable</DebugType>
-	</PropertyGroup>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+  </PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
-		<DebugSymbols>false</DebugSymbols>
-		<DebugType>none</DebugType>
-	</PropertyGroup>
-	<ItemGroup>
-		<EmbeddedResource Include="Messages\Resources\messages.json" />
-	</ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Messages\Resources\messages.json" />
+  </ItemGroup>
 </Project>

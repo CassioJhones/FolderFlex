@@ -6,7 +6,7 @@
 ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/cassiojhones/folderflex/total?style=plastic&label=Downloads)
 ![GitHub Repo stars](https://img.shields.io/github/stars/Cassiojhones/folderflex?style=plastic&label=Stars)
 ![Front](https://img.shields.io/badge/WPF-017ad7?style=plastic&logo=Windows&logoColor=white)
-![Back](https://img.shields.io/badge/.NET_9-512BD4?style=plastic&logo=dotnet&logoColor=white)
+![Back](https://img.shields.io/badge/.NET_11-512BD4?style=plastic&logo=dotnet&logoColor=white)
 [![CI/CD](https://github.com/CassioJhones/FolderFlex/actions/workflows/dotnet-desktop.yml/badge.svg?style=plastic)](https://github.com/CassioJhones/FolderFlex/actions/workflows/dotnet-desktop.yml)
 
 ## Descrição
@@ -51,7 +51,7 @@ Imagine que você precisa acessar `diversas subpastas` contendo arquivos como fo
 ## Download Gratuito
 
 1. Baixe a última versão do aplicativo na seção de [releases](https://github.com/CassioJhones/FolderFlex/releases)
-2. Caso já tiver instalado .NET 9, basta executar
+2. Caso já tiver instalado .NET 11, basta executar
 
 ## Como Usar
 

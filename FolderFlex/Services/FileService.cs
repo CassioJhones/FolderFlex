@@ -1,58 +1,66 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.IO;
 
 namespace FolderFlex.Services;
 
-static class FileService
+internal static class FileService
 {
-    public static void OpenFile(string filePath) => Process.Start(new ProcessStartInfo
+    public static void OpenFile(string filePath)
     {
-        FileName = filePath,
-        UseShellExecute = true
-    });
+        if (!File.Exists(filePath))
+            return;
+
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = filePath,
+            UseShellExecute = true
+        });
+    }
+
+    public static void OpenFolder(string folderPath)
+    {
+        if (!Directory.Exists(folderPath))
+            return;
+
+        Process.Start(new ProcessStartInfo
+        {
+            FileName = folderPath,
+            UseShellExecute = true
+        });
+    }
 
     public static void OpenLink(string url)
     {
-        try
+        if (!Uri.TryCreate(url, UriKind.Absolute, out Uri? uri) ||
+            (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
         {
-            ProcessStartInfo Open = new()
-            {
-                FileName = url,
-                UseShellExecute = true
-            };
-
-            Process.Start(Open);
+            return;
         }
-        catch (Exception)
+
+        Process.Start(new ProcessStartInfo
         {
-            ProcessStartInfo Open = new()
-            {
-                FileName = "cmd",
-                Arguments = $"/c start {url}",
-                UseShellExecute = false,
-                CreateNoWindow = true
-            };
-
-            Process.Start(Open);
-        }
+            FileName = uri.AbsoluteUri,
+            UseShellExecute = true
+        });
     }
 
-    public static string RenameFile(string originalPath)
+    public static string GetUniqueFilePath(string originalPath, ISet<string>? reservedPaths = null)
     {
-        string? folder = Path.GetDirectoryName(originalPath) ?? string.Empty;
-        string? fileName = Path.GetFileNameWithoutExtension(originalPath) ?? string.Empty;
-        string? ext = Path.GetExtension(originalPath) ?? string.Empty;
+        string folder = Path.GetDirectoryName(originalPath) ?? string.Empty;
+        string fileName = Path.GetFileNameWithoutExtension(originalPath);
+        string ext = Path.GetExtension(originalPath);
 
         int count = 1;
-        string newPath;
+        string candidate;
 
         do
         {
-            string novoNomeArquivo = $"{fileName} ({count}){ext}";
-            newPath = Path.Combine(folder, novoNomeArquivo);
+            candidate = Path.Combine(folder, $"{fileName} ({count}){ext}");
             count++;
         }
-        while (File.Exists(newPath));
-        return newPath;
+        while (File.Exists(candidate) || (reservedPaths is not null && reservedPaths.Contains(candidate)));
+
+        reservedPaths?.Add(candidate);
+        return candidate;
     }
 }

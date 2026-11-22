@@ -1,14 +1,10 @@
-﻿<Application x:Class="FolderFlex.App"
+<Application x:Class="FolderFlex.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:language="clr-namespace:FolderFlex.ViewModel"
              xmlns:util="clr-namespace:FolderFlex.Util"
-             Startup="Application_Startup"
              StartupUri="View/FolderFlexMain.xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <language:FolderFlexMessageProviderViewModel x:Key="FolderFlexMessageProviderViewModel" />
-
             <util:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
 
             <ResourceDictionary.MergedDictionaries>

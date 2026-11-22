@@ -1,18 +1,18 @@
-﻿namespace FolderFlex.Services;
+using Microsoft.Win32;
 
-static class DialogService
+namespace FolderFlex.Services;
+
+internal static class DialogService
 {
-    static internal FolderBrowserDialog OpenFolderDialog(string description, string? selectedPath, bool useDescriptionForTitle = true, bool showNewFolderButton = true)
+    public static string? SelectFolder(string title, string? initialDirectory = null)
     {
-        FolderBrowserDialog dialog = new()
+        OpenFolderDialog dialog = new()
         {
-            Description = description,
-            UseDescriptionForTitle = useDescriptionForTitle,
-            ShowNewFolderButton = showNewFolderButton,
-            SelectedPath = selectedPath ?? string.Empty
+            Title = title,
+            InitialDirectory = string.IsNullOrWhiteSpace(initialDirectory) ? string.Empty : initialDirectory,
+            Multiselect = false
         };
 
-        return dialog;
-
+        return dialog.ShowDialog() == true ? dialog.FolderName : null;
     }
 }
